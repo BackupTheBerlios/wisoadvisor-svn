@@ -1,0 +1,141 @@
+img.surveyor_img {
+	text-align: center;
+	display: block;
+	margin-top:15px;
+}
+
+img.surveyor_img_right {
+	float:right;
+	margin-left: 10px;
+}
+
+#surveyor_questionfooter {
+	background-color:#9EBEDF;
+}
+
+#surveyor_navigator, .surveyor_navigator {
+	background-color: #FFFFCC;
+	width: 590px;
+	padding: 5px;
+}
+
+#quotation, .quotation {
+	color: #003366;
+	background-color: #FFFFFF;
+	width: 590px;
+	padding: 10px;
+	font-size: 9pt;
+}
+
+#surveyor_percentage, .surveyor_percentage {
+	position: relative;
+	width: 150px;
+	color: #003366;
+	font-weight: normal;
+	float: right;
+}
+
+#surveyor_question, .surveyor_question {
+	background-color: #FFFFCC;
+}
+
+#surveyor_next_button, .surveyor_next_button {
+	color: #003366;
+	font-weight: bold;
+	margin-left: 10px;
+	background-color:#FFC30A;
+}
+
+/** Back-Button ist "normal"
+#surveyor_back_button {
+	color: #003366;
+	margin-left: 10px;
+	margin-right:10px;
+	font-weight: bold;
+	background-color:#FFC30A;
+}
+*/
+
+td.answerinrow {
+	vertical-align: top; 
+	text-align: left;
+	width: 10%;
+}
+
+table.answer {
+	width: 100%;
+	table-layout: fixed;
+}
+
+table.answers {
+	width: 590px;
+}
+
+table.question {
+	width: 590px;
+}
+
+table.images {
+	width: 100%;
+	table-layout: fixed;
+}
+
+table.answerinrow {
+	table-layout: fixed;
+	width: 100%;
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+p.answererror {
+	color: #003366;
+	font-weight: bold;
+	margin-left: 10px;
+	margin-top: 10px;
+	
+}
+
+.questiontext {
+	font-weight: bold;
+	margin-left:10px;
+	margin-right:10px;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+
+.questionhelp {
+	font-weight: normal;
+	font-size: 9pt;
+}
+
+.answertext {
+	font-weight: normal;
+	text-indent: -24px; /* negativer Wert, da in der ersten Zeile Checkbox bez. Radiobutton steht, und der Rest immer gleich anfangen soll */
+	margin-left: 34px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	padding: 0px;
+	vertical-align: text-top;
+}
+
+input, select {
+	color: #003366;
+	background-color: #FFFFCC;
+	font-size: 10pt;
+}
+
+input.wiso_box {
+	color: #003366;
+}
+
+cite {
+	quotes: "»" "«";
+}
+
+textarea {
+	color: #003366;
+	background-color: #FFFFCC;
+	font-size: 10pt;
+	width: 400px;
+	height: 150px;
+}

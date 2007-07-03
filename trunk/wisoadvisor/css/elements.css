@@ -1,0 +1,174 @@
+/* Hier sind alle Elementdefinitionen bzw. -klassen enthalten */
+
+b {
+	color: #003366;
+	font-weight: bold;
+}
+
+#session_username {
+	color: #ffffff;
+}
+
+h1 {
+	color: #003366;
+	font-size: 14pt;
+}
+
+h2 {
+	color: #003366;
+	font-size: 13pt;
+}
+
+th {
+	background-color:#FFFFCC;
+	font-weight: bold;
+	text-align: left;
+}
+
+td {
+}
+
+table {
+	min-width: 100%;
+	max-width: 100%;
+	font-size: 11pt;
+}
+
+img {
+	border-style:none;
+}
+
+.centered {
+	text-align: center;
+}
+
+.helptext {
+	font-size: 9pt;
+	vertical-align: top;
+}
+
+.verticalcentered {
+	text-align: center;
+	vertical-align: middle;
+}
+
+.justified {
+	text-align: justify;
+}
+
+.left {
+	text-align: left;
+}
+
+.right {
+	text-align: right;
+}
+
+.small_text {
+	font-size: 7pt;
+}
+
+.two_colums_left {
+	width: 50%;
+	float: left;
+}
+
+.two_colums_right {
+	width: 50%;
+}
+
+.two_colums_right_text_right {
+	width: 50%;
+	text-align: right;
+}
+
+a.common_link:active, a.common_link:visited, a.common_link:link {
+	color: #000000;
+	text-decoration: none;
+}
+
+a.common_link:hover {
+	text-decoration: underline;
+}
+
+a.menulink {
+	color: #99CCCC;
+	text-decoration: none;
+	font-size: 9pt;
+}
+
+a.menulink:hover {
+	text-decoration: underline;
+}
+
+a.sponsor_link {
+	color: #99CCCC;
+	text-decoration: none;
+	font-size: 9pt;
+}
+
+a.sponsor_link:hover {
+	text-decoration: underline;
+}
+
+img.sponsor {
+	border-width: 0px;
+	border-style: none;
+}
+
+p.error {
+	color: #003366;
+	font-weight: bold;	
+	background-color: #FFC30A;
+}
+
+.testbox {
+	background-color:#FFFFCC;
+	/*width: 100%;*/
+	text-align: right;
+	padding: 3px;
+}
+
+.image_right	{
+	float: left;
+	text-align: right;
+	margin: 5px;
+}
+
+.image_left	{
+	float: right;
+	text-align: left;
+	margin: 5px;
+}
+
+input.loginbox {
+	width: 120px;
+	font-size: 7pt;
+	color: #ffffff;
+	background-color: #9EBEDF;
+}
+
+input.loginboxsubmit {
+	font-size: 9pt;
+	color: #ffffff;
+	background-color: #003366;	
+	border-style: solid;
+	border-width: 1px;
+	border-color: #9EBEDF;
+}
+
+.infocell {
+	font-size: 9pt;
+	text-align: justify;
+}
+
+.infocell_single {
+	/**font-size: 9pt; einzelne Infoseiten vielleicht doch mit größerer Schrift?**/
+	text-align: justify;
+}
+
+#user_count {
+	color: #99CCCC;
+	text-decoration: none;
+	font-size: 9pt;
+}

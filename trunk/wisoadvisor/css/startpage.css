@@ -1,0 +1,100 @@
+/* Dies ist die spezielle CSS für die Startseite */
+/* jede Contentbox wird einzeln positioniert */
+
+.start_headline {
+	background-color: #003366;
+	color: #ffffff;
+}
+
+.start_link {
+	color: #000000;
+	text-decoration: none;
+}
+
+.start_sponsor_link {
+	width: 150px;
+	max-width: 150px;
+	min-width: 150px;
+}
+
+.start_link:hover {
+	cursor: pointer;
+}
+
+.start_einleitungstext {
+	font-size: 9pt;
+	text-align: justify;
+}
+
+#start_hintergrund {
+	width: 585px;
+	height: 662px;
+	margin: 0px;
+	padding: 0px;
+	background-image:url(../grafik/startpage_background.png); /*Pfad ist relativ zur CSS-Datei! (nicht zur jeweiligen Website) */
+	background-repeat:no-repeat;
+	text-align: justify;
+	font-size: 9pt;
+}
+
+/* Man beachte für alle Boxen: max-width wird nur von Firefox beachtet; da dieser den Padding und 
+Border aussen ansetzt, ist max-width und -height jeweils entsprechend kleiner gewählt */
+#start_uni {
+	border-style: solid;
+	border-color: #003366;
+	border-width: 1px;
+	padding: 5px;
+	position: relative;
+	overflow: hidden;
+	top: 10px;
+	left: 11px;
+	width: 275px;
+	max-width: 263px;
+	height: 175px;
+	max-height: 163px;
+}
+
+#start_studium {
+	border-style: solid;
+	border-color: #003366;
+	border-width: 1px;
+	padding: 5px;
+	position: relative;
+	overflow: hidden;
+	top: 23px;
+	left: 296px;
+	width: 275px;
+	max-width: 263px;
+	height: 165px;
+	max-height: 153px;
+}
+
+#start_beruf {
+	border-style: solid;
+	border-color: #003366;
+	border-width: 1px;
+	padding: 5px;
+	position: relative;
+	overflow: hidden;
+	top: 45px;
+	left: 11px;
+	width: 275px;
+	max-width: 263px;
+	height: 155px;
+	max-height: 143px;
+}
+
+#start_ziel {
+	border-style: solid;
+	border-color: #003366;
+	border-width: 1px;
+	padding: 5px;
+	position: relative;
+	overflow: hidden;
+	top: -18px;
+	left: 326px;
+	width: 245px;
+	max-width: 233px;
+	height: 180px;
+	max-height: 168px;
+}
