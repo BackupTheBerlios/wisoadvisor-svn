@@ -1,6 +1,6 @@
 <?php
-//WisoadvisorConfiguration enthält alle wichtigen Konfigurationsdaten
-//als Elternklasse wird Configuration auf dem Framework benötigt
+//WisoadvisorConfiguration enthï¿½lt alle wichtigen Konfigurationsdaten
+//als Elternklasse wird Configuration auf dem Framework benï¿½tigt
 require_once('classes/framework/configuration.php');
 
 class WisoadvisorConfiguration extends Configuration
@@ -17,15 +17,15 @@ class WisoadvisorConfiguration extends Configuration
 	 	//allgemeine Standards
 	 	$this->setConfValue('dispatchparamname', null, null, 'action'); //der Dispatcherparameter, der den UseCase angibt
 	 	$this->setConfValue('stepparamname', null, null, 'step'); //der Dispatcherparameter, der den Verarbeitungsschritt innerhalb eines UseCase angibt
-	 	$this->setConfValue('standardusecase', null, null, 'start'); // Der UseCase, der standardmäßig aufgerufen wird
+	 	$this->setConfValue('standardusecase', null, null, 'start'); // Der UseCase, der standardmï¿½ï¿½ig aufgerufen wird
 	 	$this->setConfValue('maintenanceusecase', null, null, 'maintenance'); // Der Wartungsusecase
 	 	$this->setConfValue('usecaseAfterLogin', null, null, 'start'); // Der UseCase, der nach erfolgreichem Login aufgerufen wird
 	 	$this->setConfValue('usecaseAfterLogout', null, null, 'start'); // Der UseCase, der nach erfolgreichem Logout aufgerufen wird
-	 	$this->setConfValue('standardstep', null, null, 'start'); // Der Schritt, der standardmäßig aufgerufen wird
-	 	$this->setConfValue('unauthenticatedExceptions', null, null, Array('login', 'registration', 'static', 'overview', 'info', 'graphics', 'maintenance', 'feedback', 'forgotpassword', 'panorama')); //legt UseCases fest, die auch ohne Login aufgerufen werden dürfen
+	 	$this->setConfValue('standardstep', null, null, 'start'); // Der Schritt, der standardmï¿½ï¿½ig aufgerufen wird
+	 	$this->setConfValue('unauthenticatedExceptions', null, null, Array('login', 'registration', 'static', 'overview', 'info', 'graphics', 'maintenance', 'feedback', 'forgotpassword', 'panorama')); //legt UseCases fest, die auch ohne Login aufgerufen werden dï¿½rfen
 	 	
 	 	//Datenbankkonfiguration
-	 	//ausgelagert in SpecialisedDatabase, damit Serverunabhängigkeit erreicht wird!
+	 	//ausgelagert in SpecialisedDatabase, damit Serverunabhï¿½ngigkeit erreicht wird!
 	 	
 	 	//allgemeine Einstellungen zu eMail (werden ggf. in den sub-Configuration benutzt)
 	 	$this->setConfValue('common', 'email', 'senderAdress', 'wi3@wiso.uni-erlangen.de');
@@ -38,10 +38,10 @@ class WisoadvisorConfiguration extends Configuration
 	 	
 	 	
 	 	//Templates, die vom HTML-Generator verwendet werden
-	 	$this->setConfValue('template', 'html', null, 'templates/htmltemplate.tpl'); //Das Template für den Seitenaufbau
-	 	$this->setConfValue('template', 'popup', null, 'templates/popuptemplate.tpl'); //Ein Template für Popup-Fenster
-	 	$this->setConfValue('template', 'indicator', 'pre', '###:###'); //Markierung für Ersetzungsanweisungen (Prefix)
-	 	$this->setConfValue('template', 'indicator', 'after', '###:###'); //Markierung für Ersetzungsanweisungen (Postfix)
+	 	$this->setConfValue('template', 'html', null, 'templates/htmltemplate.tpl'); //Das Template fï¿½r den Seitenaufbau
+	 	$this->setConfValue('template', 'popup', null, 'templates/popuptemplate.tpl'); //Ein Template fï¿½r Popup-Fenster
+	 	$this->setConfValue('template', 'indicator', 'pre', '###:###'); //Markierung fï¿½r Ersetzungsanweisungen (Prefix)
+	 	$this->setConfValue('template', 'indicator', 'after', '###:###'); //Markierung fï¿½r Ersetzungsanweisungen (Postfix)
 	 	$this->setConfValue('template', 'menuname', null, 'menudata');
 	 	$this->setConfValue('template', 'contentname', null, 'content');
 	 	$this->setConfValue('template', 'sessionname', null, 'sessiondata');
@@ -50,13 +50,13 @@ class WisoadvisorConfiguration extends Configuration
 	 	
 	 	//Messages: Nachrichtentexte, die das System ausgibt
 	 	$this->setConfValue('messages', 'usecasenotfound', null, 'Der angeforderte UseCase ist nicht vorhanden oder nicht konfiguriert. ');
-	 	$this->setConfValue('messages', 'pagenotfound', null, 'Die angeforderte Seite wurde nicht gefunden oder kann nur für angemeldete Nutzer angezeigt werden. ');
-	 	$this->setConfValue('messages', 'surveynotagainallowed', null, 'Der angeforderte Test wurde von Dir bereits ausgefüllt und abgeschickt - eine nochmalige Teilnahme ist nicht möglich. ');
-	 	$this->setConfValue('messages', 'legend_relative', null, '<b>Erklärung zu den Grafiken:</b><br/>Die Balken zeigen Dich im Vergleich zu den anderen Testteilnehmern. Der gelbe Strich markiert Dein eigenes Testergebnis, während die Ränder eines Balkens jeweils das schlechteste bzw. beste Ergebnis der anderen Nutzer (reduziert um die Extremwerte) symbolisieren.<br/><br/><img src="grafik/single_bad.png" class="image_right"/> Du hast leider nur bis zu ein Drittel der gestellten Fragen richtig beantworten können. Lies Dir die Infoseiten noch einmal gewissenhaft durch und Du wirst den Erfolg sehen, wenn Du den Test wiederholst.<br/><br/><img src="grafik/single_middle.png" class="image_right"/> Du hast zwischen 33,3% und 66,6% aller Fragen richtig beantwortet, damit liegst Du im guten Mittelfeld. Die restlichen Informationen bekommst Du über die Informationsseiten und die Homepage der WiSo-Fakultät.<br/><br/><img src="grafik/single_good.png" class="image_right"/> Glückwunsch, Du hast zwischen 66,6% und 100% der Fragen richtig beantwortet, in diesem Bereich bist Du top informiert!<br/>');
-	 	$this->setConfValue('messages', 'legend', null, '<b>Erklärung zu den Grafiken:</b><br/>Der Balken ganz oben zeigt Dich im Vergleich zu den anderen Testteilnehmern. Der gelbe Strich markiert Dein eigenes Testergebnis, während die Ränder des Balkens jeweils das schlechteste bzw. beste Ergebnis der anderen Nutzer (reduziert um die Extremwerte) symbolisieren.<br/>An den Grafiken zu &quot;Deine Ergebnisse im Einzelnen&quot; erkennst Du Deinen Stand im Vergleich zu den Ergebnissen der anderen Testteilnehmer. Der gelbe Strich markiert Dein eigenes Testergebnis, während der dunkelblaue Bereich die Bandbreite (reduziert um die Extremwerte) der Ergebnisse der anderen Benutzer zeigt.<br/><br/><img src="grafik/single_bad.png" class="image_right"/> Du hast leider nur bis zu ein Drittel der gestellten Fragen richtig beantworten können. Lies Dir die Infoseiten noch einmal gewissenhaft durch und Du wirst den Erfolg sehen, wenn Du den Test wiederholst.<br/><br/><img src="grafik/single_middle.png" class="image_right"/> Du hast zwischen 33,3% und 66,6% aller Fragen richtig beantwortet, damit liegst Du im guten Mittelfeld. Die restlichen Informationen bekommst Du über die Informationsseiten und die Homepage der WiSo-Fakultät.<br/><br/><br/><img src="grafik/single_good.png" class="image_right"/> Glückwunsch, Du hast zwischen 66,6% und 100% der Fragen richtig beantwortet, in diesem Bereich bist Du top informiert!<br/>');
-	 	$this->setConfValue('messages', 'charheader', null, 'Wie gut Du die Fragen beantwortet hast, veranschaulichen die folgenden Grafiken und Texte. Diese sind hinsichtlich verschiedener Gesichtspunkte gegliedert. Dies soll Dir bei der Reflexion Deiner Ergebnisse helfen. Viel Spaß beim Lesen Deiner Auswertung!');
+	 	$this->setConfValue('messages', 'pagenotfound', null, 'Die angeforderte Seite wurde nicht gefunden oder kann nur fï¿½r angemeldete Nutzer angezeigt werden. ');
+	 	$this->setConfValue('messages', 'surveynotagainallowed', null, 'Der angeforderte Test wurde von Dir bereits ausgefï¿½llt und abgeschickt - eine nochmalige Teilnahme ist nicht mï¿½glich. ');
+	 	$this->setConfValue('messages', 'legend_relative', null, '<b>Erklï¿½rung zu den Grafiken:</b><br/>Die Balken zeigen Dich im Vergleich zu den anderen Testteilnehmern. Der gelbe Strich markiert Dein eigenes Testergebnis, wï¿½hrend die Rï¿½nder eines Balkens jeweils das schlechteste bzw. beste Ergebnis der anderen Nutzer (reduziert um die Extremwerte) symbolisieren.<br/><br/><img src="grafik/single_bad.png" class="image_right"/> Du hast leider nur bis zu ein Drittel der gestellten Fragen richtig beantworten kï¿½nnen. Lies Dir die Infoseiten noch einmal gewissenhaft durch und Du wirst den Erfolg sehen, wenn Du den Test wiederholst.<br/><br/><img src="grafik/single_middle.png" class="image_right"/> Du hast zwischen 33,3% und 66,6% aller Fragen richtig beantwortet, damit liegst Du im guten Mittelfeld. Die restlichen Informationen bekommst Du ï¿½ber die Informationsseiten und die Homepage der WiSo-Fakultï¿½t.<br/><br/><img src="grafik/single_good.png" class="image_right"/> Glï¿½ckwunsch, Du hast zwischen 66,6% und 100% der Fragen richtig beantwortet, in diesem Bereich bist Du top informiert!<br/>');
+	 	$this->setConfValue('messages', 'legend', null, '<b>Erklï¿½rung zu den Grafiken:</b><br/>Der Balken ganz oben zeigt Dich im Vergleich zu den anderen Testteilnehmern. Der gelbe Strich markiert Dein eigenes Testergebnis, wï¿½hrend die Rï¿½nder des Balkens jeweils das schlechteste bzw. beste Ergebnis der anderen Nutzer (reduziert um die Extremwerte) symbolisieren.<br/>An den Grafiken zu &quot;Deine Ergebnisse im Einzelnen&quot; erkennst Du Deinen Stand im Vergleich zu den Ergebnissen der anderen Testteilnehmer. Der gelbe Strich markiert Dein eigenes Testergebnis, wï¿½hrend der dunkelblaue Bereich die Bandbreite (reduziert um die Extremwerte) der Ergebnisse der anderen Benutzer zeigt.<br/><br/><img src="grafik/single_bad.png" class="image_right"/> Du hast leider nur bis zu ein Drittel der gestellten Fragen richtig beantworten kï¿½nnen. Lies Dir die Infoseiten noch einmal gewissenhaft durch und Du wirst den Erfolg sehen, wenn Du den Test wiederholst.<br/><br/><img src="grafik/single_middle.png" class="image_right"/> Du hast zwischen 33,3% und 66,6% aller Fragen richtig beantwortet, damit liegst Du im guten Mittelfeld. Die restlichen Informationen bekommst Du ï¿½ber die Informationsseiten und die Homepage der WiSo-Fakultï¿½t.<br/><br/><br/><img src="grafik/single_good.png" class="image_right"/> Glï¿½ckwunsch, Du hast zwischen 66,6% und 100% der Fragen richtig beantwortet, in diesem Bereich bist Du top informiert!<br/>');
+	 	$this->setConfValue('messages', 'charheader', null, 'Wie gut Du die Fragen beantwortet hast, veranschaulichen die folgenden Grafiken und Texte. Diese sind hinsichtlich verschiedener Gesichtspunkte gegliedert. Dies soll Dir bei der Reflexion Deiner Ergebnisse helfen. Viel Spaï¿½ beim Lesen Deiner Auswertung!');
 	 	
-	 	//Matching von Klassen- auf Dateinamen - hier müssen alle benötigten Klassen definiert werden
+	 	//Matching von Klassen- auf Dateinamen - hier mï¿½ssen alle benï¿½tigten Klassen definiert werden
 	 	//zuerst die Framework-Komponenten
 	 	$phpClassSuffix = '.php';
 	 	$frameworkPath = 'classes/framework/';
@@ -167,7 +167,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	//rufe die Initialisierung der SQL-Statements auf
 	 	$this->configureSql();
 	 	
-	 	//hier unten sollte der Übersicht halber jeder UseCase zumindest seine eigene initialize-Methode bekommen
+	 	//hier unten sollte der ï¿½bersicht halber jeder UseCase zumindest seine eigene initialize-Methode bekommen
 	 	$this->configureUcStatic();
 	 	$this->configureUcLogin();
 	 	$this->configureUcRegistration();
@@ -191,49 +191,49 @@ class WisoadvisorConfiguration extends Configuration
 	 
 	 
 	/**
-	 * configureSql() füllt die Konfiguration mit den benötigten Sql-Abfragen
-	 * Hier sind alle Tabellennamen abgelegt; nach Möglichkeit sollten hier alle verwendeten
-	 * SQL-Statements (als "prepared Statement") bereits abgelegt werden, so dass sie zentral verfügbar sind
+	 * configureSql() fï¿½llt die Konfiguration mit den benï¿½tigten Sql-Abfragen
+	 * Hier sind alle Tabellennamen abgelegt; nach Mï¿½glichkeit sollten hier alle verwendeten
+	 * SQL-Statements (als "prepared Statement") bereits abgelegt werden, so dass sie zentral verfï¿½gbar sind
 	 */
 	 private function configureSql()
 	 {
-	 	//Tabellennamen für die Datenbank
+	 	//Tabellennamen fï¿½r die Datenbank
 	 	$tablePrefix = 'advisor__';
 	 	$loggingTablePrefix = $tablePrefix.'log_';
 	 	
 	 	//Allgemeine Tabellen
 		$table['user'] = $tablePrefix.'user'; //speichert die Nutzerdaten
-		$table['targetgroups'] = $tablePrefix.'targetgroups'; // enthält die unterschiedlichen Zielgruppen
-		$table['textelements'] = $tablePrefix.'textelements'; // enthält Textbausteine
+		$table['targetgroups'] = $tablePrefix.'targetgroups'; // enthï¿½lt die unterschiedlichen Zielgruppen
+		$table['textelements'] = $tablePrefix.'textelements'; // enthï¿½lt Textbausteine
 		$table['te_typ'] = $tablePrefix.'textelement_types'; // Typisiert (=gruppiert) die Textbausteine
-		$table['tg_te'] = $tablePrefix.'targetgroups_textelements'; // legt fest, welche Textbausteine für welche Zielgruppen geeignet sind
+		$table['tg_te'] = $tablePrefix.'targetgroups_textelements'; // legt fest, welche Textbausteine fï¿½r welche Zielgruppen geeignet sind
 		
 		// Logging
 		$table['log_actions'] = $loggingTablePrefix.'actions';
 		$table['log_clicks'] = $loggingTablePrefix.'clicks';
 
 		//Testtool
-		$table['answers'] = $tablePrefix.'answers'; // Hier sind mögliche Antworten abgelegt
+		$table['answers'] = $tablePrefix.'answers'; // Hier sind mï¿½gliche Antworten abgelegt
 		$table['op_res'] = $tablePrefix.'open_results'; // Hier sind Antworten auf OFFENE Fragen abgelegt
-		$table['questions'] = $tablePrefix.'questions'; // enthält einzelne Fragen
+		$table['questions'] = $tablePrefix.'questions'; // enthï¿½lt einzelne Fragen
 		$table['qu_an'] = $tablePrefix.'questions_answers'; // ordnet den Fragen Antwortalternativen und entsprechende Bewertungseinheiten zu
 		$table['results'] = $tablePrefix.'results'; // speichert die gegebenen Antworten der Nutzer
-		$table['surveys'] = $tablePrefix.'surveys'; // enthält die einzelnen Testmodule
+		$table['surveys'] = $tablePrefix.'surveys'; // enthï¿½lt die einzelnen Testmodule
 		$table['us_sur'] = $tablePrefix.'users_surveys'; // speichert, wann ein Benutzer welches Testmodul bearbeitet hat
 		$table['us_char'] = $tablePrefix.'users_chars'; // speichert das Ergebnis jedes Users in einem Merkmal
-		$table['char'] = $tablePrefix.'characteristics'; // enthält die Merkmale (z.B. Einzelkompetenzen), die geprüft werden
+		$table['char'] = $tablePrefix.'characteristics'; // enthï¿½lt die Merkmale (z.B. Einzelkompetenzen), die geprï¿½ft werden
 		$table['groups'] = $tablePrefix.'groups'; // Gruppierung der Merkmale (z.B. in Kompetenzklassen)
 		$table['blocks'] = $tablePrefix.'blocks'; // Gruppierung der Tests
 		$table['infos'] = $tablePrefix.'infos'; // Seiten der Informationsplattform
 		$table['questiontypes'] = $tablePrefix.'questiontypes'; // Fragentypen
-		$table['questionblocks'] = $tablePrefix.'questionblocks'; // Fragenblöcke
-		$table['open_results'] = $tablePrefix.'open_results'; // Fragenblöcke
+		$table['questionblocks'] = $tablePrefix.'questionblocks'; // Fragenblï¿½cke
+		$table['open_results'] = $tablePrefix.'open_results'; // Fragenblï¿½cke
 		$table['ratings'] = $tablePrefix.'ratings'; // Ergebnis zu Textelement-Zuordnung
 
 	 	//Weitere "Hilfstabellen"
 	 	$table['sponsors'] = $tablePrefix.'sponsors'; //speichert die "Sponsoren" vom Advisor (inkl. Link aufs Logo)
 	 	$table['feedback'] = $tablePrefix.'feedback'; //speichert abgegebenes Feedback in der DB
-	 	$table['infos'] = $tablePrefix.'infos'; // enthält die einzelnen Infoseiten und ihre Kurzversionen
+	 	$table['infos'] = $tablePrefix.'infos'; // enthï¿½lt die einzelnen Infoseiten und ihre Kurzversionen
 	 	 
 		//SQL-Statements
 		
@@ -265,7 +265,7 @@ class WisoadvisorConfiguration extends Configuration
 			//Passwort vergessen
 			$this->setConfValue('sql', 'user', 'validEmail', 'SELECT uid FROM '.$table['user'].' WHERE email = "?"');
 
-	 		// SQL für die Modell-Klassen
+	 		// SQL fï¿½r die Modell-Klassen
 	 		// Klasse SurveyBlock
 		 	$this->setConfValue('sql', 'survey_block', 'getForId', 'SELECT * FROM '.$table['blocks'].' WHERE blid=?');
 		 	$this->setConfValue('sql', 'survey_block', 'getAll', 'SELECT * FROM '.$table['blocks'].' ORDER BY position');
@@ -344,8 +344,8 @@ class WisoadvisorConfiguration extends Configuration
 		 	// Klasse User
 		 	$this->setConfValue('sql', 'user', 'getForId', 'SELECT * FROM '.$table['user'].' WHERE uid=?');
 		 	$this->setConfValue('sql', 'user', 'getAll', 'SELECT * FROM '.$table['user'].' ORDER BY uid');
-		 	$this->setConfValue('sql', 'user', 'storeUpdate', 'UPDATE '.$table['user'].' SET username = "?", email = "?", passwd = "?", gender = "?", birthday = "?", tgid = "?", confirmed = "?", auth_code = "?", type = "?" WHERE uid = "?"');
-			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "user")');
+		 	$this->setConfValue('sql', 'user', 'storeUpdate', 'UPDATE '.$table['user'].' SET username = "?", email = "?", passwd = "?", gender = "?", birthday = "?", tgid = "?", confirmed = "?", auth_code = "?", type = "?", matnr = "?", studies = "?" WHERE uid = "?"');
+			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, matnr, studies, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "user")');
 		 	
 		 	// Klasse TextElement
 		 	$this->setConfValue('sql', 'text_element', 'getForId', 'SELECT * FROM '.$table['textelements'].' WHERE teid=?');
@@ -367,22 +367,22 @@ class WisoadvisorConfiguration extends Configuration
 	 }
 
 	/**
-	 * configureUcStatic() füllt die Konfiguration mit den benötigten Daten für ucStatic
+	 * configureUcStatic() fï¿½llt die Konfiguration mit den benï¿½tigten Daten fï¿½r ucStatic
 	 */
 	 private function configureUcStatic()
 	 {
-		$this->setConfValue('ucStatic', 'templatePath', 'all', 'templates/static/'); //Pfad, in dem die statischen Templates (öffentliche, die jeder ansehen darf) abgelegt sind
-		$this->setConfValue('ucStatic', 'templatePath', 'authenticated', 'templates/static/authenticated/'); //Pfad, in dem die statischen Templates (nur für eingeloggte Nutzer) abgelegt sind
+		$this->setConfValue('ucStatic', 'templatePath', 'all', 'templates/static/'); //Pfad, in dem die statischen Templates (ï¿½ffentliche, die jeder ansehen darf) abgelegt sind
+		$this->setConfValue('ucStatic', 'templatePath', 'authenticated', 'templates/static/authenticated/'); //Pfad, in dem die statischen Templates (nur fï¿½r eingeloggte Nutzer) abgelegt sind
 		$this->setConfValue('ucStatic', 'suffix', null, '.tpl'); //Datei-Suffix der Templates
 	 }
 
 	/**
-	 * configureUcLogin() füllt die Konfiguration mit den benötigten Daten für ucLogin
+	 * configureUcLogin() fï¿½llt die Konfiguration mit den benï¿½tigten Daten fï¿½r ucLogin
 	 */
 	 private function configureUcLogin()
 	 {
-		$this->setConfValue('ucLogin', 'loginform_tpl', null, 'templates/ucLogin/loginform.tpl'); //Template für das Loginfenster
-		$this->setConfValue('ucLogin', 'loginbox_tpl', null, 'templates/ucLogin/loginbox.tpl'); //Template für die kleine Loginbox
+		$this->setConfValue('ucLogin', 'loginform_tpl', null, 'templates/ucLogin/loginform.tpl'); //Template fï¿½r das Loginfenster
+		$this->setConfValue('ucLogin', 'loginbox_tpl', null, 'templates/ucLogin/loginbox.tpl'); //Template fï¿½r die kleine Loginbox
 		//Variable Teile im Template:
 		$this->setConfValue('ucLogin', 'loginaction', null, 'loginaction');
 		$this->setConfValue('ucLogin', 'registeraction', null, 'registeraction');
@@ -396,7 +396,7 @@ class WisoadvisorConfiguration extends Configuration
 
 	 private function configureUcSession()
 	 {
-		$this->setConfValue('ucSession', 'authenticated_tpl', null, 'templates/ucSession/authenticated.tpl'); //Template für authentifizierte Benutzer
+		$this->setConfValue('ucSession', 'authenticated_tpl', null, 'templates/ucSession/authenticated.tpl'); //Template fï¿½r authentifizierte Benutzer
 		//Variable Teile im Template:
 		$this->setConfValue('ucSession', 'username', null, 'USERNAME');
 		$this->setConfValue('ucSession', 'useremail', null, 'USEREMAIL');
@@ -419,11 +419,11 @@ class WisoadvisorConfiguration extends Configuration
 	 }
 
 	/**
-	 * configureUcChangeUserData() füllt die Konfiguration mit den benötigten Daten
+	 * configureUcChangeUserData() fï¿½llt die Konfiguration mit den benï¿½tigten Daten
 	 */
 	 private function configureUcChangeUserData()
 	 {
-		$this->setConfValue('ucChangeUserData', 'changeform_tpl', null, 'templates/ucChangeUserData/changeform.tpl'); //Template für das Registrierungsfenster
+		$this->setConfValue('ucChangeUserData', 'changeform_tpl', null, 'templates/ucChangeUserData/changeform.tpl'); //Template fï¿½r das Registrierungsfenster
 		//Variable Teile im Template:
 		$this->setConfValue('ucChangeUserData', 'message', null, 'MESSAGE');
 		$this->setConfValue('ucChangeUserData', 'username', null, 'USERNAME');
@@ -434,33 +434,34 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucChangeUserData', 'birthday', null, 'BIRTHDAY');
 		$this->setConfValue('ucChangeUserData', 'submit', null, 'SUBMIT');
 		$this->setConfValue('ucChangeUserData', 'reset', null, 'RESET');
-		//reguläre Ausdrücke zur Überprüfung der Eingaben: 
-		//Hinweis: aufgrund der PHP-Stringbehandlung müssen die Regexe in doppelte Anführungszeichen gesetzt werden!
-		$this->setConfValue('ucChangeUserData', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gültige (i.S. von mögliche) eMailadresse oder leer
-		$this->setConfValue('ucChangeUserData', 'regex', 'password', "/^([\&\§\!\?\=\%\ß\ü\ä\öa-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		//regulï¿½re Ausdrï¿½cke zur ï¿½berprï¿½fung der Eingaben: 
+		//Hinweis: aufgrund der PHP-Stringbehandlung mï¿½ssen die Regexe in doppelte Anfï¿½hrungszeichen gesetzt werden!
+		$this->setConfValue('ucChangeUserData', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gï¿½ltige (i.S. von mï¿½gliche) eMailadresse oder leer
+		$this->setConfValue('ucChangeUserData', 'regex', 'password', "/^([\&\ï¿½\!\?\=\%\ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
 		$this->setConfValue('ucChangeUserData', 'regex', 'gender', "/^([muw]{1,1})$/i"); //Geschlecht
 		$this->setConfValue('ucChangeUserData', 'regex', 'birthday', "/^([\\d]{1,4})$/i"); //Jahreszahl oder 0
-		$this->setConfValue('ucChangeUserData', 'regex', 'username', "/^([ \ß\ü\ä\öa-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucChangeUserData', 'regex', 'username', "/^([ \ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
 		//Fehlermeldung(en):
-		$this->setConfValue('ucChangeUserData', 'error', 'username', 'Dein Name darf aus höchstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
-		$this->setConfValue('ucChangeUserData', 'error', 'email', 'Deine eMailadresse ist ungültig. ');
-		$this->setConfValue('ucChangeUserData', 'error', 'gender', 'Die Angabe des Geschlechts ist ungültig! ');
-		$this->setConfValue('ucChangeUserData', 'error', 'birthday', 'Die Geburtstagsangabe ist ungültig! ');
+		$this->setConfValue('ucChangeUserData', 'error', 'username', 'Dein Name darf aus hï¿½chstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
+		$this->setConfValue('ucChangeUserData', 'error', 'email', 'Deine eMailadresse ist ungï¿½ltig. ');
+		$this->setConfValue('ucChangeUserData', 'error', 'gender', 'Die Angabe des Geschlechts ist ungï¿½ltig! ');
+		$this->setConfValue('ucChangeUserData', 'error', 'birthday', 'Die Geburtstagsangabe ist ungï¿½ltig! ');
 		$this->setConfValue('ucChangeUserData', 'error', 'password', 'Dein Passwort muss aus mindestens 5 Zeichen bestehen. ');
-		$this->setConfValue('ucChangeUserData', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung müssen übereinstimmen. ');
+		$this->setConfValue('ucChangeUserData', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung mï¿½ssen ï¿½bereinstimmen. ');
 		//Nachricht:
-		$this->setConfValue('ucChangeUserData', 'message_text', 'stored', 'Wir haben Deine Änderungen erfolgreich gespeichert.');
+		$this->setConfValue('ucChangeUserData', 'message_text', 'stored', 'Wir haben Deine ï¿½nderungen erfolgreich gespeichert.');
 	 }
 	 
 	/**
-	 * configureUcRegistration() füllt die Konfiguration mit den benötigten Daten für ucRegistration
+	 * configureUcRegistration() fï¿½llt die Konfiguration mit den benï¿½tigten Daten fï¿½r ucRegistration
 	 */
 	 private function configureUcRegistration()
 	 {
-		$this->setConfValue('ucRegistration', 'registrationform_tpl', null, 'templates/ucRegistration/registrationform.tpl'); //Template für das Registrierungsfenster
-		$this->setConfValue('ucRegistration', 'confirmation_tpl', null, 'templates/ucRegistration/confirmation.tpl'); //Template für die Bestätigungsseite
-		$this->setConfValue('ucRegistration', 'error_verification_tpl', null, 'templates/ucRegistration/verification_error.tpl'); //Template für die Bestätigungsseite
-		$this->setConfValue('ucRegistration', 'confirm_verification_tpl', null, 'templates/ucRegistration/verification_confirmation.tpl'); //Template für die Bestätigungsseite
+		$this->setConfValue('ucRegistration', 'registrationform_tpl', null, 'templates/ucRegistration/registrationform.tpl'); //Template fï¿½r das Registrierungsfenster
+		$this->setConfValue('ucRegistration', 'confirmation_tpl', null, 'templates/ucRegistration/confirmation.tpl'); //Template fï¿½r die Bestï¿½tigungsseite
+		$this->setConfValue('ucRegistration', 'error_verification_tpl', null, 'templates/ucRegistration/verification_error.tpl'); //Template fï¿½r die Bestï¿½tigungsseite
+		$this->setConfValue('ucRegistration', 'confirm_verification_tpl', null, 'templates/ucRegistration/verification_confirmation.tpl'); //Template fï¿½r die Bestï¿½tigungsseite
+		
 		//Variable Teile im Template:
 		$this->setConfValue('ucRegistration', 'registeraction', null, 'registeraction');
 		$this->setConfValue('ucRegistration', 'datenschutzlink', null, 'datenschutzlink');
@@ -471,43 +472,49 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucRegistration', 'password', null, 'password');
 		$this->setConfValue('ucRegistration', 'gender', null, 'gender');
 		$this->setConfValue('ucRegistration', 'birthday', null, 'birthday');
-		//reguläre Ausdrücke zur Überprüfung der Eingaben: 
-		//Hinweis: aufgrund der PHP-Stringbehandlung müssen die Regexe in doppelte Anführungszeichen gesetzt werden!
-		$this->setConfValue('ucRegistration', 'regex', 'username', "/^([ \ß\ü\ä\öa-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
-		$this->setConfValue('ucRegistration', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gültige (i.S. von mögliche) eMailadresse oder leer
-		$this->setConfValue('ucRegistration', 'regex', 'password', "/^([\&\§\!\?\=\%\ß\ü\ä\öa-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucRegistration', 'matnr', null, 'matnr');
+		$this->setConfValue('ucRegistration', 'studies', null, 'studies');
+		
+		//regulï¿½re Ausdrï¿½cke zur ï¿½berprï¿½fung der Eingaben: 
+		//Hinweis: aufgrund der PHP-Stringbehandlung mï¿½ssen die Regexe in doppelte Anfï¿½hrungszeichen gesetzt werden!
+		$this->setConfValue('ucRegistration', 'regex', 'username', "/^([ \ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucRegistration', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gï¿½ltige (i.S. von mï¿½gliche) eMailadresse oder leer
+		$this->setConfValue('ucRegistration', 'regex', 'password', "/^([\&\ï¿½\!\?\=\%\ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
 		$this->setConfValue('ucRegistration', 'regex', 'gender', "/^([muw]{1,1})$/i"); //Geschlecht
 		$this->setConfValue('ucRegistration', 'regex', 'birthday', "/^([\\d]{1,4})$/i"); //Jahreszahl oder 0
+		
 		//Fehlermeldung(en):
-		$this->setConfValue('ucRegistration', 'error', 'username', 'Dein Name darf aus höchstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
-		$this->setConfValue('ucRegistration', 'error', 'email', 'Bitte gib eine gültige eMailadresse ein. ');
-		$this->setConfValue('ucRegistration', 'error', 'gender', 'Die Angabe des Geschlechts ist ungültig! ');
-		$this->setConfValue('ucRegistration', 'error', 'birthday', 'Die Geburtstagsangabe ist ungültig! ');
+		$this->setConfValue('ucRegistration', 'error', 'username', 'Dein Name darf aus hï¿½chstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
+		$this->setConfValue('ucRegistration', 'error', 'email', 'Bitte gib eine gï¿½ltige eMailadresse ein. ');
+		$this->setConfValue('ucRegistration', 'error', 'gender', 'Die Angabe des Geschlechts ist ungï¿½ltig! ');
+		$this->setConfValue('ucRegistration', 'error', 'birthday', 'Die Geburtstagsangabe ist ungï¿½ltig! ');
 		$this->setConfValue('ucRegistration', 'error', 'password', 'Dein Passwort muss aus mindestens 5 Zeichen bestehen. ');
-		$this->setConfValue('ucRegistration', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung müssen übereinstimmen. ');
+		$this->setConfValue('ucRegistration', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung mï¿½ssen ï¿½bereinstimmen. ');
 		$this->setConfValue('ucRegistration', 'error', 'double_email', 'Wir konnten Dich nicht registrieren, weil die eMailadresse schon vergeben ist. ');
 		$this->setConfValue('ucRegistration', 'error', 'datenschutz_akzeptieren', 'Du musst der Verwendung Deiner Daten zustimmen, ansonsten kannst Du Dich nicht registrieren. ');
+		
 		//Registrierungsvorgang:
-		$this->setConfValue('ucRegistration', 'authenticationLength', null, 50); //Länge des Authentifizierungscode
+		$this->setConfValue('ucRegistration', 'authenticationLength', null, 50); //Lï¿½nge des Authentifizierungscode
+		
 		//eMail-Konfiguration:
 		$this->setConfValue('ucRegistration', 'email_confirmation', 'sender', $this->getConfString('common', 'email', 'sender'));
 		$this->setConfValue('ucRegistration', 'email_confirmation', 'replyto', $this->getConfString('common', 'email', 'replyto'));
 		$this->setConfValue('ucRegistration', 'email_confirmation', 'subject', 'WiSo@visor - Deine Registrierung');
-//		$this->setConfValue('ucRegistration', 'email_confirmation', 'subject', 'WiSo@visor-Registrierung bestätigen');
+//		$this->setConfValue('ucRegistration', 'email_confirmation', 'subject', 'WiSo@visor-Registrierung bestï¿½tigen');
 //		$this->setConfValue('ucRegistration', 'email_confirmation', 'template', 'templates/ucRegistration/email.tpl');
 		$this->setConfValue('ucRegistration', 'email_confirmation', 'template', 'templates/ucRegistration/email_without_confirmation.tpl');
-		$this->setConfValue('ucRegistration', 'email_confirmation', 'username', 'username'); //Ersetzung für den Usernamen
-		$this->setConfValue('ucRegistration', 'email_confirmation', 'email', 'email'); //Ersetzung für die eMailadresse
-		$this->setConfValue('ucRegistration', 'email_confirmation', 'link', 'link'); //Ersetzung für den Bestätigungslink
+		$this->setConfValue('ucRegistration', 'email_confirmation', 'username', 'username'); //Ersetzung fï¿½r den Usernamen
+		$this->setConfValue('ucRegistration', 'email_confirmation', 'email', 'email'); //Ersetzung fï¿½r die eMailadresse
+		$this->setConfValue('ucRegistration', 'email_confirmation', 'link', 'link'); //Ersetzung fï¿½r den Bestï¿½tigungslink
 	 }
 	 
 	/**
-	 * configureUcFeedback() füllt die Konfiguration mit den benötigten Daten
+	 * configureUcFeedback() fï¿½llt die Konfiguration mit den benï¿½tigten Daten
 	 */
 	 private function configureUcFeedback()
 	 {
-		$this->setConfValue('ucFeedback', 'feedbackform_tpl', null, 'templates/ucFeedback/feedbackform.tpl'); //Template für das Formular
-		$this->setConfValue('ucFeedback', 'confirmation_tpl', null, 'templates/ucFeedback/confirmation.tpl'); //Template für die Bestätigungsseite
+		$this->setConfValue('ucFeedback', 'feedbackform_tpl', null, 'templates/ucFeedback/feedbackform.tpl'); //Template fï¿½r das Formular
+		$this->setConfValue('ucFeedback', 'confirmation_tpl', null, 'templates/ucFeedback/confirmation.tpl'); //Template fï¿½r die Bestï¿½tigungsseite
 		//Variable Teile in den Templates:
 		$this->setConfValue('ucFeedback', 'emailaddy', null, 'EMAIL');
 		$this->setConfValue('ucFeedback', 'sender', null, 'SENDER');
@@ -520,18 +527,18 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucFeedback', 'showerror', null, 'SHOWERROR');
 		$this->setConfValue('ucFeedback', 'submit', null, 'SUBMIT');
 		$this->setConfValue('ucFeedback', 'reset', null, 'RESET');
-		//reguläre Ausdrücke zur Überprüfung der Eingaben: 
-		//Hinweis: aufgrund der PHP-Stringbehandlung müssen die Regexe in doppelte Anführungszeichen gesetzt werden! - deshalb auch immer der doppelte Backslash
-		$this->setConfValue('ucFeedback', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gültige (i.S. von mögliche) eMailadresse oder leer
-		$this->setConfValue('ucFeedback', 'regex', 'subject', "/^([\\:\\.\\&\\§\\ \\!\\?\\=\\%\\ß\\ü\\ä\\öa-z0-9_-]{1,255})$/i"); //1-255 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
-		$this->setConfValue('ucFeedback', 'regex', 'sender', "/^([\\:\\.\\&\\§\\!\\ \\?\\=\\%\\ß\\ü\\ä\\öa-z0-9_-]{0,255})$/i"); //0-255 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
-		$this->setConfValue('ucFeedback', 'regex', 'reference', "/^([\\:\\.\\&\\§\\!\\?\\=\\%\\ß\\ü\\ä\\öa-z0-9_-]{0,255})$/i"); //0-255 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
-		$this->setConfValue('ucFeedback', 'regex', 'message', "/^([\\n\\r\\t\\d\\D\\s\\S\\w\\W\\:\\.\\&\\§\\ \\!\\?\\=\\%\\ß\\ü\\ä\\öa-z0-9_-]+)$/i"); //nicht leer
+		//regulï¿½re Ausdrï¿½cke zur ï¿½berprï¿½fung der Eingaben: 
+		//Hinweis: aufgrund der PHP-Stringbehandlung mï¿½ssen die Regexe in doppelte Anfï¿½hrungszeichen gesetzt werden! - deshalb auch immer der doppelte Backslash
+		$this->setConfValue('ucFeedback', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gï¿½ltige (i.S. von mï¿½gliche) eMailadresse oder leer
+		$this->setConfValue('ucFeedback', 'regex', 'subject', "/^([\\:\\.\\&\\ï¿½\\ \\!\\?\\=\\%\\ï¿½\\ï¿½\\ï¿½\\ï¿½a-z0-9_-]{1,255})$/i"); //1-255 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucFeedback', 'regex', 'sender', "/^([\\:\\.\\&\\ï¿½\\!\\ \\?\\=\\%\\ï¿½\\ï¿½\\ï¿½\\ï¿½a-z0-9_-]{0,255})$/i"); //0-255 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucFeedback', 'regex', 'reference', "/^([\\:\\.\\&\\ï¿½\\!\\?\\=\\%\\ï¿½\\ï¿½\\ï¿½\\ï¿½a-z0-9_-]{0,255})$/i"); //0-255 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucFeedback', 'regex', 'message', "/^([\\n\\r\\t\\d\\D\\s\\S\\w\\W\\:\\.\\&\\ï¿½\\ \\!\\?\\=\\%\\ï¿½\\ï¿½\\ï¿½\\ï¿½a-z0-9_-]+)$/i"); //nicht leer
 		
 		//Fehlermeldung(en):
-		$this->setConfValue('ucFeedback', 'error', 'email', 'Die Angabe Deiner eMailadresse ist freiwillig; wenn Du eine eMailadresse angibst, dann muss diese gültig sein. ');
-		$this->setConfValue('ucFeedback', 'error', 'sender', 'Die Angabe Deines Namens ist freiwillig; wenn Du Deinen Namen angibst, darf dieser höchstens 255 Zeichen lang sein. ');
-		$this->setConfValue('ucFeedback', 'error', 'subject', 'Der angegebene Betreff ist leer oder enthält ungültige Zeichen - erlaubt sind nur Buchstaben, Ziffern und Satzzeichen. ');
+		$this->setConfValue('ucFeedback', 'error', 'email', 'Die Angabe Deiner eMailadresse ist freiwillig; wenn Du eine eMailadresse angibst, dann muss diese gï¿½ltig sein. ');
+		$this->setConfValue('ucFeedback', 'error', 'sender', 'Die Angabe Deines Namens ist freiwillig; wenn Du Deinen Namen angibst, darf dieser hï¿½chstens 255 Zeichen lang sein. ');
+		$this->setConfValue('ucFeedback', 'error', 'subject', 'Der angegebene Betreff ist leer oder enthï¿½lt ungï¿½ltige Zeichen - erlaubt sind nur Buchstaben, Ziffern und Satzzeichen. ');
 		$this->setConfValue('ucFeedback', 'error', 'message', 'Die Nachricht darf nicht leer sein. ');
 		$this->setConfValue('ucFeedback', 'error', 'senderror', 'Wir konnten leider Dein Feedback aufgrund eines Systemfehlers nicht weiterleiten. ');
 		//eMail-Konfiguration:
@@ -543,23 +550,23 @@ class WisoadvisorConfiguration extends Configuration
 	 }
 	 
 	/**
-	 * configureUcForgotPwd() füllt die Konfiguration mit den benötigten Daten
+	 * configureUcForgotPwd() fï¿½llt die Konfiguration mit den benï¿½tigten Daten
 	 */
 	 private function configureUcForgotPwd()
 	 {
-		$this->setConfValue('ucForgotPwd', 'pwdform_tpl', null, 'templates/ucForgotPwd/pwdform.tpl'); //Template für das Formular
-		$this->setConfValue('ucForgotPwd', 'confirmation_tpl', null, 'templates/ucForgotPwd/confirmation.tpl'); //Template für die Bestätigungsseite
+		$this->setConfValue('ucForgotPwd', 'pwdform_tpl', null, 'templates/ucForgotPwd/pwdform.tpl'); //Template fï¿½r das Formular
+		$this->setConfValue('ucForgotPwd', 'confirmation_tpl', null, 'templates/ucForgotPwd/confirmation.tpl'); //Template fï¿½r die Bestï¿½tigungsseite
 		//Variable Teile in den Templates:
 		$this->setConfValue('ucForgotPwd', 'emailaddy', null, 'EMAIL');
 		$this->setConfValue('ucForgotPwd', 'showerror', null, 'SHOWERROR');
 		$this->setConfValue('ucForgotPwd', 'submit', null, 'SUBMIT');
 		$this->setConfValue('ucForgotPwd', 'username', null, 'USERNAME');
 		$this->setConfValue('ucForgotPwd', 'userpwd', null, 'PASSWORD');
-		//reguläre Ausdrücke zur Überprüfung der Eingaben: 
-		//Hinweis: aufgrund der PHP-Stringbehandlung müssen die Regexe in doppelte Anführungszeichen gesetzt werden! - deshalb auch immer der doppelte Backslash
-		$this->setConfValue('ucForgotPwd', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gültige (i.S. von mögliche) eMailadresse oder leer
+		//regulï¿½re Ausdrï¿½cke zur ï¿½berprï¿½fung der Eingaben: 
+		//Hinweis: aufgrund der PHP-Stringbehandlung mï¿½ssen die Regexe in doppelte Anfï¿½hrungszeichen gesetzt werden! - deshalb auch immer der doppelte Backslash
+		$this->setConfValue('ucForgotPwd', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gï¿½ltige (i.S. von mï¿½gliche) eMailadresse oder leer
 		//Fehlermeldung(en):
-		$this->setConfValue('ucForgotPwd', 'error', 'email', 'Du hast keine gültige eMailadresse angegeben. ');
+		$this->setConfValue('ucForgotPwd', 'error', 'email', 'Du hast keine gï¿½ltige eMailadresse angegeben. ');
 		$this->setConfValue('ucForgotPwd', 'error', 'nosuchemail', 'Die angegebene eMailadresse existiert in unserer Datenbank nicht. ');
 		$this->setConfValue('ucForgotPwd', 'error', 'emailerror', 'Es ist ein Systemfehler aufgetreten - leider konnten wir Dir Deine Zugangsdaten nicht senden. ');
 		//eMail-Konfiguration:
@@ -579,7 +586,7 @@ class WisoadvisorConfiguration extends Configuration
 	 
 
 	/**
-	 * configureUcSurvey() füllt die Konfiguration mit den Daten für ucSurvey
+	 * configureUcSurvey() fï¿½llt die Konfiguration mit den Daten fï¿½r ucSurvey
 	 */
 	 private function configureUcSurvey()
 	 {
@@ -590,30 +597,30 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('ucSurvey', 'clear_tpl', null, 'templates/ucSurvey/clearSurvey.tpl');
 
 	 	$this->setConfValue('ucSurvey', 'surveytitle', null, 'surveytitle'); //Titel der Umfrage
-	 	$this->setConfValue('ucSurvey', 'startpage', null, 'startpage'); //Den Text für die Startseite
-	 	$this->setConfValue('ucSurvey', 'startimage', null, 'startimage'); //Das Bild für die Startseite
+	 	$this->setConfValue('ucSurvey', 'startpage', null, 'startpage'); //Den Text fï¿½r die Startseite
+	 	$this->setConfValue('ucSurvey', 'startimage', null, 'startimage'); //Das Bild fï¿½r die Startseite
 	 	$this->setConfValue('ucSurvey', 'navigation', null, 'navigationpanel'); //Das Navigationspanel
-	 	$this->setConfValue('ucSurvey', 'whysurvey', null, 'whysurvey'); //Button zum Öffnen einer Hilfeseite
+	 	$this->setConfValue('ucSurvey', 'whysurvey', null, 'whysurvey'); //Button zum ï¿½ffnen einer Hilfeseite
 	 	$this->setConfValue('ucSurvey', 'clearsurvey', null, 'clearsurvey'); //Button zum Verwerfen der Umfrage
 	 	$this->setConfValue('ucSurvey', 'navbuttons', null, 'navigation'); //Buttons zum Navigieren innerhalb der Umfrage
 	 	$this->setConfValue('ucSurvey', 'percentage', null, 'percentage'); //Fortschrittsanzeige
 	 	$this->setConfValue('ucSurvey', 'question', null, 'question'); //Fragetext
 	 	$this->setConfValue('ucSurvey', 'questionhelp', null, 'questionhelp'); //Hilfetext zur Frage
-	 	$this->setConfValue('ucSurvey', 'answers', null, 'answers'); //Antwortmöglichkeiten
+	 	$this->setConfValue('ucSurvey', 'answers', null, 'answers'); //Antwortmï¿½glichkeiten
 	 	$this->setConfValue('ucSurvey', 'answerjavascript', null, 'answerjavascript'); //JavaScript zum Antwortfokussieren
 	 	$this->setConfValue('ucSurvey', 'quotation', null, 'quotation'); //Zitatfeld
 	 	$this->setConfValue('ucSurvey', 'answererror', null, 'answererror'); //Buttons zum Navigieren innerhalb der Umfrage
 	 	
 		//Buttonbeschriftungen: hier sind jeweils die Buttonbeschriftungen definiert
 	 	$this->setConfValue('ucSurvey', 'button', 'startsurvey', 'Test starten');
-	 	$this->setConfValue('ucSurvey', 'button', 'savesurvey', 'Test abschließen');
+	 	$this->setConfValue('ucSurvey', 'button', 'savesurvey', 'Test abschlieï¿½en');
 	 	$this->setConfValue('ucSurvey', 'button', 'clearsurvey', 'Alle Antworten verwerfen');
 	 	$this->setConfValue('ucSurvey', 'button', 'whysurvey', 'Hilfe');
 	 	$this->setConfValue('ucSurvey', 'button', 'feedback', 'Feedback');
 	 	$this->setConfValue('ucSurvey', 'button', 'next', 'Weiter >>');
-	 	$this->setConfValue('ucSurvey', 'button', 'back', '<< Zurück');
+	 	$this->setConfValue('ucSurvey', 'button', 'back', '<< Zurï¿½ck');
 	 	
-	 	$this->setConfValue('ucSurvey', 'replace', 'multiplechoice', '<br/><br/><span class="questionhelp">(Mehrfachantworten möglich)</span>');
+	 	$this->setConfValue('ucSurvey', 'replace', 'multiplechoice', '<br/><br/><span class="questionhelp">(Mehrfachantworten mï¿½glich)</span>');
 		$this->setConfValue('ucSurvey', 'message', 'required', 'Bitte beantworte diese Frage. Vorher kannst Du nicht im Test fortfahren.');
 		
 		//wohin soll nach Abschluss der Umfrage weitergeleitet werden, wohin bei Abbruch? (jeweils ein UseCase-Handle)
@@ -636,7 +643,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('ucOverview', 'line_icons_column_tpl', null, 'templates/ucOverview/line_icons_columns.tpl');
 	 	
 	 	$this->setConfValue('ucOverview', 'text', 'bar_title', 'Du bist unter den besten ###:###result###:### Prozent der Kandidaten.');
-	 	$this->setConfValue('ucOverview', 'text', 'bar_title_best', 'Glückwunsch! Es gibt keinen Kandidaten, der besser ist als Du.');
+	 	$this->setConfValue('ucOverview', 'text', 'bar_title_best', 'Glï¿½ckwunsch! Es gibt keinen Kandidaten, der besser ist als Du.');
 	 	
 	 	$this->setConfValue('ucOverview', 'button', 'email', '>> PDF anfordern');
 	 }
@@ -728,7 +735,7 @@ class WisoadvisorConfiguration extends Configuration
 		//eMail-Konfiguration:
 		$this->setConfValue('ucGetPdf', 'email', 'sender', $this->getConfString('common', 'email', 'sender'));
 		$this->setConfValue('ucGetPdf', 'email', 'replyto', $this->getConfString('common', 'email', 'replyto'));
-		$this->setConfValue('ucGetPdf', 'email', 'subject', 'WiSo@visor - Deine persönlichen Testergebnisse');
+		$this->setConfValue('ucGetPdf', 'email', 'subject', 'WiSo@visor - Deine persï¿½nlichen Testergebnisse');
 		$this->setConfValue('ucGetPdf', 'email', 'template', 'templates/ucGetPdf/email.tpl');
 		$this->setConfValue('ucGetPdf', 'email', 'username', 'username');
 		

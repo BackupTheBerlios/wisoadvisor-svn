@@ -1,9 +1,9 @@
 <?php
-//führt die Registrierung durch
+//fï¿½hrt die Registrierung durch
 
 class ucRegistration extends UseCase
 {
-	//Ausführung: Business-Logik
+	//Ausfï¿½hrung: Business-Logik
 	public function execute()
 	{
 		//unterschiedliches Verhalten, je nachdem, ob Nutzer angemeldet oder nicht; 
@@ -18,16 +18,16 @@ class ucRegistration extends UseCase
 		else
 		{
 			$this->setOutputType(USECASE_HTML);
-			//abhängig vom Step...
+			//abhï¿½ngig vom Step...
 			switch ($this->getStep())
 			{
 				case 'check':
-					//Registrierungsdaten kontrollieren und Registrierung ggf. durchführen
+					//Registrierungsdaten kontrollieren und Registrierung ggf. durchfï¿½hren
 					$this->checkRegistration();
 					break;
 				
 				case 'confirm':
-					//überprüfe die Parameterangaben und schalte den User ggf. frei
+					//ï¿½berprï¿½fe die Parameterangaben und schalte den User ggf. frei
 					$this->checkConfirmation();
 					break;
 					
@@ -42,11 +42,11 @@ class ucRegistration extends UseCase
 	}
 
 	/**
-	 * checkRegistration() führt die Registrierung durch
+	 * checkRegistration() fï¿½hrt die Registrierung durch
 	 */
 	private function checkRegistration()
 	{
-		//zuerst die übergebenen Parameter einlesen:
+		//zuerst die ï¿½bergebenen Parameter einlesen:
 		$email = $this->getParam()->getParameter('email');
 		$username = $this->getParam()->getParameter('username');
 		$password = $this->getParam()->getParameter('passwd');
@@ -54,19 +54,23 @@ class ucRegistration extends UseCase
 		$gender = $this->getParam()->getParameter('gender');
 		$birthday = $this->getParam()->getParameter('birthday');
 		$datenschutz = $this->getParam()->getParameter('datenschutz');
+		$matnr = $this->getParam()->getParameter('matnr');
+		$studies = $this->getParam()->getParameter('studies');
 		
 		//in $ error werden evtl. Fehlermeldungen gesammelt.
 		$error = '';
 		
-		//aus den übergebenen Daten wird ein neues UserObjekt gebaut:
+		//aus den ï¿½bergebenen Daten wird ein neues UserObjekt gebaut:
 		$user = User::getNew($this);
 		$user->setEMail($email);
 		$user->setUserName($username);
 		$user->setPassword($password);
 		$user->setGender($gender);
 		$user->setBirthday($birthday);
+		$user->setMatNr($matnr);
+		$user->setStudies($studies);
 		
-		//zuerst checken: ist die eMailadresse gültig?
+		//zuerst checken: ist die eMailadresse gï¿½ltig?
   		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'email'), $email)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'email').'<br/>';
 		//ist der Username ok?
   		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'username'), $username)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'username').'<br/>';
@@ -76,7 +80,7 @@ class ucRegistration extends UseCase
   		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'birthday'), $birthday)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'birthday').'<br/>';
 		//ist das Passwort ok?
   		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'password'), $password)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'password').'<br/>';
-		//stimmen Passwort und -Wiederholung überein?
+		//stimmen Passwort und -Wiederholung ï¿½berein?
 		if ($password != $passwordRepeat) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'password_repeat').'<br/>';
 		//wurde der Datenschutzhaken gesetzt?
 		if (($datenschutz == null) || ($datenschutz == '')) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'datenschutz_akzeptieren').'<br/>';
@@ -95,10 +99,10 @@ class ucRegistration extends UseCase
 			$targetgroup = 1;
 //			//confirmed: zu diesem Zeitpunkt immer false (WICHTIG: als String!)
 //			$confirmed = 'false';
-//			IM MOMENT WIRD JEDER USER 'SOFORT' FREIGESCHALTET, DAMIT EINE FREIE REGISTRIERUNG OHNE EMAILBESTÄTIGUNG MÖGLICH IST!
+//			IM MOMENT WIRD JEDER USER 'SOFORT' FREIGESCHALTET, DAMIT EINE FREIE REGISTRIERUNG OHNE EMAILBESTï¿½TIGUNG Mï¿½GLICH IST!
 			$confirmed = true;
 			
-			//UserObjekt weiter befüllen:
+			//UserObjekt weiter befï¿½llen:
 			$user->setConfirmed($confirmed);
 			$user->setTgId($targetgroup);
 			$user->setAuthCode($authCode);
@@ -112,13 +116,13 @@ class ucRegistration extends UseCase
 				//1. eMail verschicken
 				//$this->generateConfirmationMail($email, $username, $authCode);
 				
-//				//2. Bestätigungsseite anzeigen
+//				//2. Bestï¿½tigungsseite anzeigen
 //				$this->showConfirmation($email);
-//				IM MOMENT - SIEHE OBEN - WIRD KEINE BESTÄTIGUNG ANGEZEIGT, SONDERN DIREKT WIEDER DER LOGIN!
+//				IM MOMENT - SIEHE OBEN - WIRD KEINE BESTï¿½TIGUNG ANGEZEIGT, SONDERN DIREKT WIEDER DER LOGIN!
 //				header('location:'.$this->getUseCaseLink('login', '', Array('target='.urlencode($this->getParam()->getParameter('target')))));
 //				$this->setOutputType(USECASE_NOTYPE);
 				
-				//jetzt setzen wir einfach noch die benötigten Parameter und loggen den User automatisch ein:
+				//jetzt setzen wir einfach noch die benï¿½tigten Parameter und loggen den User automatisch ein:
 				$this->getParam()->setParameter('email', $user->getEMail());
 				$this->getParam()->setParameter('passwd', $user->getPassword());
 				$this->getParam()->setParameter('step', 'check');
@@ -141,7 +145,7 @@ class ucRegistration extends UseCase
 	}
 
 	/**
-	 * checkConfirmation() überprüft, ob die Registrierung freigeschaltet werden kann
+	 * checkConfirmation() ï¿½berprï¿½ft, ob die Registrierung freigeschaltet werden kann
 	 * @return eine entsprechende HTML-Seite (direkt im Output)
 	 * @deprecated derzeit nicht verwendet
 	 */
@@ -177,21 +181,21 @@ class ucRegistration extends UseCase
 	{
 			//zur Anzeige der Seite wird der HTML-Generator benutzt
 			$generator = new HtmlGenerator( $this->getConf()->getConfString('ucRegistration', 'error_verification_tpl'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
-			//befülle den Generator mit den zu ersetzenden Anteilen...
+			//befï¿½lle den Generator mit den zu ersetzenden Anteilen...
 			$generator->apply($this->getConf()->getConfString('ucRegistration', 'email'), $email);
 			//HTML in den Output schreiben...
 			$this->appendOutput($generator->getHTML());
 	}
 	
 	/**
-	 * showVerificationConfirmation() zeigt die "Verifizierungsbestätigungsseite" an
+	 * showVerificationConfirmation() zeigt die "Verifizierungsbestï¿½tigungsseite" an
 	 * @deprecated derzeit nicht verwendet
 	 */	
 	private function showVerificationConfirmation($email)
 	{
 			//zur Anzeige der Seite wird der HTML-Generator benutzt
 			$generator = new HtmlGenerator( $this->getConf()->getConfString('ucRegistration', 'confirm_verification_tpl'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
-			//befülle den Generator mit den zu ersetzenden Anteilen...
+			//befï¿½lle den Generator mit den zu ersetzenden Anteilen...
 			$generator->apply($this->getConf()->getConfString('ucRegistration', 'email'), $email);
 			//HTML in den Output schreiben...
 			$this->appendOutput($generator->getHTML());
@@ -208,8 +212,12 @@ class ucRegistration extends UseCase
 		if (!$user) $user = User::getNew($this);
 		
 		//zur Anzeige des Formulars wird der HTML-Generator benutzt
-		$generator = new HtmlGenerator( $this->getConf()->getConfString('ucRegistration', 'registrationform_tpl'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
-		//befülle den Generator mit den zu ersetzenden Anteilen...
+		$generator = new HtmlGenerator( $this->getConf()->getConfString('ucRegistration', 'registrationform_tpl'), 
+		                                $this->getConf()->getConfString('template', 'indicator', 'pre'), 
+		                                $this->getConf()->getConfString('template', 'indicator', 'after'));
+		
+		/* Stammdaten Wiso@visor */
+		                                //befï¿½lle den Generator mit den zu ersetzenden Anteilen...
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'registeraction'), $this->getOwnLink('check'));
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'datenschutzlink'), $this->getUsecaseLink('static', 'datenschutz'));
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'showerror'), $error);
@@ -217,12 +225,14 @@ class ucRegistration extends UseCase
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'username'), $user->getUserName());
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'password'), $user->getPassword());
 
-		//die gender-Radio-Boxen müssen extra bereitgestellt werden:
+		/* Stammdaten Wiso@visor freiwillig, fuer Statistik */
+		
+		//die gender-Radio-Boxen mï¿½ssen extra bereitgestellt werden:
 		//TODO: dazu den Form-Generator verwenden!!!
 		$check['u'] = ''; $check['m'] = ''; $check['w'] = '';
 		if ((!$user->getGender()) || ($user->getGender()=='')) $user->setGender('u');
 		$check[$user->getGender()] = 'checked="checked"';
-		$genderRadio = '<input type="radio" name="gender" id="gender_u" tabindex="5" '.$check['u'].' value="u"/><label for="gender_u"> keine Angabe</label><br/><input type="radio" tabindex="6" name="gender" id="gender_m" '.$check['m'].' value="m"/><label for="gender_m"> männlich</label><br/><input type="radio" tabindex="7" name="gender" id="gender_w" '.$check['w'].' value="w"/><label for="gender_w"> weiblich</label>';
+		$genderRadio = '<input type="radio" name="gender" id="gender_u" tabindex="5" '.$check['u'].' value="u"/><label for="gender_u"> keine Angabe</label><br/><input type="radio" tabindex="6" name="gender" id="gender_m" '.$check['m'].' value="m"/><label for="gender_m">m&auml;nnlich</label><br/><input type="radio" tabindex="7" name="gender" id="gender_w" '.$check['w'].' value="w"/><label for="gender_w"> weiblich</label>';
 		
 		//das Birthday-Select muss auch gebaut werden 
 		//TODO: auch hier den FormGenerator verwenden
@@ -234,6 +244,23 @@ class ucRegistration extends UseCase
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'gender'), $genderRadio);
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'birthday'), $birthdaySelect);
 
+		/* Stammdaten Wiso@visor v2 */
+		
+		$generator->apply($this->getConf()->getConfString('ucRegistration', 'matnr'), $user->getMatNr());
+		
+		//das Studiengangs-Select muss auch gebaut werden 
+		//TODO: auch hier den FormGenerator verwenden
+		$selected = Array();
+		if ((!$user->getStudies()) || ($user->getStudies()=='')) $user->getStudies('0');
+		$selected[(string) $user->getStudies()] = ' selected="selected"';
+		$studiesSelect = '<select height="1" name="studies" tabindex="10">
+                       <option value="Wirtschaftswissenschaften"'.@$selected['Wirtschaftswissenschaften'].'>Wirtschaftswissenschaften</option>
+											 <option value="International Business Studies"'.@$selected['International Business Studies'].'>International Business Studies</option>
+											 <option value="Sozialoekonomik"'.@$selected['Sozialoekonomik'].'>Sozialoekonomik</option>
+										  </select>';
+		
+		$generator->apply($this->getConf()->getConfString('ucRegistration', 'studies'), $studiesSelect);
+		
 		//ggf. wird auch das Link-Target mit durchgereicht
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'targetlink'), $this->getParam()->getParameter('target'));
 	
@@ -242,7 +269,7 @@ class ucRegistration extends UseCase
 	}
 
 	/**
-	 * showConfirmation() zeigt die Bestätigungsseite nach erfolgreicher Registrierung an
+	 * showConfirmation() zeigt die Bestï¿½tigungsseite nach erfolgreicher Registrierung an
 	 * @param $email eMailadresse
 	 * @return das entsprechende HTML-Fragment (direkt im UseCase-Output)
 	 * @deprecated derzeit nicht verwendet
@@ -251,16 +278,16 @@ class ucRegistration extends UseCase
 	{
 		//zur Anzeige der Seite wird der HTML-Generator benutzt
 		$generator = new HtmlGenerator( $this->getConf()->getConfString('ucRegistration', 'confirmation_tpl'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
-		//befülle den Generator mit den zu ersetzenden Anteilen...
+		//befï¿½lle den Generator mit den zu ersetzenden Anteilen...
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'email'), $email);
 		//HTML in den Output schreiben...
 		$this->appendOutput($generator->getHTML());
 	}
 
 	/**
-	 * generateConfirmationMail() generiert eine eMail mit dem Bestätigungslink zur Freischaltung der Registrierung
-	 * @param $email eMailadresse des Empfängers
-	 * @param $username Name des Empfängers
+	 * generateConfirmationMail() generiert eine eMail mit dem Bestï¿½tigungslink zur Freischaltung der Registrierung
+	 * @param $email eMailadresse des Empfï¿½ngers
+	 * @param $username Name des Empfï¿½ngers
 	 * @param $authCode Verifizierungscode
 	 * @return true, wenn alles geklappt hat, sonst false
 	 */
@@ -272,11 +299,11 @@ class ucRegistration extends UseCase
 		$link = 'http://'.$_SERVER['SERVER_NAME'].$this->getMainLink(); //Link auf die Startseite
 		//zum Erstellen des Mailbodys kann wieder der "HTML-Generator" benutzt werden (ist eigentlich ein "Template-Generator"...)
 		$generator = new HtmlGenerator( $this->getConf()->getConfString('ucRegistration', 'email_confirmation', 'template'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
-		//befülle den Generator mit den zu ersetzenden Anteilen...
+		//befï¿½lle den Generator mit den zu ersetzenden Anteilen...
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'email_confirmation', 'email'), $email);
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'email_confirmation', 'username'), $username);
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'email_confirmation', 'link'), $link);
-		//damit können alle Teile der eMail erzeugt werden:
+		//damit kï¿½nnen alle Teile der eMail erzeugt werden:
 		$body = $generator->getHTML();
 		$subject = $this->getConf()->getConfString('ucRegistration', 'email_confirmation', 'subject');
 		$header = 'From: '.$this->getConf()->getConfString('ucRegistration', 'email_confirmation', 'sender')."\nReply-To: ".$this->getConf()->getConfString('ucRegistration', 'email_confirmation', 'replyto')."\n";
@@ -286,22 +313,22 @@ class ucRegistration extends UseCase
 	}
 
 	/**
-	 * generateVerificationString() erzeugt einen zufälligen String zur Verification der eMailadresse
+	 * generateVerificationString() erzeugt einen zufï¿½lligen String zur Verification der eMailadresse
 	 * @return ein String mit dem Zufallscode
 	 */
 	 private function generateVerificationString()
 	 {
 	 	//einige "feste" Definitionen:
-	 	$rndPossibilities['low'] = 48; //untere Grenze für den Ascii-Wert
-	 	$rndPossibilities['up'] = 122; //obere Grenze für den Ascii-Wert
-	 	$rndPossibilities['interval_numbers']['low'] = 48; //untere Grenze für Ziffern
-	 	$rndPossibilities['interval_numbers']['up'] = 57; //obere Grenze für Ziffern
-	 	$rndPossibilities['interval_chars_big']['low'] = 65; //untere Grenze für Großbuchstaben
-	 	$rndPossibilities['interval_chars_big']['up'] = 90; //obere Grenze für Großbuchstaben
-	 	$rndPossibilities['interval_chars_small']['low'] = 97; //untere Grenze für Kleinbuchstaben
-	 	$rndPossibilities['interval_chars_small']['up'] = 122; //obere Grenze für Kleinbuchstaben
+	 	$rndPossibilities['low'] = 48; //untere Grenze fï¿½r den Ascii-Wert
+	 	$rndPossibilities['up'] = 122; //obere Grenze fï¿½r den Ascii-Wert
+	 	$rndPossibilities['interval_numbers']['low'] = 48; //untere Grenze fï¿½r Ziffern
+	 	$rndPossibilities['interval_numbers']['up'] = 57; //obere Grenze fï¿½r Ziffern
+	 	$rndPossibilities['interval_chars_big']['low'] = 65; //untere Grenze fï¿½r Groï¿½buchstaben
+	 	$rndPossibilities['interval_chars_big']['up'] = 90; //obere Grenze fï¿½r Groï¿½buchstaben
+	 	$rndPossibilities['interval_chars_small']['low'] = 97; //untere Grenze fï¿½r Kleinbuchstaben
+	 	$rndPossibilities['interval_chars_small']['up'] = 122; //obere Grenze fï¿½r Kleinbuchstaben
 	 	
-	 	//Länge des Verfifikationsstrings:
+	 	//Lï¿½nge des Verfifikationsstrings:
 	 	$length = $this->getConf()->getConfInt('ucRegistration', 'authenticationLength');
 
 	 	//in $code wird der String erstellt:
@@ -318,7 +345,7 @@ class ucRegistration extends UseCase
 	 					&& (($rndNumber < $rndPossibilities['interval_chars_small']['low']) || ($rndNumber > $rndPossibilities['interval_chars_small']['up']))
 	 				); //wiederhole, falls $rndNumber NICHT in einem der 3 Intervalle liegt
 	 				
-	 		//hänge das ermittelte Ascii-Zeichen an den String an
+	 		//hï¿½nge das ermittelte Ascii-Zeichen an den String an
 	 		$code .= chr($rndNumber);
 		}
 		

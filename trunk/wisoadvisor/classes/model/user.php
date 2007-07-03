@@ -1,8 +1,8 @@
 <?php
 /***********************************************************************************
- * WiSo@vice - Online Studienberatung der WiSo-Fakultät
- * (c) 2006 Lehrstuhl für Wirtschaftsinformatik 3, Uni Erlangen-Nürnberg
- * Rückfragen zu dieser Software: kompetenzmanagement@floooooo.de,
+ * WiSo@vice - Online Studienberatung der WiSo-Fakultï¿½t
+ * (c) 2006 Lehrstuhl fï¿½r Wirtschaftsinformatik 3, Uni Erlangen-Nï¿½rnberg
+ * Rï¿½ckfragen zu dieser Software: kompetenzmanagement@floooooo.de,
  *                                Michael.Gottfried@freenet.de
  *
  * Datei: user.php
@@ -11,8 +11,8 @@
  * Erstellt von: Michael Gottfried
  ***********************************************************************************/
 
-/**
- * Die Klasse User repräsentiert jeden Benutzer, der sich am System anmelden kann.
+/** 
+ * Die Klasse User reprï¿½sentiert jeden Benutzer, der sich am System anmelden kann.
  * 
  * @author Michael Gottfried
  */ 
@@ -27,6 +27,8 @@ class User extends ModelHelper {
 	private $authCode = null;
 	private $gender = null;
 	private $birthday = null;
+	private $matnr = null;
+	private $studies = null;
 	
 	private function __construct($uid) {
 		parent::__construct($uid);
@@ -36,7 +38,7 @@ class User extends ModelHelper {
 	 * Ermittelt ausgehend von der aus der Datenbank gelesenen Datenzeile
 	 * alle notwendigen Informationen zur Erstellung eines neuen Objekts.
 	 * 
-	 * @param array $row Die Datenbankzeile, die Infos zum erstellenden Objekt enthält.
+	 * @param array $row Die Datenbankzeile, die Infos zum erstellenden Objekt enthï¿½lt.
 	 * @return User Das neu erzeugte User-Objekt.
 	 */
 	private function getForDBRow($row) {
@@ -53,8 +55,10 @@ class User extends ModelHelper {
 			$result->authCode = $row['auth_code'];
 			$result->gender = $row['gender'];
 			$result->birthday = $row['birthday'];
+			$result->matnr = $row['matnr'];
+			$result->studies = $row['studies'];
 		}
-		// Objekt zurückliefern
+		// Objekt zurï¿½ckliefern
 		return $result;
 	}
 	
@@ -62,8 +66,8 @@ class User extends ModelHelper {
 	 * Liefert ein User-Objekt, dessen Inhalte aus der Datenbank gelesen werden.
 	 * 
 	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
-	 * @param int $uid User-ID, die das gewünschte Objekt identifiert.
-	 * @return User Das gewünschte Objekt oder null, falls kein Objekt mit diser ID existiert.
+	 * @param int $uid User-ID, die das gewï¿½nschte Objekt identifiert.
+	 * @return User Das gewï¿½nschte Objekt oder null, falls kein Objekt mit diser ID existiert.
 	 */
 	public static function getForId(ModelContext $context, $uid) {
 		// In DB suchen, ob existiert
@@ -117,21 +121,49 @@ class User extends ModelHelper {
 		if ($this->id==User::ID_NEW)
 		{
 			$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'user', 'storeInsert'), 
-														Array($this->userName, $this->eMail, $this->password, $this->gender, $this->birthday, $this->tgId, $confirmed, $this->authCode));
-			//zusätzlich ggf. die "richtige" ID aus der DB gleich setzen:
+														Array($this->userName, 
+														      $this->eMail, 
+														      $this->password, 
+														      $this->gender, 
+														      $this->birthday, 
+														      $this->tgId, 
+														      $confirmed, 
+														      $this->authCode, 
+														      $this->matnr, 
+														      $this->studies));
+			//zusï¿½tzlich ggf. die "richtige" ID aus der DB gleich setzen:
 			if ($result) $this->setId( $context->getDb()->lastId() );
-			else throw new ModelException("User::storeInDb: Fehler beim Einfügen in die Datenbank:<br>".$context->getDb()->getError(), 0);
+			else throw new ModelException("User::storeInDb: Fehler beim Einfï¿½gen in die Datenbank:<br>".$context->getDb()->getError(), 0);
 		}
 		else
 		{
 			//UPDATE an DB schicken:
 			$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'user', 'storeUpdate'), 
-														Array($this->userName, $this->eMail, $this->password, $this->gender, $this->birthday, $this->tgId, $confirmed, $this->authCode, $this->type, $this->id));
+														Array($this->userName, 
+														      $this->eMail, 
+														      $this->password, 
+														      $this->gender, 
+														      $this->birthday, 
+														      $this->tgId, 
+														      $confirmed, 
+														      $this->authCode, 
+														      $this->type,
+														      $this->matnr,
+														      $this->studies, 
+														      $this->id));
 			if (!$result) 
 				throw new ModelException("User::storeInDb: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
 		}
 
 		return true;
+	}
+	
+	public function getStudies() {
+    return $this->studies;	  
+	}
+	
+	public function getMatNr() {
+    return $this->matnr;	  
 	}
 	
 	public function getType() {
@@ -170,6 +202,14 @@ class User extends ModelHelper {
 		return $this->userName;
 	}
 
+	public function setMatNr($matnr) {
+		$this->matnr = $matnr;
+	}
+	
+		public function setStudies($studies) {
+		$this->studies = $studies;
+	}
+	
 	public function setType($type) {
 		$this->type = $type;
 	}
