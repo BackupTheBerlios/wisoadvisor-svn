@@ -35,6 +35,27 @@
 		<td>###:###BIRTHDAY###:###</td>
 		<td class="helptext">Bitte gib Dein Geburtsjahr an.</td>
 	</tr>
+	
+	<!--  Stammdaten fuer Wiso@visor V2 -->
+
+	<tr>
+		<td colspan="3"><br/>Die folgenden Daten solltest Du dann angeben, wenn Du bereits Student an der WiSo
+		bist und die erweiterten Funktionen des Wiso@visor nutzen m&ouml;chtest. Darunter fallen z. B. die Studienverlaufsplanung
+		und die Noten&uuml;bersicht.</td>
+	</tr>
+	<tr>
+		<td>Matrikelnummer</td>
+		<td>###:###MATNR###:###</td>
+		<td class="helptext">Bitte gib Deine Matrikelnummer an.</td>
+	</tr>
+	<tr>
+		<td>Studiengang</td>
+		<td>###:###STUDIES###:###</td>
+		<td class="helptext">Bitte gib Deinen Studiengang an.</td>
+	</tr>
+		
+  <!-- Ende v2 -->
+
 	<tr>
 		<td colspan="3" class="right">###:###SUBMIT###:###</td>
 	</tr>

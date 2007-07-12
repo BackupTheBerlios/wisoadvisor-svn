@@ -424,6 +424,7 @@ class WisoadvisorConfiguration extends Configuration
 	 private function configureUcChangeUserData()
 	 {
 		$this->setConfValue('ucChangeUserData', 'changeform_tpl', null, 'templates/ucChangeUserData/changeform.tpl'); //Template fï¿½r das Registrierungsfenster
+		
 		//Variable Teile im Template:
 		$this->setConfValue('ucChangeUserData', 'message', null, 'MESSAGE');
 		$this->setConfValue('ucChangeUserData', 'username', null, 'USERNAME');
@@ -432,24 +433,29 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucChangeUserData', 'password_rep', null, 'PASSWORDREPEAT');
 		$this->setConfValue('ucChangeUserData', 'gender', null, 'GENDER');
 		$this->setConfValue('ucChangeUserData', 'birthday', null, 'BIRTHDAY');
+		$this->setConfValue('ucChangeUserData', 'studies', null, 'STUDIES');
+		$this->setConfValue('ucChangeUserData', 'matnr', null, 'MATNR');
 		$this->setConfValue('ucChangeUserData', 'submit', null, 'SUBMIT');
 		$this->setConfValue('ucChangeUserData', 'reset', null, 'RESET');
-		//regulï¿½re Ausdrï¿½cke zur ï¿½berprï¿½fung der Eingaben: 
-		//Hinweis: aufgrund der PHP-Stringbehandlung mï¿½ssen die Regexe in doppelte Anfï¿½hrungszeichen gesetzt werden!
+		
+		//reguläre Ausdrücke zur Überprüfung der Eingaben: 
+		//Hinweis: aufgrund der PHP-Stringbehandlung müssen die Regexe in doppelte Anführungszeichen gesetzt werden!
 		$this->setConfValue('ucChangeUserData', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gï¿½ltige (i.S. von mï¿½gliche) eMailadresse oder leer
 		$this->setConfValue('ucChangeUserData', 'regex', 'password', "/^([\&\ï¿½\!\?\=\%\ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
 		$this->setConfValue('ucChangeUserData', 'regex', 'gender', "/^([muw]{1,1})$/i"); //Geschlecht
 		$this->setConfValue('ucChangeUserData', 'regex', 'birthday', "/^([\\d]{1,4})$/i"); //Jahreszahl oder 0
 		$this->setConfValue('ucChangeUserData', 'regex', 'username', "/^([ \ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		
 		//Fehlermeldung(en):
-		$this->setConfValue('ucChangeUserData', 'error', 'username', 'Dein Name darf aus hï¿½chstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
-		$this->setConfValue('ucChangeUserData', 'error', 'email', 'Deine eMailadresse ist ungï¿½ltig. ');
-		$this->setConfValue('ucChangeUserData', 'error', 'gender', 'Die Angabe des Geschlechts ist ungï¿½ltig! ');
-		$this->setConfValue('ucChangeUserData', 'error', 'birthday', 'Die Geburtstagsangabe ist ungï¿½ltig! ');
+		$this->setConfValue('ucChangeUserData', 'error', 'username', 'Dein Name darf aus h&ouml;chstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
+		$this->setConfValue('ucChangeUserData', 'error', 'email', 'Deine eMailadresse ist ung&uuml;ltig. ');
+		$this->setConfValue('ucChangeUserData', 'error', 'gender', 'Die Angabe des Geschlechts ist ung&uuml;ltig! ');
+		$this->setConfValue('ucChangeUserData', 'error', 'birthday', 'Die Geburtstagsangabe ist ung&uuml;ltig! ');
 		$this->setConfValue('ucChangeUserData', 'error', 'password', 'Dein Passwort muss aus mindestens 5 Zeichen bestehen. ');
-		$this->setConfValue('ucChangeUserData', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung mï¿½ssen ï¿½bereinstimmen. ');
+		$this->setConfValue('ucChangeUserData', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung m&uuml;ssen &uuml;bereinstimmen. ');
+		
 		//Nachricht:
-		$this->setConfValue('ucChangeUserData', 'message_text', 'stored', 'Wir haben Deine ï¿½nderungen erfolgreich gespeichert.');
+		$this->setConfValue('ucChangeUserData', 'message_text', 'stored', 'Wir haben Deine &Auml;nderungen erfolgreich gespeichert.');
 	 }
 	 
 	/**
@@ -484,12 +490,12 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucRegistration', 'regex', 'birthday', "/^([\\d]{1,4})$/i"); //Jahreszahl oder 0
 		
 		//Fehlermeldung(en):
-		$this->setConfValue('ucRegistration', 'error', 'username', 'Dein Name darf aus hï¿½chstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
-		$this->setConfValue('ucRegistration', 'error', 'email', 'Bitte gib eine gï¿½ltige eMailadresse ein. ');
-		$this->setConfValue('ucRegistration', 'error', 'gender', 'Die Angabe des Geschlechts ist ungï¿½ltig! ');
-		$this->setConfValue('ucRegistration', 'error', 'birthday', 'Die Geburtstagsangabe ist ungï¿½ltig! ');
+		$this->setConfValue('ucRegistration', 'error', 'username', 'Dein Name darf aus h&ouml;chstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
+		$this->setConfValue('ucRegistration', 'error', 'email', 'Bitte gib eine g&uuml;ltige eMailadresse ein. ');
+		$this->setConfValue('ucRegistration', 'error', 'gender', 'Die Angabe des Geschlechts ist ung&uuml;lltig! ');
+		$this->setConfValue('ucRegistration', 'error', 'birthday', 'Die Geburtstagsangabe ist ung&uuml;lltig! ');
 		$this->setConfValue('ucRegistration', 'error', 'password', 'Dein Passwort muss aus mindestens 5 Zeichen bestehen. ');
-		$this->setConfValue('ucRegistration', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung mï¿½ssen ï¿½bereinstimmen. ');
+		$this->setConfValue('ucRegistration', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung m&uuml;lssen &uuml;lbereinstimmen. ');
 		$this->setConfValue('ucRegistration', 'error', 'double_email', 'Wir konnten Dich nicht registrieren, weil die eMailadresse schon vergeben ist. ');
 		$this->setConfValue('ucRegistration', 'error', 'datenschutz_akzeptieren', 'Du musst der Verwendung Deiner Daten zustimmen, ansonsten kannst Du Dich nicht registrieren. ');
 		

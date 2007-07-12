@@ -21,7 +21,9 @@ class ucChangeUserData extends UseCase
 	const PARAMETER_PWD_REPEAT = 'password_repeat';
 	const PARAMETER_GENDER = 'gender';
 	const PARAMETER_BIRTHDAY = 'birthday';
-
+	const PARAMETER_STUDIES = 'studies';
+	const PARAMETER_MATNR = 'matnr';
+	
 
 	//Ausführung: Business-Logik
 	public function execute()
@@ -56,6 +58,8 @@ class ucChangeUserData extends UseCase
 		$passwordRepeat = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_PWD_REPEAT);
 		$gender = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_GENDER);
 		$birthday = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_BIRTHDAY);
+		$studies = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_STUDIES);
+		$matnr = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_MATNR);
 		
 		//in $ error werden evtl. Fehlermeldungen gesammelt.
 		$error = '';
@@ -89,7 +93,9 @@ class ucChangeUserData extends UseCase
 			$user->setGender($gender);
 			$user->setBirthday($birthday);
 			$user->setPassword($password);
-			
+      $user->setMatNr($matnr);
+      $user->setStudies($studies);
+      
 			$user->storeInDb($this);
 			
 			//ausserdem: Das Session-Objekt aktualisieren
@@ -137,6 +143,26 @@ class ucChangeUserData extends UseCase
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'password_rep'), $formGen->getPasswordInput(ucChangeUserData::PARAMETER_PWD_REPEAT, $user->getPassword()));
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'gender'), $genderRadio);
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'birthday'), $birthdaySelect);
+		
+		/* Stammdaten Wiso@visor v2 */
+		
+		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'matnr'), $formGen->getInput(ucChangeUserData::PARAMETER_MATNR, $user->getMatNr()));
+		
+		//das Studiengangs-Select muss auch gebaut werden 
+		//TODO: auch hier den FormGenerator verwenden
+		$selected = Array();
+		if ((!$user->getStudies()) || ($user->getStudies()=='')) $user->getStudies('0');
+		$selected[(string) $user->getStudies()] = ' selected="selected"';
+		$studiesSelect = '<select height="1" name="studies" tabindex="10">
+                       <option value="Wirtschaftswissenschaften"'.@$selected['Wirtschaftswissenschaften'].'>Wirtschaftswissenschaften</option>
+											 <option value="International Business Studies"'.@$selected['International Business Studies'].'>International Business Studies</option>
+											 <option value="Sozialoekonomik"'.@$selected['Sozialoekonomik'].'>Sozialoekonomik</option>
+										  </select>';
+		
+		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'studies'), $studiesSelect);
+		
+		/* ende v2 */
+		
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'reset'), $formGen->getResetButton('resetbutton', 'Zurücksetzen'));
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'submit'), $formGen->getSubmitButton('surveyor_next_button', 'Ändern'));
 		
