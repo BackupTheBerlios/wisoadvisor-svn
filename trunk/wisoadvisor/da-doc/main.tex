@@ -1,0 +1,54 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{a4wide}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{ngerman}
+\usepackage{graphicx}
+\usepackage{apacite}
+
+% default fonts like arial
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault }
+
+% fancy header config
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
+\fancyhf{}
+\fancyhead[C]{Bildungsevaluation und Bildungscontrolling im Kontext der Hochschulentwicklung}
+\fancyfoot[L]{\leftmark}
+\fancyfoot[R]{Seite \thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\footrulewidth}{0.5pt}
+
+% absatz und zeilenabstand
+\setcounter{page}{2}
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1.5}
+
+
+\begin{document}
+
+% abstract 
+%\include{abstract/abstract}
+
+% inhaltsverzeichnis
+\tableofcontents
+\newpage
+
+% abbildungsverzeichnis
+\listoffigures
+\newpage
+
+% tabellenverzeichnis
+\listoftables
+\newpage
+
+% first chapter
+\include{chapter01/chapter01}
+
+% bibtex
+\bibliographystyle{apacite}
+\bibliography{bibtex/sources}
+
+\end{document}
