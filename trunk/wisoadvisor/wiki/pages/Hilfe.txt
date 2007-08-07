@@ -1,0 +1,80 @@
+!!! Help
+Here is an outline of all the rules of working in '' TigerWiki ''.
+Click on '''Edit''' at the top of this screen to see what you have to write to get the things below.
+(If you see only '''locked Page''', to carry out a CHMOD 777 on this file via a software ftp)
+
+----
+The titles use the point of exclamation!
+! Large
+!! Larger
+!!! Largest
+----
+The styles use the simple apostrophe '
+'''Fat'''
+''italic''
+'''''Fat and italic'''''
+----
+The numbered lists uses hash: #
+#First
+#Second
+#Third 
+----
+The bulleted lists use star/asterisk *
+* apple
+* pear
+* fish 
+
+----
+For HTML code, and all other coding where the formating is important use these special "squiggely" brackets:
+{<table width="100%">
+<tr>
+<td>
+<a href="?page=Reception">Reception</a>
+</td>
+<td>
+...here's some table coding asldkfjalskdjfÃ¼ asdkf askdjfl aslaksdjflÃ¶ak laksdjflaksdjf ladkjflaskd laksdjflaksd kasjlifweln scydifuowi4j slkdjfaÃ¶sdfa alskdjflak ...here's some table coding asldkfjalskdjfÃ¼ asdkf askdjfl aslaksdjflÃ¶ak laksdjflaksdjf ladkjflaskd laksdjflaksd kasjlifweln scydifuowi4j slkdjfaÃ¶sdfa alskdjflak...here's some table coding asldkfjalskdjfÃ¼ asdkf askdjfl aslaksdjflÃ¶ak laksdjflaksdjf ladkjflaskd laksdjflaksd kasjlifweln scydifuowi4j slkdjfaÃ¶sdfa alskdjflak...here's some table coding asldkfjalskdjfÃ¼ asdkf askdjfl aslaksdjflÃ¶ak laksdjflaksdjf ladkjflaskd laksdjflaksd kasjlifweln scydifuowi4j slkdjfaÃ¶sdfa alskdjflak...here's some table coding asldkfjalskdjfÃ¼ asdkf askdjfl aslaksdjflÃ¶ak laksdjflaksdjf ladkjflaskd laksdjflaksd kasjlifweln scydifuowi4j slkdjfaÃ¶sdfa alskdjflak
+</td>
+</tr>
+<tr>
+<td>
+...here's some table coding
+</td>
+<td>
+...here's some table coding
+</td>
+</tr>
+</table>}
+
+{<font color=red> yes using a different text colour works too </font>}
+
+----
+The external links and the email addresses are recognised automatially.  
+http://www.rowlff.de/rowiki/
+rowiki@rowlff.de
+
+----
+or through a text between square brackets with a pipe separating the text from the link:
+[Visit the site of roWiki|http://www.rowlff.de/rowiki/]
+
+----
+Links to the wiki-pages use the square brackets:
+[Reception]
+
+If you want a different text for the link description, but want to refer to a wiki page use "|?page=" in front of the wiki page you refer to:
+[The link descrcrition you want|?page=thewikipageyouwanttopointto]
+
+----
+To display an images inserting the URL of an image you want to see and it is automatically displaying the image
+[http://www.spiegel.de/static/sys/v8/headlines/spiegelonline.gif]
+
+An image with link uses again the pipe in front of the URL
+[ [http://www.spiegel.de/static/sys/v8/headlines/spiegelonline.gif]|http://www.spiegel.de]
+
+
+If a page does not exist, it will be created with the first click on its link.
+Click on '''NewPageCreation''' below and you will be able quite simply to write this new page'''
+[NewPageCreation]
+----
+
+''' and to insert lines, use four indents:"----"
+----
