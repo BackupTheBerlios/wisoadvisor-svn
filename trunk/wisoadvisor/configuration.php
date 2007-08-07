@@ -1,6 +1,6 @@
 <?php
-//WisoadvisorConfiguration enthï¿½lt alle wichtigen Konfigurationsdaten
-//als Elternklasse wird Configuration auf dem Framework benï¿½tigt
+//WisoadvisorConfiguration enthaelt alle wichtigen Konfigurationsdaten
+//als Elternklasse wird Configuration auf dem Framework benoetigt
 require_once('classes/framework/configuration.php');
 
 class WisoadvisorConfiguration extends Configuration
@@ -17,11 +17,11 @@ class WisoadvisorConfiguration extends Configuration
 	 	//allgemeine Standards
 	 	$this->setConfValue('dispatchparamname', null, null, 'action'); //der Dispatcherparameter, der den UseCase angibt
 	 	$this->setConfValue('stepparamname', null, null, 'step'); //der Dispatcherparameter, der den Verarbeitungsschritt innerhalb eines UseCase angibt
-	 	$this->setConfValue('standardusecase', null, null, 'start'); // Der UseCase, der standardmï¿½ï¿½ig aufgerufen wird
+	 	$this->setConfValue('standardusecase', null, null, 'start'); // Der UseCase, der standardmaessig aufgerufen wird
 	 	$this->setConfValue('maintenanceusecase', null, null, 'maintenance'); // Der Wartungsusecase
 	 	$this->setConfValue('usecaseAfterLogin', null, null, 'start'); // Der UseCase, der nach erfolgreichem Login aufgerufen wird
 	 	$this->setConfValue('usecaseAfterLogout', null, null, 'start'); // Der UseCase, der nach erfolgreichem Logout aufgerufen wird
-	 	$this->setConfValue('standardstep', null, null, 'start'); // Der Schritt, der standardmï¿½ï¿½ig aufgerufen wird
+	 	$this->setConfValue('standardstep', null, null, 'start'); // Der Schritt, der standardmaessig aufgerufen wird
 	 	$this->setConfValue('unauthenticatedExceptions', null, null, Array('login', 'registration', 'static', 'overview', 'info', 'graphics', 'maintenance', 'feedback', 'forgotpassword', 'panorama')); //legt UseCases fest, die auch ohne Login aufgerufen werden dï¿½rfen
 	 	
 	 	//Datenbankkonfiguration
@@ -38,10 +38,10 @@ class WisoadvisorConfiguration extends Configuration
 	 	
 	 	
 	 	//Templates, die vom HTML-Generator verwendet werden
-	 	$this->setConfValue('template', 'html', null, 'templates/htmltemplate.tpl'); //Das Template fï¿½r den Seitenaufbau
-	 	$this->setConfValue('template', 'popup', null, 'templates/popuptemplate.tpl'); //Ein Template fï¿½r Popup-Fenster
-	 	$this->setConfValue('template', 'indicator', 'pre', '###:###'); //Markierung fï¿½r Ersetzungsanweisungen (Prefix)
-	 	$this->setConfValue('template', 'indicator', 'after', '###:###'); //Markierung fï¿½r Ersetzungsanweisungen (Postfix)
+	 	$this->setConfValue('template', 'html', null, 'templates/htmltemplate.tpl'); //Das Template fuer den Seitenaufbau
+	 	$this->setConfValue('template', 'popup', null, 'templates/popuptemplate.tpl'); //Ein Template fuer Popup-Fenster
+	 	$this->setConfValue('template', 'indicator', 'pre', '###:###'); //Markierung fuer Ersetzungsanweisungen (Prefix)
+	 	$this->setConfValue('template', 'indicator', 'after', '###:###'); //Markierung fuer Ersetzungsanweisungen (Postfix)
 	 	$this->setConfValue('template', 'menuname', null, 'menudata');
 	 	$this->setConfValue('template', 'contentname', null, 'content');
 	 	$this->setConfValue('template', 'sessionname', null, 'sessiondata');
@@ -50,13 +50,13 @@ class WisoadvisorConfiguration extends Configuration
 	 	
 	 	//Messages: Nachrichtentexte, die das System ausgibt
 	 	$this->setConfValue('messages', 'usecasenotfound', null, 'Der angeforderte UseCase ist nicht vorhanden oder nicht konfiguriert. ');
-	 	$this->setConfValue('messages', 'pagenotfound', null, 'Die angeforderte Seite wurde nicht gefunden oder kann nur fï¿½r angemeldete Nutzer angezeigt werden. ');
-	 	$this->setConfValue('messages', 'surveynotagainallowed', null, 'Der angeforderte Test wurde von Dir bereits ausgefï¿½llt und abgeschickt - eine nochmalige Teilnahme ist nicht mï¿½glich. ');
-	 	$this->setConfValue('messages', 'legend_relative', null, '<b>Erklï¿½rung zu den Grafiken:</b><br/>Die Balken zeigen Dich im Vergleich zu den anderen Testteilnehmern. Der gelbe Strich markiert Dein eigenes Testergebnis, wï¿½hrend die Rï¿½nder eines Balkens jeweils das schlechteste bzw. beste Ergebnis der anderen Nutzer (reduziert um die Extremwerte) symbolisieren.<br/><br/><img src="grafik/single_bad.png" class="image_right"/> Du hast leider nur bis zu ein Drittel der gestellten Fragen richtig beantworten kï¿½nnen. Lies Dir die Infoseiten noch einmal gewissenhaft durch und Du wirst den Erfolg sehen, wenn Du den Test wiederholst.<br/><br/><img src="grafik/single_middle.png" class="image_right"/> Du hast zwischen 33,3% und 66,6% aller Fragen richtig beantwortet, damit liegst Du im guten Mittelfeld. Die restlichen Informationen bekommst Du ï¿½ber die Informationsseiten und die Homepage der WiSo-Fakultï¿½t.<br/><br/><img src="grafik/single_good.png" class="image_right"/> Glï¿½ckwunsch, Du hast zwischen 66,6% und 100% der Fragen richtig beantwortet, in diesem Bereich bist Du top informiert!<br/>');
-	 	$this->setConfValue('messages', 'legend', null, '<b>Erklï¿½rung zu den Grafiken:</b><br/>Der Balken ganz oben zeigt Dich im Vergleich zu den anderen Testteilnehmern. Der gelbe Strich markiert Dein eigenes Testergebnis, wï¿½hrend die Rï¿½nder des Balkens jeweils das schlechteste bzw. beste Ergebnis der anderen Nutzer (reduziert um die Extremwerte) symbolisieren.<br/>An den Grafiken zu &quot;Deine Ergebnisse im Einzelnen&quot; erkennst Du Deinen Stand im Vergleich zu den Ergebnissen der anderen Testteilnehmer. Der gelbe Strich markiert Dein eigenes Testergebnis, wï¿½hrend der dunkelblaue Bereich die Bandbreite (reduziert um die Extremwerte) der Ergebnisse der anderen Benutzer zeigt.<br/><br/><img src="grafik/single_bad.png" class="image_right"/> Du hast leider nur bis zu ein Drittel der gestellten Fragen richtig beantworten kï¿½nnen. Lies Dir die Infoseiten noch einmal gewissenhaft durch und Du wirst den Erfolg sehen, wenn Du den Test wiederholst.<br/><br/><img src="grafik/single_middle.png" class="image_right"/> Du hast zwischen 33,3% und 66,6% aller Fragen richtig beantwortet, damit liegst Du im guten Mittelfeld. Die restlichen Informationen bekommst Du ï¿½ber die Informationsseiten und die Homepage der WiSo-Fakultï¿½t.<br/><br/><br/><img src="grafik/single_good.png" class="image_right"/> Glï¿½ckwunsch, Du hast zwischen 66,6% und 100% der Fragen richtig beantwortet, in diesem Bereich bist Du top informiert!<br/>');
-	 	$this->setConfValue('messages', 'charheader', null, 'Wie gut Du die Fragen beantwortet hast, veranschaulichen die folgenden Grafiken und Texte. Diese sind hinsichtlich verschiedener Gesichtspunkte gegliedert. Dies soll Dir bei der Reflexion Deiner Ergebnisse helfen. Viel Spaï¿½ beim Lesen Deiner Auswertung!');
+	 	$this->setConfValue('messages', 'pagenotfound', null, 'Die angeforderte Seite wurde nicht gefunden oder kann nur f&uuml;r angemeldete Nutzer angezeigt werden. ');
+	 	$this->setConfValue('messages', 'surveynotagainallowed', null, 'Der angeforderte Test wurde von Dir bereits ausgefuellt und abgeschickt - eine nochmalige Teilnahme ist nicht m&ouml;glich. ');
+	 	$this->setConfValue('messages', 'legend_relative', null, '<b>Erkl&auml;rung zu den Grafiken:</b><br/>Die Balken zeigen Dich im Vergleich zu den anderen Testteilnehmern. Der gelbe Strich markiert Dein eigenes Testergebnis, w&auml;hrend die R&auml;nder eines Balkens jeweils das schlechteste bzw. beste Ergebnis der anderen Nutzer (reduziert um die Extremwerte) symbolisieren.<br/><br/><img src="grafik/single_bad.png" class="image_right"/> Du hast leider nur bis zu ein Drittel der gestellten Fragen richtig beantworten k&ouml;nnen. Lies Dir die Infoseiten noch einmal gewissenhaft durch und Du wirst den Erfolg sehen, wenn Du den Test wiederholst.<br/><br/><img src="grafik/single_middle.png" class="image_right"/> Du hast zwischen 33,3% und 66,6% aller Fragen richtig beantwortet, damit liegst Du im guten Mittelfeld. Die restlichen Informationen bekommst Du &uuml;ber die Informationsseiten und die Homepage der WiSo-Fakult&auml;t.<br/><br/><img src="grafik/single_good.png" class="image_right"/> Glï¿½ckwunsch, Du hast zwischen 66,6% und 100% der Fragen richtig beantwortet, in diesem Bereich bist Du top informiert!<br/>');
+	 	$this->setConfValue('messages', 'legend', null, '<b>Erkl&auml;rung zu den Grafiken:</b><br/>Der Balken ganz oben zeigt Dich im Vergleich zu den anderen Testteilnehmern. Der gelbe Strich markiert Dein eigenes Testergebnis, w&auml;hrend die R&auml;nder des Balkens jeweils das schlechteste bzw. beste Ergebnis der anderen Nutzer (reduziert um die Extremwerte) symbolisieren.<br/>An den Grafiken zu &quot;Deine Ergebnisse im Einzelnen&quot; erkennst Du Deinen Stand im Vergleich zu den Ergebnissen der anderen Testteilnehmer. Der gelbe Strich markiert Dein eigenes Testergebnis, w&auml;hrend der dunkelblaue Bereich die Bandbreite (reduziert um die Extremwerte) der Ergebnisse der anderen Benutzer zeigt.<br/><br/><img src="grafik/single_bad.png" class="image_right"/> Du hast leider nur bis zu ein Drittel der gestellten Fragen richtig beantworten k&ouml;nnen. Lies Dir die Infoseiten noch einmal gewissenhaft durch und Du wirst den Erfolg sehen, wenn Du den Test wiederholst.<br/><br/><img src="grafik/single_middle.png" class="image_right"/> Du hast zwischen 33,3% und 66,6% aller Fragen richtig beantwortet, damit liegst Du im guten Mittelfeld. Die restlichen Informationen bekommst Du &uuml;ber die Informationsseiten und die Homepage der WiSo-Fakult&auml;t.<br/><br/><br/><img src="grafik/single_good.png" class="image_right"/> Gl&uuml;ckwunsch, Du hast zwischen 66,6% und 100% der Fragen richtig beantwortet, in diesem Bereich bist Du top informiert!<br/>');
+	 	$this->setConfValue('messages', 'charheader', null, 'Wie gut Du die Fragen beantwortet hast, veranschaulichen die folgenden Grafiken und Texte. Diese sind hinsichtlich verschiedener Gesichtspunkte gegliedert. Dies soll Dir bei der Reflexion Deiner Ergebnisse helfen. Viel Spa&szlig; beim Lesen Deiner Auswertung!');
 	 	
-	 	//Matching von Klassen- auf Dateinamen - hier mï¿½ssen alle benï¿½tigten Klassen definiert werden
+	 	//Matching von Klassen- auf Dateinamen - hier muessen alle benoetigten Klassen definiert werden
 	 	//zuerst die Framework-Komponenten
 	 	$phpClassSuffix = '.php';
 	 	$frameworkPath = 'classes/framework/';
@@ -76,10 +76,12 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('class', 'ModelContext', null, $frameworkPath.'model'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ModelHelper', null, $frameworkPath.'model'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'Logger', null, $frameworkPath.'logger'.$phpClassSuffix);
+	 	
 	 	//Framework-Exceptions
 	 	$this->setConfValue('class', 'ModelException', null, $frameworkPath.'exceptions'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'MissingParameterException', null, $frameworkPath.'exceptions'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'HtmlFormGeneratorException', null, $frameworkPath.'exceptions'.$phpClassSuffix);
+	 	
 	 	// Logging-Klassen
 	 	$loggingPath = 'classes/logging/';
 	 	$this->setConfValue('class', 'ActionLogger', null, $loggingPath.'ActionLogger'.$phpClassSuffix);
@@ -114,6 +116,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('class', 'ucGraphics', null, $classPath.'uc_graphics'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ucGetPdf', null, $classPath.'uc_get_pdf'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ucPanoramaViewer', null, $classPath.'uc_panorama'.$phpClassSuffix);
+	 	
 	 	//Spezialklassen
 	 	$this->setConfValue('class', 'ImageCreator', null, $classPath.'image_creator'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'AdvisorPdf', null, $classPath.'pdf_creator'.$phpClassSuffix);
@@ -135,6 +138,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('class', 'QuestionType', null, $modelPath.'question_type'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'QuestionBlock', null, $modelPath.'question_block'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'Rating', null, $modelPath.'rating'.$phpClassSuffix);
+	 	
 	 	//Bibliotheken
 	 	$libraryPath = $classPath.'lib/';
 	 	$this->setConfValue('class', 'FPDF', null, $libraryPath.'fpdf/fpdf'.$phpClassSuffix);
@@ -167,7 +171,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	//rufe die Initialisierung der SQL-Statements auf
 	 	$this->configureSql();
 	 	
-	 	//hier unten sollte der ï¿½bersicht halber jeder UseCase zumindest seine eigene initialize-Methode bekommen
+	 	//hier unten sollte der Uebersicht halber jeder UseCase zumindest seine eigene initialize-Methode bekommen
 	 	$this->configureUcStatic();
 	 	$this->configureUcLogin();
 	 	$this->configureUcRegistration();
@@ -191,49 +195,49 @@ class WisoadvisorConfiguration extends Configuration
 	 
 	 
 	/**
-	 * configureSql() fï¿½llt die Konfiguration mit den benï¿½tigten Sql-Abfragen
-	 * Hier sind alle Tabellennamen abgelegt; nach Mï¿½glichkeit sollten hier alle verwendeten
-	 * SQL-Statements (als "prepared Statement") bereits abgelegt werden, so dass sie zentral verfï¿½gbar sind
+	 * configureSql() fuellt die Konfiguration mit den benoetigten Sql-Abfragen
+	 * Hier sind alle Tabellennamen abgelegt; nach Moeglichkeit sollten hier alle verwendeten
+	 * SQL-Statements (als "prepared Statement") bereits abgelegt werden, so dass sie zentral verfuegbar sind
 	 */
 	 private function configureSql()
 	 {
-	 	//Tabellennamen fï¿½r die Datenbank
+	 	//Tabellennamen fuer die Datenbank
 	 	$tablePrefix = 'advisor__';
 	 	$loggingTablePrefix = $tablePrefix.'log_';
 	 	
 	 	//Allgemeine Tabellen
 		$table['user'] = $tablePrefix.'user'; //speichert die Nutzerdaten
-		$table['targetgroups'] = $tablePrefix.'targetgroups'; // enthï¿½lt die unterschiedlichen Zielgruppen
-		$table['textelements'] = $tablePrefix.'textelements'; // enthï¿½lt Textbausteine
+		$table['targetgroups'] = $tablePrefix.'targetgroups'; // enthaelt die unterschiedlichen Zielgruppen
+		$table['textelements'] = $tablePrefix.'textelements'; // enthaelt¿½lt Textbausteine
 		$table['te_typ'] = $tablePrefix.'textelement_types'; // Typisiert (=gruppiert) die Textbausteine
-		$table['tg_te'] = $tablePrefix.'targetgroups_textelements'; // legt fest, welche Textbausteine fï¿½r welche Zielgruppen geeignet sind
+		$table['tg_te'] = $tablePrefix.'targetgroups_textelements'; // legt fest, welche Textbausteine fuer welche Zielgruppen geeignet sind
 		
 		// Logging
 		$table['log_actions'] = $loggingTablePrefix.'actions';
 		$table['log_clicks'] = $loggingTablePrefix.'clicks';
 
 		//Testtool
-		$table['answers'] = $tablePrefix.'answers'; // Hier sind mï¿½gliche Antworten abgelegt
+		$table['answers'] = $tablePrefix.'answers'; // Hier sind moegliche Antworten abgelegt
 		$table['op_res'] = $tablePrefix.'open_results'; // Hier sind Antworten auf OFFENE Fragen abgelegt
-		$table['questions'] = $tablePrefix.'questions'; // enthï¿½lt einzelne Fragen
+		$table['questions'] = $tablePrefix.'questions'; // enthaelt einzelne Fragen
 		$table['qu_an'] = $tablePrefix.'questions_answers'; // ordnet den Fragen Antwortalternativen und entsprechende Bewertungseinheiten zu
 		$table['results'] = $tablePrefix.'results'; // speichert die gegebenen Antworten der Nutzer
-		$table['surveys'] = $tablePrefix.'surveys'; // enthï¿½lt die einzelnen Testmodule
+		$table['surveys'] = $tablePrefix.'surveys'; // enthaelt die einzelnen Testmodule
 		$table['us_sur'] = $tablePrefix.'users_surveys'; // speichert, wann ein Benutzer welches Testmodul bearbeitet hat
 		$table['us_char'] = $tablePrefix.'users_chars'; // speichert das Ergebnis jedes Users in einem Merkmal
-		$table['char'] = $tablePrefix.'characteristics'; // enthï¿½lt die Merkmale (z.B. Einzelkompetenzen), die geprï¿½ft werden
+		$table['char'] = $tablePrefix.'characteristics'; // enthaelt die Merkmale (z.B. Einzelkompetenzen), die geprueft werden
 		$table['groups'] = $tablePrefix.'groups'; // Gruppierung der Merkmale (z.B. in Kompetenzklassen)
 		$table['blocks'] = $tablePrefix.'blocks'; // Gruppierung der Tests
 		$table['infos'] = $tablePrefix.'infos'; // Seiten der Informationsplattform
 		$table['questiontypes'] = $tablePrefix.'questiontypes'; // Fragentypen
-		$table['questionblocks'] = $tablePrefix.'questionblocks'; // Fragenblï¿½cke
-		$table['open_results'] = $tablePrefix.'open_results'; // Fragenblï¿½cke
+		$table['questionblocks'] = $tablePrefix.'questionblocks'; // Fragenbloecke
+		$table['open_results'] = $tablePrefix.'open_results'; // Fragenbloecke
 		$table['ratings'] = $tablePrefix.'ratings'; // Ergebnis zu Textelement-Zuordnung
 
 	 	//Weitere "Hilfstabellen"
 	 	$table['sponsors'] = $tablePrefix.'sponsors'; //speichert die "Sponsoren" vom Advisor (inkl. Link aufs Logo)
 	 	$table['feedback'] = $tablePrefix.'feedback'; //speichert abgegebenes Feedback in der DB
-	 	$table['infos'] = $tablePrefix.'infos'; // enthï¿½lt die einzelnen Infoseiten und ihre Kurzversionen
+	 	$table['infos'] = $tablePrefix.'infos'; // enthaelt die einzelnen Infoseiten und ihre Kurzversionen
 	 	 
 		//SQL-Statements
 		

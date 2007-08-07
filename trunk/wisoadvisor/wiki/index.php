@@ -198,39 +198,44 @@
             $CONTENT = preg_replace("/%html%\s/", "", $CONTENT);
         else {
             $CONTENT = htmlentities($CONTENT);
-    		$CONTENT = preg_replace("/&amp;#036;/Umsi", "&#036;", $CONTENT);
-    		$CONTENT = preg_replace("/&amp;#092;/Umsi", "&#092;", $CONTENT);
-    		$CONTENT = preg_replace("/\^(.)/Umsie", "'&#'.ord('\\1').';'", $CONTENT);
-    		$CONTENT = preg_replace('#\[(.+)\|([0-9a-zA-Z\.\'\s\#/~\-_%=\?\&amp;,\+]*)\]#U', '<a href="$2" class="url">$1</a>', $CONTENT);
-    		$CONTENT = preg_replace('#\[(.+)\|h(ttps?://[0-9a-zA-Z\.\#/~\-_%=\?\&amp;,\+]*)\]#U', '<a href="xx$2" class="url">$1</a>', $CONTENT);
-    		$CONTENT = preg_replace('#\[h(ttps?://[0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.(jpeg|jpg|gif|png))\]#i', '<img src="xx$1" />', $CONTENT);
-    		$CONTENT = preg_replace('#\[([0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.(jpeg|jpg|gif|png))\]#i', '<img src="$1" />', $CONTENT);
-    		$CONTENT = preg_replace('#(https?://[0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*)#i', '<a href="$0" class="url">$1</a>', $CONTENT);
-    		$CONTENT = preg_replace('#xxttp#', 'http', $CONTENT);
-    		preg_match_all("/\[([^\/]+)\]/U", $CONTENT, $matches, PREG_PATTERN_ORDER);
-    		foreach ($matches[1] as $match)
-    			if (file_exists(html_entity_decode($PAGES_DIR."$match.txt")))
-    				$CONTENT = str_replace("[$match]", "<a href=\"./?page=".$match."\">$match</a>", $CONTENT);
-    			else
-    				$CONTENT = str_replace("[$match]", "<a class=\"pending\" href=\"./?page=".$match."\">$match</a>", $CONTENT);
-    		$CONTENT = preg_replace('#(\[\?(.+)\]*)#i', '<a href="http://fr.wikipedia.org/wiki/$0" class="url">$0</a>', $CONTENT);
-            $CONTENT = preg_replace('#([0-9a-zA-Z\./~\-_]+@[0-9a-z\./~\-_]+)#i', '<a href="mailto:$0">$0</a>', $CONTENT);
-            $CONTENT = preg_replace('/^\*\*\*(.*)(\n)/Um', "<ul><ul><ul><li>$1</li></ul></ul></ul>$2", $CONTENT);
-            $CONTENT = preg_replace('/^\*\*(.*)(\n)/Um', "<ul><ul><li>$1</li></ul></ul>$2", $CONTENT);
-            $CONTENT = preg_replace('/^\*(.*)(\n)/Um', "<ul><li>$1</li></ul>$2", $CONTENT);
-            $CONTENT = preg_replace('/^\#\#\#(.*)(\n)/Um', "<ol><ol><ol><li>$1</li></ol></ol></ol>$2", $CONTENT);
-            $CONTENT = preg_replace('/^\#\#(.*)(\n)/Um', "<ol><ol><li>$1</li></ol></ol>$2", $CONTENT);
-            $CONTENT = preg_replace('/^\#(.*)(\n)/Um', "<ol><li>$1</li></ol>$2", $CONTENT);
+    		    $CONTENT = preg_replace("/&amp;#036;/Umsi", "&#036;", $CONTENT);
+    		    $CONTENT = preg_replace("/&amp;#092;/Umsi", "&#092;", $CONTENT);
+    		    $CONTENT = preg_replace("/\^(.)/Umsie", "'&#'.ord('\\1').';'", $CONTENT);
+    		    $CONTENT = preg_replace('#\[(.+)\|([0-9a-zA-Z\.\'\s\#/~\-_%=\?\&amp;,\+]*)\]#U', '<a href="$2" class="url">$1</a>', $CONTENT);
+    		    $CONTENT = preg_replace('#\[(.+)\|h(ttps?://[0-9a-zA-Z\.\#/~\-_%=\?\&amp;,\+]*)\]#U', '<a href="xx$2" class="url">$1</a>', $CONTENT);
+    		    $CONTENT = preg_replace('#\[h(ttps?://[0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.(jpeg|jpg|gif|png))\]#i', '<img src="xx$1" />', $CONTENT);
+    		    $CONTENT = preg_replace('#\[([0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.(jpeg|jpg|gif|png))\]#i', '<img src="$1" />', $CONTENT);
+    		    $CONTENT = preg_replace('#(https?://[0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*)#i', '<a href="$0" class="url">$1</a>', $CONTENT);
+    		    $CONTENT = preg_replace('#xxttp#', 'http', $CONTENT);
+    		    
+    		    preg_match_all("/\[([^\/]+)\]/U", $CONTENT, $matches, PREG_PATTERN_ORDER);
+    		    foreach ($matches[1] as $match)
+    			    if (file_exists(html_entity_decode($PAGES_DIR."$match.txt")))
+    				    $CONTENT = str_replace("[$match]", "<a href=\"./?page=".$match."\">$match</a>", $CONTENT);
+    			    else
+    				    $CONTENT = str_replace("[$match]", "<a class=\"pending\" href=\"./?page=".$match."\">$match</a>", $CONTENT);
 
-            $CONTENT = preg_replace('/(<\/ol>\n*<ol>|<\/ul>\n*<ul>)/', "", $CONTENT); 
-            $CONTENT = preg_replace('/(<\/ol>\n*<ol>|<\/ul>\n*<ul>)/', "", $CONTENT); 
-            $CONTENT = preg_replace('/(<\/ol>\n*<ol>|<\/ul>\n*<ul>)/', "", $CONTENT); 
+    		    $CONTENT = preg_replace('#\[INCLUDE:([0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.map)\]#ei', "getFileContents('\\1')", $CONTENT);
 
-
-            $CONTENT = preg_replace('/^!!!(.*)(\n)/Um', '<h1>$1</h1>$2', $CONTENT);
-            $CONTENT = preg_replace('/^!!(.*)(\n)/Um', '<h2>$1</h2>$2', $CONTENT);
-            $CONTENT = preg_replace('/^!(.*)(\n)/Um', '<h3>$1</h3>$2', $CONTENT);
-            while (preg_match('/^  /Um', $CONTENT))
+    		    $CONTENT = preg_replace('#(\[\?(.+)\]*)#i', '<a href="http://de.wikipedia.org/wiki/$0" class="url">$0</a>', $CONTENT);
+		        $CONTENT = preg_replace('#([0-9a-zA-Z\./~\-_]+@[0-9a-z\./~\-_]+)#i', '<a href="mailto:$0">$0</a>', $CONTENT);
+		        $CONTENT = preg_replace('/^\*\*\*(.*)(\n)/Um', "<ul><ul><ul><li>$1</li></ul></ul></ul>$2", $CONTENT);
+		        $CONTENT = preg_replace('/^\*\*(.*)(\n)/Um', "<ul><ul><li>$1</li></ul></ul>$2", $CONTENT);
+		        $CONTENT = preg_replace('/^\*(.*)(\n)/Um', "<ul><li>$1</li></ul>$2", $CONTENT);
+		        $CONTENT = preg_replace('/^\#\#\#(.*)(\n)/Um', "<ol><ol><ol><li>$1</li></ol></ol></ol>$2", $CONTENT);
+		        $CONTENT = preg_replace('/^\#\#(.*)(\n)/Um', "<ol><ol><li>$1</li></ol></ol>$2", $CONTENT);
+		        $CONTENT = preg_replace('/^\#(.*)(\n)/Um', "<ol><li>$1</li></ol>$2", $CONTENT);
+		
+		        $CONTENT = preg_replace('/(<\/ol>\n*<ol>|<\/ul>\n*<ul>)/', "", $CONTENT); 
+		        $CONTENT = preg_replace('/(<\/ol>\n*<ol>|<\/ul>\n*<ul>)/', "", $CONTENT); 
+		        $CONTENT = preg_replace('/(<\/ol>\n*<ol>|<\/ul>\n*<ul>)/', "", $CONTENT); 
+		
+		
+		        $CONTENT = preg_replace('/^!!!(.*)(\n)/Um', '<h1>$1</h1>$2', $CONTENT);
+		        $CONTENT = preg_replace('/^!!(.*)(\n)/Um', '<h2>$1</h2>$2', $CONTENT);
+		        $CONTENT = preg_replace('/^!(.*)(\n)/Um', '<h3>$1</h3>$2', $CONTENT);
+		        
+		        while (preg_match('/^  /Um', $CONTENT))
               $CONTENT = preg_replace('/^( +) ([^ ])/Um', '$1&nbsp;&nbsp;&nbsp;&nbsp;$2', $CONTENT);
               $CONTENT = preg_replace('/^ /Um', '&nbsp;&nbsp;&nbsp;&nbsp;', $CONTENT);
               $CONTENT = preg_replace('/----*(\r\n|\r|\n)/m', '<hr />', $CONTENT);
@@ -274,4 +279,14 @@
         $html = preg_replace('/{COOKIE}/', '', $html);
 // Affichage de la page
     echo utf8_decode($html);
+    
+ function getFileContents ($iFileName) {
+    echo $iFileName;
+    if ($file = fopen($iFileName, "r")) {
+      $ret = fread($file, filesize($iFileName));
+      fclose($file);
+    }
+    
+    return $ret;   
+ }
 ?>

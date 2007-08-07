@@ -14,7 +14,7 @@
     $START_PAGE			=	"Studienanfang";
     $HOME_BUTTON		=	"Studienanfang";
     $HELP_BUTTON		=	"Hilfe";
-    $DEFAULT_CONTENT	=	"Die Seite ".stripslashes($_GET["page"])." ist leer."; //The center variable is the page requested
+    $DEFAULT_CONTENT	=	"Die Seite \"".stripslashes($_GET["page"])."\" existiert noch nicht."; //The center variable is the page requested
     $EDIT_BUTTON		=	"Bearbeiten";
     $DONE_BUTTON		=	"Speichern";
     $PROTECTED_BUTTON 	=	"Gesperrte Seite";
