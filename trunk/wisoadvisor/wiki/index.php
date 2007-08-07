@@ -281,7 +281,6 @@
     echo utf8_decode($html);
     
  function getFileContents ($iFileName) {
-    echo $iFileName;
     if ($file = fopen($iFileName, "r")) {
       $ret = fread($file, filesize($iFileName));
       fclose($file);

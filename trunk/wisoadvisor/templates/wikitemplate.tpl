@@ -42,6 +42,9 @@
 			{CONTENT}
 		</td>
 	</tr>
+	<tr><td>&nbsp;</td></tr>	
+	<tr><td>&nbsp;</td></tr>	
+	<tr><td>&nbsp;</td></tr>	
 	<tr id="footerLinks">
 		<td class="pageLinks" align="right">
 			{EDIT} {HELP}
