@@ -26,33 +26,18 @@
 			<a href="../index.php?action=static&step=impressum" class="menulink"><img src="../grafik/pfeil.gif"/>&nbsp;Impressum</a><br/>
 		</div>
 	</div>
-<div id="content">
-  
-<table border="0" width="100%" cellpadding="4" id="mainTable" cellspacing="0" summary="{PAGE_TITLE_BRUT}">
-	<!-- 
-	<tr id="headerLinks">
-		<td class="pageLinks">
-			{HOME} / {RECENT_CHANGES}
-		</td>
-	</tr>
-	 -->
-	<tr>
-		<td id="mainContent" colspan="2">
-			<div class="error">{ERROR}</div>
-			{CONTENT}
-		</td>
-	</tr>
-	<tr><td>&nbsp;</td></tr>	
-	<tr><td>&nbsp;</td></tr>	
-	<tr><td>&nbsp;</td></tr>	
-	<tr id="footerLinks">
-		<td class="pageLinks" align="right">
-			{EDIT} {HELP}
-		</td>
-  </tr>	
-</table>
 
-</div>
+  <div id="content">
+		<div class="error">{ERROR}</div>
+		{CONTENT}
+  	<p>&nbsp;</p>	
+  	<p>&nbsp;</p>	
+  	<p>&nbsp;</p>	
+		<div align="right">
+			{EDIT} {HELP}
+		</div>
+  </div>
+  
 </div>
 </body>
 </html>
