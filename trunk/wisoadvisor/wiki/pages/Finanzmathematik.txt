@@ -1,1 +1,0 @@
-[INCLUDE:../grafik/wiki/finanzmathematik.map]
