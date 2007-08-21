@@ -1,0 +1,29 @@
+!!Unternehmen, Märkte, Volkswirtschaften
+[TABLE:[../grafik/wiki/prof_wigger.jpg]||'''Prof. Berthold U. Wigger:'''{<br>}"Die Vorlesung ''Unternehmen, Märkte, Volkswirtschaften'' schafft die elementaren Grundlagen für die volkswirtschaftlichen Aspekte des wirtschaftswissenschaftlichen Studiums und gliedert sich in zwei Teile, der Einführung in die Mikro- und Makroökonomik, die ich halte und die empirischen Konzepte, die Frau Prof. Riphahn behandelt."]
+[TABLE:'''Prof. Regina T. Riphahn:'''{<br>}"Meine Aufgabe im Rahmen dieser Veranstaltung besteht darin im Bereich der empirischen Konzepte eine Einführung in die Wirtschaftstheorie zu geben."||[../grafik/wiki/prof_riphahn.gif]]
+
+!!Lehrinhalte
+Der Teilbereich von '''Prof. Wigger''' der Lehrveranstaltung ''Unternehmen, Märkte, Volkswirtschaften'' beschäftigt sich nach einem Grundlagenteil mit den volkswirtschaftlichen Teildisziplinen Mikroökonomik und Makroökonomik.
+
+Für Details zu den einzelnen Bereichen von Prof. Wigger bewege Deine Maus über die folgende Grafik.
+
+[INCLUDE:../grafik/wiki/umv1.map]
+
+'''Prof. Riphahn''' bezieht sich in ihrem Teil über die empirischen Konzepte auf die Grundlagen der Wirtschaftstheorie, die Vorgehensweisen der empirischen Wirtschaftsforschng sowie die zentralen Konzepte und Indikatoren zur Beschreibung essentieller Zusammenhänge in der Volkswirtschaft.
+
+Für die Inhalte der drei Teilbereiche von Prof. Riphahn bewege Deine Maus über die folgende Grafik.
+
+[INCLUDE:../grafik/wiki/umv2.map]
+
+!!Studentenstimmen
+"In dieser Veranstaltung habe ich sehr viele Kenntnisse zur Volkswirtschaftslehre erwerben können."
+
+"Dies war zwar eine der schwersten Lehrveranstaltungen, die ich im 1. Semester besucht habe, allerdings habe ich auch sehr viel gelernt."
+
+ 
+!!Organisatorisches
+Diese Lehrveranstaltung wird zur Hälfte von Prof. Wigger und zur Hälfte von Prof. Riphahn gehalten, die jeweils einen Teil der Volkswirtschaftslehre abdecken..
+
+ 
+!!Prüfungsmodalitäten
+Die Prüfungsleistung zu ''Unternehmen, Märkte, Volkswirtschaften'' besteht aus zwei Teilklausuren zu jeweils 60 Minuten, in denen die jeweiligen Inhalte aus den Veranstaltungen von Prof. Wigger und Prof. Riphahn geprüft werden.
