@@ -12,7 +12,9 @@
 	<div id="header"><a href="../index.php" alt="WiSo@visor Startseite"><img src="/wisoadvisor/grafik/logos/wiso.gif"/></a></div>
 	<div id="menu">
 	  <p>&nbsp;{HOME}<br/>
-	     &nbsp;&nbsp;{PAGE_TITLE}</p>
+	     &nbsp;&nbsp;<a class="menulink" href="?page=Lehrveranstaltungen">Lehrveranstaltungen</a><br />
+	     &nbsp;&nbsp;<a class="menulink" href="?page=Einrichtungen">Einrichtungen</a><br />
+	   </p>
 		<div id="common_links">
 			<a href="../index.php" class="menulink"><img src="../grafik/pfeil.gif"/>&nbsp;Startseite</a><br/>
 			<a href="../index.php?action=overview&step=" class="menulink"><img src="../grafik/pfeil.gif"/>&nbsp;Ergebnis&uuml;bersicht</a><br/>
