@@ -1,0 +1,82 @@
+\section{Studieneingangsberatung für Erstsemester}
+\label{sec:Studieneingangsberatung}
+
+\subsection{Konzept und Prototyp}
+\subsubsection{Konzeption}
+Das vorliegende Konzept zur Studieneingangsberatung (SEB) \abbrev{SEB}{Studieneingangsberatung} entstammt einer Studienarbeit über innovative Ansätze der Informationsvermittlung \cite{Nursinski:2007}.
+
+[...]
+
+\subsubsection{Prototyp}
+Der Prototyp für die SEB besteht aus statischen HTML-Seiten, \abbrev{HTML}{Hypertext Markup Language} die mit verweissensitiven Grafiken und teilweise mit JavaScript-Elementen interaktiv gestaltet werden. Besonderes Augenmerk wird auf die Navigation gerichtet, sodass der Benutzer immer genau weiß, wo er sich in der Navigation befindet. 
+
+Layout und Design des Prototypen sind an den Internetauftritt des Lehrstuhls Wirtschaftsinformatik III angelehnt. 
+
+\subsection{Anforderungen an die Implementierung}
+
+\subsection{Umsetzung des Konzepts im WiSo@visor}
+
+\subsubsection{Realisierung als Wiki}
+Bei der Implementierung der SEB stand die Frage nach der technischen Gestaltung im Vordergrund: Die Inhalte sollten schnell und unbürokratisch geändert werden können. Für den bestehenden WiSo@visor existiert derzeit allerdings noch keine Administrationsumgebung, in der die Textbausteine gepflegt werden können; Änderungen müssen hier direkt in der Datenbank erfolgen.
+
+% a bisserl über verschiedene Wikis schwallen; auf Vergleichsseite verweisen
+Im Konzept wurde bereits berücksichtigt, dass die Inhalte der SEB...
+
+\subsubsection{Modifikationen an TigerWiki}
+\label{wiki-mod}
+
+Obwohl TigerWiki bereits alle grundlegenden Formatierungsmöglichkeiten mitbrachte, waren dennoch einige Modifikationen an der Software notwendig:
+\begin{itemize}
+\item Damit die im gesamten Wiso@visor verwendeten Grafiken nicht an verschiedenen Orten im Verzeichnisbaum liegen, lag es nahe, auch die im Wiki zu verwendenen Grafiken im Grafikverzeichnis des Advisor abzulegen. Dies aber hatte den Nachteil, dass im Code einer Wiki-Seite nun immer der relative Pfad zur Grafik mitangegeben werden musste. In der Konfigurationsdatei des Wikis ist nun ein \textbf{Pfad für Grafiken} definiert, der allen Grafiken und sonstigen Ressourcen vorangestellt wird. Das Warten der Seiteninhalte wird so erheblich erleichtert.
+\item TigerWiki kann Inhalte nur untereinander darstellen. Nun unterstützt das Wiki einfache (einzeilige) \textbf{Tabellen}, um Inhalte auch nebeneinander darstellen zu können. Verwendet wird dies beispielsweise bei den Aussagen der Professoren, wo neben dem jeweiligen Statement auch ein Foto platziert wird.
+\item Die verweissensitiven Grafiken des Prototypen erfordern aufwändigen HTML-Code. Fügt man diesen Code jedoch über das HTML-Element von TigerWiki ein, wird die Bearbeitung einer solchen Seite sehr schnell unübersichtlich. Der komplette Code dieser Grafiken wurde nun in externe HTML-Dateien ausgelagert; diese kann über eine \textbf{Include-Anweisung} eingefügt werden. Die Konsequenz daraus ist, dass die bearbeitbare Wiki-Seite weitgehend frei von HTML-Code bleibt.
+\end{itemize}
+
+Diese Modifikationen wurden dem ursprünglichen Entwickler der Software zugesandt und werden möglicherweise in eine künftige Version des Systems integriert.
+
+\subsubsection{Kurzreferenz zu TigerWiki}
+
+Wie bereits erwähnt, war es vor allem seine Einfachheit, die TigerWiki als Basis für das Wiki zur SEB so attraktiv machte. Tabelle \ref{tab:SyntaxDerWikiEinträge} gibt einen Überblick über die Kommandos, die nun zum Editieren der Seiten bereitstehen \cite<vgl.>{tigerwiki:aide}.
+
+
+\begin{table}[ht]
+\small
+	\centering
+		\begin{tabular}{|l|l|l|}
+
+			\hline
+			\textbf{Element}        & \textbf{Syntax}													& \textbf{Beispiel} \\
+			\hline
+			Überschrift             & ! (groß)  															& !Überschrift 1 \\
+			                        & !! (mittel) 														& !!Überschrift 1.1 \\
+			                        & !!! (klein)														  & !!!Überschrift 1.1.1 \\			                        
+			\hline
+			Format                  & \lq\lq~(kursiv)  										    & \lq\lq kursiv \\
+			                        & \lq\lq\lq~(fett)  										  & \lq\lq\lq fett \\
+			\hline
+			Liste                   & * (nicht nummeriert)  									& *erstes Element \\
+			                        & \# (nummeriert)  											  & *zweites Element \\
+			\hline
+			Grafik                  & [Dateiname] (intern)										& [profamberg.jpg] \\
+			                        & [URL] (extern)													& [http://www.foo.bar/profamberg.jpg] \\
+			\hline
+			Link                    & [Seite] (intern) 												& [Lehrveranstaltungen] \\
+															& [Beschreibung|?page=Seite] (intern) 		& [Planspiel|?page=Planspiel] \\
+															& [URL] (extern) 													& [http://www.wiso.uni-erlangen.de] \\
+															& [Beschreibung|URL] (extern)							& [WiSo|http://www.wiso.uni-erlangen.de] \\
+			\hline
+			Tabelle                 & [TABLE:Spalte1||Spalte2]								& [TABLE:[profamberg.jpg]||Prof. Amberg] \\
+
+			\hline
+			Textdatei               & [INCLUDE:Dateiname]	  							    & [INCLUDE:planspiel.map] \\
+
+			\hline
+			HTML-Code               & \{...\}	  							    					  & \{<br><br>\} \\
+
+			\hline					
+		\end{tabular}
+	\caption{Syntax der Wiki-Einträge}
+	\label{tab:SyntaxDerWikiEinträge}
+\end{table}
+
+Wie in \ref{wiki-mod} erwähnt, ist zu beachten, dass das Wiki interne Ressourcen, also Grafiken und Textdateien, im voreingestellten Grafikverzeichnis sucht. So wird z. B. die Eingabe \texttt{[profamberg.jpg]} ersetzt durch \texttt{<img src="'../grafik/wiki/profamberg.jpg"'/>}.
