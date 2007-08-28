@@ -3,6 +3,7 @@
 	$PASSWORD			=	"rmpflpfrmpf";
 // Paramètres divers
     $WIKI_TEMPLATE  = "../templates/wikitemplate.tpl";
+    $WIKI_GRAPHICSPATH = "../grafik/wiki/";
     $LANG		        =	"en";
 	$CHARSET	        =	"utf-8";
     $TIME_FORMAT		=	"%Y-%m-%d %R";

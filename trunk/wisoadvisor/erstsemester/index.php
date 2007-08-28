@@ -31,7 +31,7 @@
    	if ($_POST["content"] != "") {
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {	
 			if ($_POST["sc"] == $PASSWORD || $_COOKIE['AutorisationTigerWiki'] == md5($PASSWORD)) {
-			    setcookie('AutorisationTigerWiki', md5($PASSWORD), time() + 365*24*3600);
+			    setcookie('AutorisationTigerWiki', md5($PASSWORD), time() + 24*3600);
 				if (! $file = @fopen($PAGES_DIR . stripslashes($_POST["page"]) . ".txt", "w"))
 					die("Could not write page!");
 				if (get_magic_quotes_gpc())
@@ -199,17 +199,17 @@
         else {
             $CONTENT = htmlentities($CONTENT);
 
-            $CONTENT = preg_replace("#\[TABLE:(.+)\]#e", "getSimpleTableContents('\\1')", $CONTENT);
-    		    $CONTENT = preg_replace('#\[INCLUDE:(.+)\]#e', "getFileContents('\\1')", $CONTENT);
+            $CONTENT = preg_replace("#\[TABLE:(.+)\]#ie", "getSimpleTableContents('\\1')", $CONTENT);
+    		    $CONTENT = preg_replace('#\[INCLUDE:(.+)\]#ie', "getFileContents('$WIKI_GRAPHICSPATH'.'\\1')", $CONTENT);
     		    
             $CONTENT = preg_replace("/&amp;#036;/Umsi", "&#036;", $CONTENT);
     		    $CONTENT = preg_replace("/&amp;#092;/Umsi", "&#092;", $CONTENT);
     		    $CONTENT = preg_replace("/\^(.)/Umsie", "'&#'.ord('\\1').';'", $CONTENT);
     		    $CONTENT = preg_replace('#\[(.+)\|([0-9a-zA-Z\.\'\s\#/~\-_%=\?\&amp;,\+]*)\]#U', '<a href="$2" class="url">$1</a>', $CONTENT);
-    		    $CONTENT = preg_replace('#\[(.+)\|h(ttps?://[0-9a-zA-Z\.\#/~\-_%=\?\&amp;,\+]*)\]#U', '<a href="xx$2" class="url">$1</a> <img src="../grafik/wiki/external.png">', $CONTENT);
-    		    $CONTENT = preg_replace('#\[h(ttps?://[0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.(jpeg|jpg|gif|png))\]#i', '<img src="xx$1" />', $CONTENT);
-    		    $CONTENT = preg_replace('#\[([0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.(jpeg|jpg|gif|png))\]#i', '<img src="$1" />', $CONTENT);
-    		    $CONTENT = preg_replace('#(https?://[0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*)#i', '<a href="$0" class="url">$1</a> <img src="../grafik/wiki/external.png">', $CONTENT);
+    		    $CONTENT = preg_replace('#\[(.+)\|h(ttps?://[0-9a-zA-Z\.\#/~\-_%=\?\&amp;,\+]*)\]#U', '<a href="xx$2" class="url">$1</a> <img alt="" src="../grafik/wiki/external.png">', $CONTENT);
+    		    $CONTENT = preg_replace('#\[h(ttps?://[0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.(jpeg|jpg|gif|png))\]#i', '<img alt="" src="xx$1" />', $CONTENT);
+    		    $CONTENT = preg_replace('#\[([0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*\.(jpeg|jpg|gif|png))\]#i', '<img alt="" src="'.$WIKI_GRAPHICSPATH.'$1" />', $CONTENT);
+    		    $CONTENT = preg_replace('#(https?://[0-9a-zA-Z\.\&amp;\#\:/~\-_%=?]*)#i', '<a href="$0" class="url">$1</a><img src="'.$WIKI_GRAPHICSPATH.'external.png">', $CONTENT);
     		    $CONTENT = preg_replace('#xxttp#', 'http', $CONTENT);
     		    
     		    preg_match_all("/\[([^\/]+)\]/U", $CONTENT, $matches, PREG_PATTERN_ORDER);
