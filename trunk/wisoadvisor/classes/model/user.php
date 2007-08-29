@@ -29,6 +29,7 @@ class User extends ModelHelper {
 	private $birthday = null;
 	private $matnr = null;
 	private $studies = null;
+	private $majid = null;
 	
 	private function __construct($uid) {
 		parent::__construct($uid);
@@ -38,7 +39,7 @@ class User extends ModelHelper {
 	 * Ermittelt ausgehend von der aus der Datenbank gelesenen Datenzeile
 	 * alle notwendigen Informationen zur Erstellung eines neuen Objekts.
 	 * 
-	 * @param array $row Die Datenbankzeile, die Infos zum erstellenden Objekt enthï¿½lt.
+	 * @param array $row Die Datenbankzeile, die Infos zum erstellenden Objekt enthaelt.
 	 * @return User Das neu erzeugte User-Objekt.
 	 */
 	private function getForDBRow($row) {
@@ -56,9 +57,10 @@ class User extends ModelHelper {
 			$result->gender = $row['gender'];
 			$result->birthday = $row['birthday'];
 			$result->matnr = $row['matnr'];
-			$result->studies = $row['studies'];
+			$result->majid = $row['majid'];
+			$result->studies = $row['fullname'];
 		}
-		// Objekt zurï¿½ckliefern
+		// Objekt zurueckliefern
 		return $result;
 	}
 	
@@ -66,8 +68,8 @@ class User extends ModelHelper {
 	 * Liefert ein User-Objekt, dessen Inhalte aus der Datenbank gelesen werden.
 	 * 
 	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
-	 * @param int $uid User-ID, die das gewï¿½nschte Objekt identifiert.
-	 * @return User Das gewï¿½nschte Objekt oder null, falls kein Objekt mit diser ID existiert.
+	 * @param int $uid User-ID, die das gewuenschte Objekt identifiert.
+	 * @return User Das gewuenschte Objekt oder null, falls kein Objekt mit diser ID existiert.
 	 */
 	public static function getForId(ModelContext $context, $uid) {
 		// In DB suchen, ob existiert
@@ -130,10 +132,10 @@ class User extends ModelHelper {
 														      $confirmed, 
 														      $this->authCode, 
 														      $this->matnr, 
-														      $this->studies));
-			//zusï¿½tzlich ggf. die "richtige" ID aus der DB gleich setzen:
+														      $this->majid));
+			//zusaetzlich ggf. die "richtige" ID aus der DB gleich setzen:
 			if ($result) $this->setId( $context->getDb()->lastId() );
-			else throw new ModelException("User::storeInDb: Fehler beim Einfï¿½gen in die Datenbank:<br>".$context->getDb()->getError(), 0);
+			else throw new ModelException("User::storeInDb: Fehler beim Einfügen in die Datenbank:<br>".$context->getDb()->getError(), 0);
 		}
 		else
 		{
@@ -149,13 +151,17 @@ class User extends ModelHelper {
 														      $this->authCode, 
 														      $this->type,
 														      $this->matnr,
-														      $this->studies, 
+														      $this->majid, 
 														      $this->id));
 			if (!$result) 
 				throw new ModelException("User::storeInDb: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
 		}
 
 		return true;
+	}
+	
+	public function getMajId() {
+    return $this->majid;	  
 	}
 	
 	public function getStudies() {
@@ -206,7 +212,11 @@ class User extends ModelHelper {
 		$this->matnr = $matnr;
 	}
 	
-		public function setStudies($studies) {
+  public function setMajId($majid) {
+		$this->majid = $majid;
+	}
+	
+	public function setStudies($studies) {
 		$this->studies = $studies;
 	}
 	
