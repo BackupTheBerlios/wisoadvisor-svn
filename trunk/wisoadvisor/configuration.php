@@ -116,6 +116,10 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('class', 'ucGraphics', null, $classPath.'uc_graphics'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ucGetPdf', null, $classPath.'uc_get_pdf'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ucPanoramaViewer', null, $classPath.'uc_panorama'.$phpClassSuffix);
+	 		 	
+	 	// anwendungseigenen Klassen Advisor v2
+	 	$this->setConfValue('class', 'ucPlaner', null, $classPath.'uc_planer'.$phpClassSuffix);
+	 	$this->setConfValue('class', 'ucPerfOpt', null, $classPath.'uc_perfopt'.$phpClassSuffix);
 	 	
 	 	//Spezialklassen
 	 	$this->setConfValue('class', 'ImageCreator', null, $classPath.'image_creator'.$phpClassSuffix);
@@ -168,6 +172,10 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('usecase', 'getpdf', null, 'ucGetPdf');
 	 	$this->setConfValue('usecase', 'panorama', null, 'ucPanoramaViewer');
 	 	
+	 	// Matching advisor v2
+	 	$this->setConfValue('usecase', 'planer', null, 'ucPlaner');
+	 	$this->setConfValue('usecase', 'perfopt', null, 'ucPerfOpt');
+	 	
 	 	//rufe die Initialisierung der SQL-Statements auf
 	 	$this->configureSql();
 	 	
@@ -189,6 +197,10 @@ class WisoadvisorConfiguration extends Configuration
  		$this->configureUcLinkbox();
  		$this->configureUcGetPdf();
  		$this->configureUcPanoramaViewer();
+ 		
+ 		// initialize advisor v2
+ 		$this->configureUcPlaner();
+ 		$this->configureUcPerfOpt();
  		
  		$this->configureImageCreator();
 	 }
@@ -745,7 +757,7 @@ class WisoadvisorConfiguration extends Configuration
 		//eMail-Konfiguration:
 		$this->setConfValue('ucGetPdf', 'email', 'sender', $this->getConfString('common', 'email', 'sender'));
 		$this->setConfValue('ucGetPdf', 'email', 'replyto', $this->getConfString('common', 'email', 'replyto'));
-		$this->setConfValue('ucGetPdf', 'email', 'subject', 'WiSo@visor - Deine persï¿½nlichen Testergebnisse');
+		$this->setConfValue('ucGetPdf', 'email', 'subject', 'WiSo@visor - Deine persönlichen Testergebnisse');
 		$this->setConfValue('ucGetPdf', 'email', 'template', 'templates/ucGetPdf/email.tpl');
 		$this->setConfValue('ucGetPdf', 'email', 'username', 'username');
 		
@@ -759,6 +771,16 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPanoramaViewer', 'template', 'path', 'PANORAMAPATH');
 	}
 
+	private function configureUcPlaner () {
+		$this->setConfValue('ucPlaner', 'htmltemplate', null, 'templates/ucPlaner/planer.tpl');
+		$this->setConfValue('ucPlaner', 'username', null, 'username');		
+	}
+
+	private function configureUcPerfOpt () {
+		$this->setConfValue('ucPerfOpt', 'htmltemplate', null, 'templates/ucPerfOpt/perfopt.tpl');
+		$this->setConfValue('ucPerfOpt', 'username', null, 'username');		
+	}
+	
 }
 
 ?>
