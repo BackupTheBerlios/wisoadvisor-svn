@@ -251,7 +251,14 @@ class WisoadvisorConfiguration extends Configuration
 	 	$table['feedback'] = $tablePrefix.'feedback'; //speichert abgegebenes Feedback in der DB
 	 	$table['infos'] = $tablePrefix.'infos'; // enthaelt die einzelnen Infoseiten und ihre Kurzversionen
 	 	 
-		//SQL-Statements
+		// advisor v2
+    $table['studies'] = $tablePrefix.'studies'; // enthaelt die Studiengaenge
+    $table['majors'] = $tablePrefix.'majors'; // enthaelt die Studienschwerpunkte
+    $table['modules'] = $tablePrefix.'modules'; // enthaelt die Module (d.h. Lehrveranstaltungen/Musterstundenplan)
+    $table['modulegroups'] = $tablePrefix.'modulegroups'; // enthaelt die Modulgruppierungen (Pflicht/Schluessel/Kern/Vertiefung/Doppelpflicht)
+    
+    
+	 	//SQL-Statements
 		
 			//Allgemein
 			
@@ -269,6 +276,9 @@ class WisoadvisorConfiguration extends Configuration
 			//Registrierung
 			$this->setConfValue('sql', 'registration', 'verificate', 'SELECT uid FROM '.$table['user'].' WHERE username = "?" AND auth_code = "?"');
 			$this->setConfValue('sql', 'registration', 'verificate_update', 'UPDATE '.$table['user'].' SET confirmed = "true" WHERE username = "?" AND auth_code = "?"');
+
+			// Registrierung v2
+			$this->setConfValue('sql', 'registration', 'dropdown_studies', 'SELECT * FROM '.$table['majors'].' ORDER BY fullname ASC');
 			
 			//Sponsoranzeige
 			$this->setConfValue('sql', 'sponsors', 'randomSponsor', 'SELECT sponsorname, logo, href FROM '.$table['sponsors'].' ORDER BY RAND() LIMIT 1');
@@ -358,10 +368,16 @@ class WisoadvisorConfiguration extends Configuration
 		 	$this->setConfValue('sql', 'characteristic', 'getForBlock', 'SELECT DISTINCT c.chid, c.characteristic, c.gid , c.lower_target, c.upper_target, c.show_result FROM '.$table['char'].' c, '.$table['questions'].' q, '.$table['questionblocks'].' qb, '.$table['surveys'].' s WHERE c.chid = q.chid AND q.qbid = qb.qbid AND qb.sid = s.sid AND s.blid = ?');
 		 	
 		 	// Klasse User
-		 	$this->setConfValue('sql', 'user', 'getForId', 'SELECT * FROM '.$table['user'].' WHERE uid=?');
+		 	$this->setConfValue('sql', 'user', 'getForId', 'SELECT au.*,
+                                                             am.fullname
+                                                        FROM '.$table['user'].' au,
+                                                             '.$table['majors'].' am 
+																											WHERE uid=?
+                                                        AND am.majid = au.majid');
+		 	
 		 	$this->setConfValue('sql', 'user', 'getAll', 'SELECT * FROM '.$table['user'].' ORDER BY uid');
-		 	$this->setConfValue('sql', 'user', 'storeUpdate', 'UPDATE '.$table['user'].' SET username = "?", email = "?", passwd = "?", gender = "?", birthday = "?", tgid = "?", confirmed = "?", auth_code = "?", type = "?", matnr = "?", studies = "?" WHERE uid = "?"');
-			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, matnr, studies, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "user")');
+		 	$this->setConfValue('sql', 'user', 'storeUpdate', 'UPDATE '.$table['user'].' SET username = "?", email = "?", passwd = "?", gender = "?", birthday = "?", tgid = "?", confirmed = "?", auth_code = "?", type = "?", matnr = "?", majid = "?" WHERE uid = "?"');
+			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, matnr, majid, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "user")');
 		 	
 		 	// Klasse TextElement
 		 	$this->setConfValue('sql', 'text_element', 'getForId', 'SELECT * FROM '.$table['textelements'].' WHERE teid=?');
@@ -449,6 +465,7 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucChangeUserData', 'password_rep', null, 'PASSWORDREPEAT');
 		$this->setConfValue('ucChangeUserData', 'gender', null, 'GENDER');
 		$this->setConfValue('ucChangeUserData', 'birthday', null, 'BIRTHDAY');
+		$this->setConfValue('ucChangeUserData', 'majid', null, 'MAJID');
 		$this->setConfValue('ucChangeUserData', 'studies', null, 'STUDIES');
 		$this->setConfValue('ucChangeUserData', 'matnr', null, 'MATNR');
 		$this->setConfValue('ucChangeUserData', 'submit', null, 'SUBMIT');
@@ -496,6 +513,7 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucRegistration', 'birthday', null, 'birthday');
 		$this->setConfValue('ucRegistration', 'matnr', null, 'matnr');
 		$this->setConfValue('ucRegistration', 'studies', null, 'studies');
+		$this->setConfValue('ucRegistration', 'majid', null, 'majid');
 		
 		//regul�re Ausdr�cke zur �berpr�fung der Eingaben: 
 		//Hinweis: aufgrund der PHP-Stringbehandlung m�ssen die Regexe in doppelte Anf�hrungszeichen gesetzt werden!
@@ -774,6 +792,7 @@ class WisoadvisorConfiguration extends Configuration
 	private function configureUcPlaner () {
 		$this->setConfValue('ucPlaner', 'htmltemplate', null, 'templates/ucPlaner/planer.tpl');
 		$this->setConfValue('ucPlaner', 'username', null, 'username');		
+		$this->setConfValue('ucPlaner', 'studies', null, 'studies');		
 	}
 
 	private function configureUcPerfOpt () {

@@ -460,6 +460,29 @@
 		 	return $this->getElement('label', $data);
 		 }
 		 
+		 /**
+		  * @param $context ModelContext with database
+		  * @param $iName Name for DropDown
+		  * @param $iSql SQL query
+		  * @param $key key for shown text in dropdown
+		  * @param $value key to be added as dropdown value
+		  * @param $highlightedValue highlighted text
+		  */
+     public static function getDropDownFromDb (ModelContext $context, $iName, $iSql, $key, $value, $highlightedValue) {
+        $ret = '<select name="' . $iName . '">';
+		    $resultSet = $context->getDb()->query($iSql);
+
+		    while ($row = $context->getDb()->fetch_array($resultSet)) {
+		      $ret .= "<option ";
+		      if ($highlightedValue != "" && $highlightedValue == $row[$value]) {
+		        $ret .= " selected=\"true\"";
+		      }
+		      $ret .= "value=\"".$row[$value]."\">" . $row[$key] . "</option>\n" ;
+		    }
+		    
+		    $ret .= '</select>';
+        return $ret;
+     }
 
  }
  

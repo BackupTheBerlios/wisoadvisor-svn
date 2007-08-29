@@ -55,7 +55,7 @@ class ucRegistration extends UseCase
 		$birthday = $this->getParam()->getParameter('birthday');
 		$datenschutz = $this->getParam()->getParameter('datenschutz');
 		$matnr = $this->getParam()->getParameter('matnr');
-		$studies = $this->getParam()->getParameter('studies');
+		$majid = $this->getParam()->getParameter('majid');
 		
 		//in $ error werden evtl. Fehlermeldungen gesammelt.
 		$error = '';
@@ -68,7 +68,7 @@ class ucRegistration extends UseCase
 		$user->setGender($gender);
 		$user->setBirthday($birthday);
 		$user->setMatNr($matnr);
-		$user->setStudies($studies);
+		$user->setMajId($majid);
 		
 		//zuerst checken: ist die eMailadresse gültig?
   		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'email'), $email)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'email').'<br/>';
@@ -248,17 +248,8 @@ class ucRegistration extends UseCase
 		
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'matnr'), $user->getMatNr());
 		
-		//das Studiengangs-Select muss auch gebaut werden 
-		//TODO: auch hier den FormGenerator verwenden
-		$selected = Array();
-		if ((!$user->getStudies()) || ($user->getStudies()=='')) $user->getStudies('0');
-		$selected[(string) $user->getStudies()] = ' selected="selected"';
-		$studiesSelect = '<select height="1" name="studies" tabindex="10">
-                       <option value="Wirtschaftswissenschaften"'.@$selected['Wirtschaftswissenschaften'].'>Wirtschaftswissenschaften</option>
-											 <option value="International Business Studies"'.@$selected['International Business Studies'].'>International Business Studies</option>
-											 <option value="Sozialoekonomik"'.@$selected['Sozialoekonomik'].'>Sozialoekonomik</option>
-										  </select>';
-		
+		//Studiengangs-Select muss auch gebaut werden 
+		$studiesSelect = HtmlFormGenerator::getDropDownFromDb($this, "majid", $this->getConf()->getConfString('sql', 'registration', 'dropdown_studies'), "fullname", "majid", "1");
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'studies'), $studiesSelect);
 		
 		//ggf. wird auch das Link-Target mit durchgereicht

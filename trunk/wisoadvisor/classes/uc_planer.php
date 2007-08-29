@@ -48,7 +48,8 @@ private function sayHello() {
 	                                
 	$user = User::getForId($this, $this->getSess()->getUid());
 	$generator->apply($this->getConf()->getConfString('ucPlaner', 'username'), $user->getUserName());
-  $this->appendOutput($generator->getHTML());
+	$generator->apply($this->getConf()->getConfString('ucPlaner', 'studies'), $user->getStudies());
+	$this->appendOutput($generator->getHTML());
 	
   $this->setOutputType(USECASE_HTML);
   return true;

@@ -94,7 +94,7 @@ class ucChangeUserData extends UseCase
 			$user->setBirthday($birthday);
 			$user->setPassword($password);
       $user->setMatNr($matnr);
-      $user->setStudies($studies);
+      $user->setMajId($studies);
       
 			$user->storeInDb($this);
 			
@@ -147,18 +147,7 @@ class ucChangeUserData extends UseCase
 		/* Stammdaten Wiso@visor v2 */
 		
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'matnr'), $formGen->getInput(ucChangeUserData::PARAMETER_MATNR, $user->getMatNr()));
-		
-		//das Studiengangs-Select muss auch gebaut werden 
-		//TODO: auch hier den FormGenerator verwenden
-		$selected = Array();
-		if ((!$user->getStudies()) || ($user->getStudies()=='')) $user->getStudies('0');
-		$selected[(string) $user->getStudies()] = ' selected="selected"';
-		$studiesSelect = '<select height="1" name="studies" tabindex="10">
-                       <option value="Wirtschaftswissenschaften"'.@$selected['Wirtschaftswissenschaften'].'>Wirtschaftswissenschaften</option>
-											 <option value="International Business Studies"'.@$selected['International Business Studies'].'>International Business Studies</option>
-											 <option value="Sozialoekonomik"'.@$selected['Sozialoekonomik'].'>Sozialoekonomik</option>
-										  </select>';
-		
+		$studiesSelect = HtmlFormGenerator::getDropDownFromDb($this, "studies", $this->getConf()->getConfString('sql', 'registration', 'dropdown_studies'), "fullname", "majid", $user->getMajId());				
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'studies'), $studiesSelect);
 		
 		/* ende v2 */
