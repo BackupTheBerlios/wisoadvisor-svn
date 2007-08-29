@@ -11,6 +11,8 @@ class ucLinkbox extends UseCase
 
 		$generator->apply('STARTSEITE', $this->getMainLink());
 		$generator->apply('ERGEBNISUEBERSICHT', $this->getUsecaseLink('overview'));
+		$generator->apply('PRUEFUNGSPLAN', $this->getUsecaseLink('planer'));
+		$generator->apply('OPTIMIZER', $this->getUsecaseLink('perfopt'));
 		$generator->apply('DATENSCHUTZ', $this->getUsecaseLink('static', 'datenschutz'));
 		$generator->apply('IMPRESSUM', $this->getUsecaseLink('static', 'impressum'));
 		$generator->apply('FEEDBACK', $this->getUsecaseLink('feedback', '', Array('reference='.urlencode('Position:'.$_SERVER['QUERY_STRING']))));
