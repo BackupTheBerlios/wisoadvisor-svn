@@ -143,6 +143,11 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('class', 'QuestionBlock', null, $modelPath.'question_block'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'Rating', null, $modelPath.'rating'.$phpClassSuffix);
 	 	
+	 	// Model-Klassen v2
+	 	$this->setConfValue('class', 'ScheduleEntry', null, $modelPath.'schedule_entry'.$phpClassSuffix);
+	 	$this->setConfValue('class', 'Module', null, $modelPath.'module'.$phpClassSuffix);
+	 	$this->setConfValue('class', 'SemesterCalculator', null, $modelPath.'semester_calculator'.$phpClassSuffix);
+	 	
 	 	//Bibliotheken
 	 	$libraryPath = $classPath.'lib/';
 	 	$this->setConfValue('class', 'FPDF', null, $libraryPath.'fpdf/fpdf'.$phpClassSuffix);
@@ -254,8 +259,10 @@ class WisoadvisorConfiguration extends Configuration
 		// advisor v2
     $table['studies'] = $tablePrefix.'studies'; // enthaelt die Studiengaenge
     $table['majors'] = $tablePrefix.'majors'; // enthaelt die Studienschwerpunkte
-    $table['modules'] = $tablePrefix.'modules'; // enthaelt die Module (d.h. Lehrveranstaltungen/Musterstundenplan)
+    $table['lectures'] = $tablePrefix.'lectures'; // enthaelt die Veranstaltungen
+    $table['modules'] = $tablePrefix.'modules'; // enthaelt den Musterstundenplan
     $table['modulegroups'] = $tablePrefix.'modulegroups'; // enthaelt die Modulgruppierungen (Pflicht/Schluessel/Kern/Vertiefung/Doppelpflicht)
+    $table['schedule'] = $tablePrefix.'schedule'; // enthaelt die Pruefungsplaene (Verlaufsplanung)
     
     
 	 	//SQL-Statements
@@ -291,7 +298,7 @@ class WisoadvisorConfiguration extends Configuration
 			//Passwort vergessen
 			$this->setConfValue('sql', 'user', 'validEmail', 'SELECT uid FROM '.$table['user'].' WHERE email = "?"');
 
-	 		// SQL f�r die Modell-Klassen
+	 		// SQL fuer die Modell-Klassen
 	 		// Klasse SurveyBlock
 		 	$this->setConfValue('sql', 'survey_block', 'getForId', 'SELECT * FROM '.$table['blocks'].' WHERE blid=?');
 		 	$this->setConfValue('sql', 'survey_block', 'getAll', 'SELECT * FROM '.$table['blocks'].' ORDER BY position');
@@ -396,10 +403,29 @@ class WisoadvisorConfiguration extends Configuration
 		 	$this->setConfValue('sql', 'rating', 'getAll', 'SELECT * FROM '.$table['ratings'].' ORDER BY raid');
 		 	$this->setConfValue('sql', 'rating', 'getForResult', 'SELECT * FROM '.$table['ratings'].' WHERE chid = ? AND tgid = ? AND type = "?" AND lower_limit <= ? AND ? <= upper_limit');
 			
+		 	// Klasse Schedule
+      $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, mark_planned, semester, sem_year) VALUES ("?", "?", "?", "?", "?")');
+      $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned = "?", semester = "?", sem_year = "?" WHERE schid = "?"');
+      $this->setConfValue('sql', 'schedule', 'deleteForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid = "?"');
+      $this->setConfValue('sql', 'schedule', 'getForUser', 'SELECT asch.*,
+																					                         am.*,
+																																	 al.*
+																												     FROM '.$table['schedule']. ' asch,
+																															    '.$table['modules']. ' am,
+																															    '.$table['lectures']. ' al
+                                                             WHERE asch.uid=?
+																														   AND am.modid = asch.modid
+																														   AND al.alid = am.alid
+                                                               AND am.majid=? 
+																													ORDER BY asch.sem_year ASC, asch.semester DESC, al.name ASC');
+      // Klasse Module
+      $this->setConfValue('sql', 'module', 'getForId', 'SELECT * FROM '.$table['modules']. ' WHERE modid=?');
+      $this->setConfValue('sql', 'module', 'getForMajor', 'SELECT * FROM '.$table['modules']. ' WHERE majid=?');
+      
 	 }
 
 	/**
-	 * configureUcStatic() f�llt die Konfiguration mit den ben�tigten Daten f�r ucStatic
+	 * configureUcStatic() fuellt die Konfiguration mit den benoetigten Daten fuer ucStatic
 	 */
 	 private function configureUcStatic()
 	 {
@@ -790,9 +816,22 @@ class WisoadvisorConfiguration extends Configuration
 	}
 
 	private function configureUcPlaner () {
+
+	  // template files
 		$this->setConfValue('ucPlaner', 'htmltemplate', null, 'templates/ucPlaner/planer.tpl');
-		$this->setConfValue('ucPlaner', 'username', null, 'username');		
-		$this->setConfValue('ucPlaner', 'studies', null, 'studies');		
+	  $this->setConfValue('ucPlaner', 'linkcreatetemplate', null, 'templates/ucPlaner/linkcreate.tpl');
+		$this->setConfValue('ucPlaner', 'entrytemplate', null, 'templates/ucPlaner/entry.tpl');
+	  $this->setConfValue('ucPlaner', 'entryheadtemplate', null, 'templates/ucPlaner/entry_head.tpl');
+	  $this->setConfValue('ucPlaner', 'entryfoottemplate', null, 'templates/ucPlaner/entry_foot.tpl');
+	  
+	  // parameters for template entries to be replaced
+	  $this->setConfValue('ucPlaner', 'linkcreate', null, 'linkcreate');		
+	  $this->setConfValue('ucPlaner', 'username', null, 'username');		
+		$this->setConfValue('ucPlaner', 'studies', null, 'studies');				
+		$this->setConfValue('ucPlaner', 'mod_name', null, 'mod_name');		
+		$this->setConfValue('ucPlaner', 'semester_readable', null, 'semester_readable');		
+		$this->setConfValue('ucPlaner', 'ects', null, 'ects');		
+		
 	}
 
 	private function configureUcPerfOpt () {
