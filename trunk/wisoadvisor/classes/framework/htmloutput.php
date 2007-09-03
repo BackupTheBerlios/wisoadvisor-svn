@@ -41,12 +41,13 @@ class HtmlGenerator
 		$template = file_get_contents($this->templateFile);
 		
 		//dann: suche nach "IndikatorStrings" und ersetze sie mit den korrekten Ersetzungen
-		foreach ($this->replacements as $replacement)
-		{
-			$template = str_replace( $this->indicatorPre.$replacement['indicator'].$this->indicatorAfter, 
-							$replacement['input'], 
-							$template );
-		}
+    if (!empty($this->replacements)) {
+			foreach ($this->replacements as $replacement) {
+				$template = str_replace( $this->indicatorPre.$replacement['indicator'].$this->indicatorAfter, 
+								$replacement['input'], 
+								$template );
+			}
+    }
 		//fertig: das template wurde verändert und kann zurückgegeben werden
 		return $template;
 	}
