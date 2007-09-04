@@ -1,0 +1,1 @@
+Mit diesem Pr&uuml;fungsplan endet Dein Studium nach dem ###:###lastsemester###:###.
