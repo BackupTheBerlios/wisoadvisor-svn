@@ -404,8 +404,8 @@ class WisoadvisorConfiguration extends Configuration
 		 	$this->setConfValue('sql', 'rating', 'getForResult', 'SELECT * FROM '.$table['ratings'].' WHERE chid = ? AND tgid = ? AND type = "?" AND lower_limit <= ? AND ? <= upper_limit');
 			
 		 	// Klasse Schedule
-      $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, semester, sem_year) VALUES ("?", "?", "?", "?")');
-      $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned = "?", semester = "?", sem_year = "?" WHERE schid = "?"');
+      $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, semester, sem_year, try) VALUES ("?", "?", "?", "?", "?")');
+      $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned="?", semester="?", sem_year="?", try="?" WHERE schid = "?"');
       $this->setConfValue('sql', 'schedule', 'deleteForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid=?');
       $this->setConfValue('sql', 'schedule', 'getForId', 'SELECT * FROM '.$table['schedule']. ' WHERE schid=?');
       $this->setConfValue('sql', 'schedule', 'getForUser', 'SELECT asch.*,
@@ -831,22 +831,27 @@ class WisoadvisorConfiguration extends Configuration
 	  $this->setConfValue('ucPlaner', 'entryfoottemplate', null, 'templates/ucPlaner/entry_foot.tpl');
 	  
 	  // parameters for template entries to be replaced
-	  $this->setConfValue('ucPlaner', 'schid', null, 'schid');
-	  $this->setConfValue('ucPlaner', 'linkplan', null, 'linkplan');		
-	  $this->setConfValue('ucPlaner', 'mark_plan', null, 'mark_plan');		
-	  $this->setConfValue('ucPlaner', 'linkcreate', null, 'linkcreate');		
+		// schedule header
 	  $this->setConfValue('ucPlaner', 'username', null, 'username');		
 		$this->setConfValue('ucPlaner', 'studies', null, 'studies');				
 		$this->setConfValue('ucPlaner', 'firstsemester', null, 'firstsemester');		
 		$this->setConfValue('ucPlaner', 'lastsemester', null, 'lastsemester');		
-		$this->setConfValue('ucPlaner', 'duration', null, 'duration');		
-		$this->setConfValue('ucPlaner', 'mod_name', null, 'mod_name');		
+		$this->setConfValue('ucPlaner', 'duration', null, 'duration');				
+	  $this->setConfValue('ucPlaner', 'linkcreate', null, 'linkcreate');				
+	  // entry header
 		$this->setConfValue('ucPlaner', 'semester_readable', null, 'semester_readable');		
+	  $this->setConfValue('ucPlaner', 'linkplan', null, 'linkplan');				
+		$this->setConfValue('ucPlaner', 'semester_short', null, 'semester_short');				
+	  // entries
+		$this->setConfValue('ucPlaner', 'mod_name', null, 'mod_name');		
 		$this->setConfValue('ucPlaner', 'ects', null, 'ects');		
-		$this->setConfValue('ucPlaner', 'movedown', null, 'movedown');		
-		$this->setConfValue('ucPlaner', 'moveup', null, 'moveup');		
+		$this->setConfValue('ucPlaner', 'mark_plan', null, 'mark_plan');		
+	  $this->setConfValue('ucPlaner', 'actions', null, 'actions');
+	  $this->setConfValue('ucPlaner', 'form', null, 'form');
+	  $this->setConfValue('ucPlaner', 'try', null, 'try');
+	  $this->setConfValue('ucPlaner', 'mark_real', null, 'mark_real');
+	  // entry footer
 		$this->setConfValue('ucPlaner', 'sum_ects', null, 'sum_ects');		
-		$this->setConfValue('ucPlaner', 'semester_short', null, 'semester_short');		
 		
 	}
 
