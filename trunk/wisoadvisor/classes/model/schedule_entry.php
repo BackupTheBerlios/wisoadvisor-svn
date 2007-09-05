@@ -22,6 +22,7 @@ class ScheduleEntry extends ModelHelper {
   private $mark_real = null;
   private $semester = null;
   private $sem_year = null;
+  private $try = null;
   private $majid = null;
   private $mgrpid = null;
   private $mod_name = null;
@@ -51,6 +52,7 @@ class ScheduleEntry extends ModelHelper {
       $result->modid = $row['modid'];
       $result->mark_planned = $row['mark_planned'];
       $result->mark_real = $row['mark_real'];
+      $result->try = $row['try'];
       $result->semester = $row['semester'];
       $result->sem_year = $row['sem_year'];
       $result->majid = $row['majid'];
@@ -143,7 +145,8 @@ class ScheduleEntry extends ModelHelper {
 														Array($this->uid, 
 														      $this->modid, 
 														      $this->semester, 
-														      $this->sem_year));
+														      $this->sem_year,
+														      $this->try));
 			//zusaetzlich ggf. die "richtige" ID aus der DB gleich setzen:
 			if ($result) $this->setId( $context->getDb()->lastId() );
 			else throw new ModelException("ScheduleEntry::storeInDb: Fehler beim Einfügen in die Datenbank:<br>".$context->getDb()->getError(), 0);
@@ -153,7 +156,8 @@ class ScheduleEntry extends ModelHelper {
 			$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'storeUpdate'), 
 														Array($this->mark_planned, 
 														      $this->semester, 
-														      $this->sem_year, 
+														      $this->sem_year,
+														      $this->try,
 														      $this->id));
 			if (!$result) 
 				throw new ModelException("ScheduleEntry::storeInDb: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
@@ -194,6 +198,13 @@ class ScheduleEntry extends ModelHelper {
 	/*
 	 * getters and setters for advisor__schedule entries
 	 */
+	public function setTry($try) {
+    $this->try = $try;
+  }
+  public function getTry() {
+    return $this->try;
+  }
+  
 	public function setUserId($uid) {
     $this->uid = $uid;
   }

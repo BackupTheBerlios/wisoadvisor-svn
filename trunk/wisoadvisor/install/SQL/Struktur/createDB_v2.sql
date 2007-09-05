@@ -648,5 +648,7 @@ CREATE TABLE `advisor__schedule` (
   `mark_real` float default NULL,
   `semester` enum('ws','ss') collate latin1_general_ci default NULL,
   `sem_year` int(10) unsigned default NULL,
+  `try` int(10) unsigned default NULL,
   PRIMARY KEY  (`schid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;
+
