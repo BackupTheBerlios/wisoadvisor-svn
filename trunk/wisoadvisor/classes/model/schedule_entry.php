@@ -90,6 +90,24 @@ class ScheduleEntry extends ModelHelper {
   }
 	
 	/**
+	 * Liefert ein ScheduleEntry-Objekte aus der Datenbank gelesen.
+	 * 
+	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
+	 * @param $schid ScheduleEntry ID
+	 * @return ScheduleEntry-Objekt
+	 */
+	public static function getForId(ModelContext $context, $schid) {
+		// In DB suchen, ob existiert
+		$resultSet = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'getForId'), Array($schid));
+		if ($resultSet == false) 
+			throw new ModelException("ScheduleEntry::getForId: Fehler beim Lesen in der Datenbank:<br>".$context->getDb()->getError(), 0);
+		while (($row = $context->getDb()->fetch_array($resultSet)) != false) {
+			$result = self::getForDBRow($row);
+		}
+		return $result;
+	}
+	
+  /**
 	 * Liefert alle ScheduleEntry-Objekte aus der Datenbank gelesen.
 	 * 
 	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
@@ -109,7 +127,7 @@ class ScheduleEntry extends ModelHelper {
 	}
 	
 	/**
-	 * speichert das Userobjekt wieder neu in der DB ab
+	 * speichert das ScheduleEntry-Objekt wieder neu in der DB ab
 	 * 
 	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
 	 * @return true, wenn alles geklappt hat
@@ -208,6 +226,7 @@ class ScheduleEntry extends ModelHelper {
 	public function setSemester($semester) {
     $this->semester = $semester;
   }
+  
   public function getSemester() {
     return $this->semester;
   }
@@ -215,6 +234,7 @@ class ScheduleEntry extends ModelHelper {
 	public function setSemYear($sem_year) {
     $this->sem_year = $sem_year;
   }
+  
   public function getSemYear() {
     return $this->sem_year;
   }
