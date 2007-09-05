@@ -38,21 +38,25 @@ class SemesterCalculator {
 	  }
 
     // bloody hack, sorry
-     if ($numSemesters > 0) {
+    if ($numSemesters > 0) {
 	    for ($i=1;$i<=$numSemesters;$i++) {
         if ($this->sem_word == 'ws') {
           $this->sem_year++;
+          $this->sem_word = 'ss';
+        } else {
+          $this->sem_word = 'ws';
         }
-        $this->sem_word = ($this->sem_word == 'ws' ? 'ss' : 'ws');
       }
-     } else if ($numSemesters < 0) {
+    } else if ($numSemesters < 0) {
 	    for ($i=-1;$i>=$numSemesters;$i--) {
         if ($this->sem_word == 'ss') {
           $this->sem_year--;
+          $this->sem_word = 'ws';
+        } else {
+          $this->sem_word = 'ss';
         }
-        $this->sem_word = ($this->sem_word == 'ws' ? 'ss' : 'ws');
       }
-     }
+    }
 	  
 	}
 	

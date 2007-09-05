@@ -85,7 +85,7 @@ class ScheduleEntry extends ModelHelper {
 	public static function deleteForUser(ModelContext $context, $uid) {
 		$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'deleteForUser'), Array($uid));
 	  if (!$result) {
-	    throw new ModelException("ScheduleEntry::storeInDb: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
+	    throw new ModelException("ScheduleEntry::deleteForUser: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
 	  }
   }
 	
@@ -142,7 +142,6 @@ class ScheduleEntry extends ModelHelper {
 			$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'storeInsert'), 
 														Array($this->uid, 
 														      $this->modid, 
-														      $this->mark_planned, 
 														      $this->semester, 
 														      $this->sem_year));
 			//zusaetzlich ggf. die "richtige" ID aus der DB gleich setzen:

@@ -106,6 +106,13 @@ class ParameterHandler
 		return @$_POST[$key];
 	}
 
+	
+	//getAllPostParameters gibt alle Parameter aus _POST zurueck
+	public function getAllPostParameters()
+	{
+		return @$_POST;
+	}
+
 	//setGetParameter gibt den Wert des mit $key spezifizierten Parameters aus dem GET zurück
 	protected function setGetParameter( $key, $value )
 	{

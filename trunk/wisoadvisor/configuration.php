@@ -404,7 +404,7 @@ class WisoadvisorConfiguration extends Configuration
 		 	$this->setConfValue('sql', 'rating', 'getForResult', 'SELECT * FROM '.$table['ratings'].' WHERE chid = ? AND tgid = ? AND type = "?" AND lower_limit <= ? AND ? <= upper_limit');
 			
 		 	// Klasse Schedule
-      $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, mark_planned, semester, sem_year) VALUES ("?", "?", "?", "?", "?")');
+      $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, semester, sem_year) VALUES ("?", "?", "?", "?")');
       $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned = "?", semester = "?", sem_year = "?" WHERE schid = "?"');
       $this->setConfValue('sql', 'schedule', 'deleteForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid=?');
       $this->setConfValue('sql', 'schedule', 'getForId', 'SELECT * FROM '.$table['schedule']. ' WHERE schid=?');
@@ -831,6 +831,9 @@ class WisoadvisorConfiguration extends Configuration
 	  $this->setConfValue('ucPlaner', 'entryfoottemplate', null, 'templates/ucPlaner/entry_foot.tpl');
 	  
 	  // parameters for template entries to be replaced
+	  $this->setConfValue('ucPlaner', 'schid', null, 'schid');
+	  $this->setConfValue('ucPlaner', 'linkplan', null, 'linkplan');		
+	  $this->setConfValue('ucPlaner', 'mark_plan', null, 'mark_plan');		
 	  $this->setConfValue('ucPlaner', 'linkcreate', null, 'linkcreate');		
 	  $this->setConfValue('ucPlaner', 'username', null, 'username');		
 		$this->setConfValue('ucPlaner', 'studies', null, 'studies');				
@@ -842,6 +845,8 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPlaner', 'ects', null, 'ects');		
 		$this->setConfValue('ucPlaner', 'movedown', null, 'movedown');		
 		$this->setConfValue('ucPlaner', 'moveup', null, 'moveup');		
+		$this->setConfValue('ucPlaner', 'sum_ects', null, 'sum_ects');		
+		$this->setConfValue('ucPlaner', 'semester_short', null, 'semester_short');		
 		
 	}
 
