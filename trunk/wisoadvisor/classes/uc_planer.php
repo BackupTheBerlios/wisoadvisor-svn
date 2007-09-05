@@ -225,17 +225,17 @@ private function getEntryActions($user, $myentry) {
 
 	$startSemCalc = new SemesterCalculator(); // semester, in dem der user zu studieren angefangen hat (siehe advisor__user)
   $startSemCalc->setBoth($user->getSemStart());
-  
+    
   $link_moveup = '<a href="' . $this->getOwnLink('move', Array(ucPlaner::PARAMETER_SCHID.'='.$myentry->getId(), 
                                                                ucPlaner::PARAMETER_DIR.'=up', 
                                                                ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
-                                                               '#'.$entrySemCalc->getBoth()))
+                                                               '#'.$entrySemCalc->getPrevSemesterCalculator()->getBoth()))
                              . '"><img alt="Um ein Semester vorziehen" title="Um ein Semester vorziehen" src="grafik/nach_oben.gif"/></a>';
                              
   $link_movedown = '<a href="' . $this->getOwnLink('move', Array(ucPlaner::PARAMETER_SCHID.'='.$myentry->getId(), 
                                                                  ucPlaner::PARAMETER_DIR.'=down', 
                                                                  ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
-                                                                 '#'.$entrySemCalc->getBoth()))
+                                                                 '#'.$entrySemCalc->getNextSemesterCalculator()->getBoth()))
                                . '"><img alt="Um ein Semester schieben" title="Um ein Semester schieben" src="grafik/nach_unten.gif"/></a>';
 
   $ret = ''; // per default alles verboten  

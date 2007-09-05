@@ -118,20 +118,21 @@ class SemesterCalculator {
       }
     }
     
-    /*
-    // year of input greater than ours => not older
-    if ( < ) {
-      $ret = true;
-    
-    // year of input equals ours => compare words
-    } else if ($iSemesterCalculator->getSemesterYear() == $this->getSemesterYear()) {
-      if (($iSemesterCalculator->getSemesterWord() == 'ss') && ($this->sem_word == 'ws')) {
-        $ret = true;
-      } else if ($iSemesterCalculator->getSemesterWord() == $this->sem_word) {
-        $ret = true;
-      }
-    }*/
     return $ret;
+  }
+  
+  public function getPrevSemesterCalculator() {
+    $ret = new SemesterCalculator();
+    $ret->setBoth($this->getBoth());
+    $ret->addSemester(-1, false);
+    return $ret;
+  }
+  
+  public function getNextSemesterCalculator() {
+    $ret = new SemesterCalculator();
+    $ret->setBoth($this->getBoth());
+    $ret->addSemester(1, false);
+    return $ret;    
   }
 }
 ?>
