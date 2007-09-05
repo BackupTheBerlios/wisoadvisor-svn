@@ -36,19 +36,46 @@ class SemesterCalculator {
 	  if ($ignoreFirstSemester) {
   	  $numSemesters--;
 	  }
+
+    // bloody hack, sorry
+     if ($numSemesters > 0) {
+	    for ($i=1;$i<=$numSemesters;$i++) {
+        if ($this->sem_word == 'ws') {
+          $this->sem_year++;
+        }
+        $this->sem_word = ($this->sem_word == 'ws' ? 'ss' : 'ws');
+      }
+     } else if ($numSemesters < 0) {
+	    for ($i=-1;$i>=$numSemesters;$i--) {
+        if ($this->sem_word == 'ss') {
+          $this->sem_year--;
+        }
+        $this->sem_word = ($this->sem_word == 'ws' ? 'ss' : 'ws');
+      }
+     }
 	  
-	  if ($numSemesters > 0) {
-      $this->sem_year += ($numSemesters/2);
-	    if ($numSemesters % 2 != 0) {
-        $this->sem_word = ($this->sem_word == 'ss' ? 'ws' : 'ss');
-	    }
-	  }
 	}
 	
+  public function setBoth ($iBoth) {
+    $this->sem_word = substr($iBoth, 0, 2);
+    $this->sem_year = substr($iBoth, 2);    
+  }
+  
+  public function getBoth () {
+    return $this->sem_word . $this->sem_year;  
+  }
+  
+  public function setSemesterWord($semword) {
+    $this->sem_word = $semword;
+  }
+
   public function getSemesterWord() {
     return $this->sem_word;
   }
   
+  public function setSemesterYear($semyear) {
+    $this->sem_year = $semyear;
+  }
   public function getSemesterYear() {
     return $this->sem_year;
   }
@@ -71,6 +98,36 @@ class SemesterCalculator {
 	  return $ret;
 	}
 	
-  
+  public function compare($iSemesterCalculator) {
+
+    $ret = 1;
+    
+    if ($iSemesterCalculator->getBoth() == $this->getBoth()) {
+      $ret = 0;
+    } else {
+      if ($this->sem_year < $iSemesterCalculator->getSemesterYear()) {
+        $ret = -1;
+      } else if ($this->sem_year == $iSemesterCalculator->getSemesterYear()) {
+        if (($this->sem_word == 'ss') && ($iSemesterCalculator->getSemesterWord() == 'ws')) {
+          $ret = -1;
+        }
+      }
+    }
+    
+    /*
+    // year of input greater than ours => not older
+    if ( < ) {
+      $ret = true;
+    
+    // year of input equals ours => compare words
+    } else if ($iSemesterCalculator->getSemesterYear() == $this->getSemesterYear()) {
+      if (($iSemesterCalculator->getSemesterWord() == 'ss') && ($this->sem_word == 'ws')) {
+        $ret = true;
+      } else if ($iSemesterCalculator->getSemesterWord() == $this->sem_word) {
+        $ret = true;
+      }
+    }*/
+    return $ret;
+  }
 }
 ?>

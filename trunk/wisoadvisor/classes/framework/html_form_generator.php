@@ -483,6 +483,28 @@
 		    $ret .= '</select>';
         return $ret;
      }
+     
+		 /**
+		  * @param $iName Name for DropDown
+		  * @param $highlightedValue highlighted text
+		  */
+     public static function getDropDownSemester($iName, $highlightedValue) {
+        
+       // 2006 is the first year with bachelor students
+       // start of studies is always in winter
+       $ret = '<select name="' . $iName . '">';
+       for ($i=2006;$i<(date('Y')+5);$i++) {
+         $value='ws'.$i;
+		     $ret .= "<option ";
+		     if ($highlightedValue != '' && $highlightedValue == $value) {
+		       $ret .= ' selected="true"';
+		     }
+         $ret .= 'value="'.$value.'">Wintersemester ' .$i.'/'. substr($i+1, strlen(rtrim($i+1))-2, 2);"</option>\n" ;
+       }
+		   $ret .= '</select>';
+       return $ret;
+       
+      }
 
  }
  

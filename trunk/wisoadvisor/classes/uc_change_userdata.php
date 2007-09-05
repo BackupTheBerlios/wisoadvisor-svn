@@ -23,6 +23,7 @@ class ucChangeUserData extends UseCase
 	const PARAMETER_BIRTHDAY = 'birthday';
 	const PARAMETER_STUDIES = 'studies';
 	const PARAMETER_MATNR = 'matnr';
+	const PARAMETER_SEMSTART = 'sem_start';
 	
 
 	//Ausführung: Business-Logik
@@ -60,6 +61,7 @@ class ucChangeUserData extends UseCase
 		$birthday = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_BIRTHDAY);
 		$studies = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_STUDIES);
 		$matnr = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_MATNR);
+		$sem_start = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_SEMSTART);
 		
 		//in $ error werden evtl. Fehlermeldungen gesammelt.
 		$error = '';
@@ -95,6 +97,7 @@ class ucChangeUserData extends UseCase
 			$user->setPassword($password);
       $user->setMatNr($matnr);
       $user->setMajId($studies);
+      $user->setSemStart($sem_start);
       
 			$user->storeInDb($this);
 			
@@ -149,6 +152,8 @@ class ucChangeUserData extends UseCase
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'matnr'), $formGen->getInput(ucChangeUserData::PARAMETER_MATNR, $user->getMatNr()));
 		$studiesSelect = HtmlFormGenerator::getDropDownFromDb($this, "studies", $this->getConf()->getConfString('sql', 'registration', 'dropdown_studies'), "fullname", "majid", $user->getMajId());				
 		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'studies'), $studiesSelect);
+		$semStartSelect = HtmlFormGenerator::getDropDownSemester("sem_start", $user->getSemStart());
+		$generator->apply($this->getConf()->getConfString('ucChangeUserData', 'sem_start'), $semStartSelect);
 		
 		/* ende v2 */
 		

@@ -224,7 +224,7 @@ class ucRegistration extends UseCase
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'email'), $user->getEMail());
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'username'), $user->getUserName());
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'password'), $user->getPassword());
-
+		
 		/* Stammdaten Wiso@visor freiwillig, fuer Statistik */
 		
 		//die gender-Radio-Boxen müssen extra bereitgestellt werden:
@@ -251,6 +251,10 @@ class ucRegistration extends UseCase
 		//Studiengangs-Select muss auch gebaut werden 
 		$studiesSelect = HtmlFormGenerator::getDropDownFromDb($this, "majid", $this->getConf()->getConfString('sql', 'registration', 'dropdown_studies'), "fullname", "majid", "1");
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'studies'), $studiesSelect);
+		
+		//Studienanfangs-Select muss auch gebaut werden 
+		$semStartSelect = HtmlFormGenerator::getDropDownSemester("sem_start", $user->getSemStart());
+		$generator->apply($this->getConf()->getConfString('ucRegistration', 'sem_start'), $semStartSelect);
 		
 		//ggf. wird auch das Link-Target mit durchgereicht
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'targetlink'), $this->getParam()->getParameter('target'));

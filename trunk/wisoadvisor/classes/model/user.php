@@ -30,6 +30,7 @@ class User extends ModelHelper {
 	private $matnr = null;
 	private $studies = null;
 	private $majid = null;
+	private $sem_start = null;
 	
 	private function __construct($uid) {
 		parent::__construct($uid);
@@ -59,6 +60,7 @@ class User extends ModelHelper {
 			$result->matnr = $row['matnr'];
 			$result->majid = $row['majid'];
 			$result->studies = $row['fullname'];
+			$result->sem_start = $row['sem_start'];
 		}
 		// Objekt zurueckliefern
 		return $result;
@@ -132,7 +134,8 @@ class User extends ModelHelper {
 														      $confirmed, 
 														      $this->authCode, 
 														      $this->matnr, 
-														      $this->majid));
+														      $this->majid,
+														      $this->sem_start));
 			//zusaetzlich ggf. die "richtige" ID aus der DB gleich setzen:
 			if ($result) $this->setId( $context->getDb()->lastId() );
 			else throw new ModelException("User::storeInDb: Fehler beim Einfügen in die Datenbank:<br>".$context->getDb()->getError(), 0);
@@ -152,12 +155,21 @@ class User extends ModelHelper {
 														      $this->type,
 														      $this->matnr,
 														      $this->majid, 
+														      $this->sem_start,
 														      $this->id));
 			if (!$result) 
 				throw new ModelException("User::storeInDb: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
 		}
 
 		return true;
+	}
+	
+	public function setSemStart($semStart) {
+    $this->sem_start = $semStart;	  
+	}
+	
+	public function getSemStart() {
+    return $this->sem_start;
 	}
 	
 	public function getMajId() {

@@ -383,8 +383,8 @@ class WisoadvisorConfiguration extends Configuration
                                                         AND am.majid = au.majid');
 		 	
 		 	$this->setConfValue('sql', 'user', 'getAll', 'SELECT * FROM '.$table['user'].' ORDER BY uid');
-		 	$this->setConfValue('sql', 'user', 'storeUpdate', 'UPDATE '.$table['user'].' SET username = "?", email = "?", passwd = "?", gender = "?", birthday = "?", tgid = "?", confirmed = "?", auth_code = "?", type = "?", matnr = "?", majid = "?" WHERE uid = "?"');
-			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, matnr, majid, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "user")');
+		 	$this->setConfValue('sql', 'user', 'storeUpdate', 'UPDATE '.$table['user'].' SET username = "?", email = "?", passwd = "?", gender = "?", birthday = "?", tgid = "?", confirmed = "?", auth_code = "?", type = "?", matnr = "?", majid = "?", sem_start = "?" WHERE uid = "?"');
+			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, matnr, majid, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "user")');
 		 	
 		 	// Klasse TextElement
 		 	$this->setConfValue('sql', 'text_element', 'getForId', 'SELECT * FROM '.$table['textelements'].' WHERE teid=?');
@@ -406,7 +406,8 @@ class WisoadvisorConfiguration extends Configuration
 		 	// Klasse Schedule
       $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, mark_planned, semester, sem_year) VALUES ("?", "?", "?", "?", "?")');
       $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned = "?", semester = "?", sem_year = "?" WHERE schid = "?"');
-      $this->setConfValue('sql', 'schedule', 'deleteForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid = "?"');
+      $this->setConfValue('sql', 'schedule', 'deleteForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid=?');
+      $this->setConfValue('sql', 'schedule', 'getForId', 'SELECT * FROM '.$table['schedule']. ' WHERE schid=?');
       $this->setConfValue('sql', 'schedule', 'getForUser', 'SELECT asch.*,
 																					                         am.*,
 																																	 al.*
@@ -492,6 +493,7 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucChangeUserData', 'gender', null, 'GENDER');
 		$this->setConfValue('ucChangeUserData', 'birthday', null, 'BIRTHDAY');
 		$this->setConfValue('ucChangeUserData', 'majid', null, 'MAJID');
+		$this->setConfValue('ucChangeUserData', 'sem_start', null, 'SEM_START');
 		$this->setConfValue('ucChangeUserData', 'studies', null, 'STUDIES');
 		$this->setConfValue('ucChangeUserData', 'matnr', null, 'MATNR');
 		$this->setConfValue('ucChangeUserData', 'submit', null, 'SUBMIT');
@@ -540,6 +542,7 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucRegistration', 'matnr', null, 'matnr');
 		$this->setConfValue('ucRegistration', 'studies', null, 'studies');
 		$this->setConfValue('ucRegistration', 'majid', null, 'majid');
+		$this->setConfValue('ucRegistration', 'sem_start', null, 'sem_start');
 		
 		//regul�re Ausdr�cke zur �berpr�fung der Eingaben: 
 		//Hinweis: aufgrund der PHP-Stringbehandlung m�ssen die Regexe in doppelte Anf�hrungszeichen gesetzt werden!
@@ -819,18 +822,26 @@ class WisoadvisorConfiguration extends Configuration
 
 	  // template files
 		$this->setConfValue('ucPlaner', 'htmltemplate', null, 'templates/ucPlaner/planer.tpl');
-	  $this->setConfValue('ucPlaner', 'linkcreatetemplate', null, 'templates/ucPlaner/linkcreate.tpl');
+		$this->setConfValue('ucPlaner', 'prognosetemplate', null, 'templates/ucPlaner/planer_prognose.tpl');
+		$this->setConfValue('ucPlaner', 'linkcreatetemplate', null, 'templates/ucPlaner/linkcreate.tpl');
 		$this->setConfValue('ucPlaner', 'entrytemplate', null, 'templates/ucPlaner/entry.tpl');
-	  $this->setConfValue('ucPlaner', 'entryheadtemplate', null, 'templates/ucPlaner/entry_head.tpl');
+		$this->setConfValue('ucPlaner', 'entrylockedalltemplate', null, 'templates/ucPlaner/entry_locked_all.tpl');
+		$this->setConfValue('ucPlaner', 'entrylockeduptemplate', null, 'templates/ucPlaner/entry_locked_up.tpl');
+		$this->setConfValue('ucPlaner', 'entryheadtemplate', null, 'templates/ucPlaner/entry_head.tpl');
 	  $this->setConfValue('ucPlaner', 'entryfoottemplate', null, 'templates/ucPlaner/entry_foot.tpl');
 	  
 	  // parameters for template entries to be replaced
 	  $this->setConfValue('ucPlaner', 'linkcreate', null, 'linkcreate');		
 	  $this->setConfValue('ucPlaner', 'username', null, 'username');		
 		$this->setConfValue('ucPlaner', 'studies', null, 'studies');				
+		$this->setConfValue('ucPlaner', 'firstsemester', null, 'firstsemester');		
+		$this->setConfValue('ucPlaner', 'lastsemester', null, 'lastsemester');		
+		$this->setConfValue('ucPlaner', 'duration', null, 'duration');		
 		$this->setConfValue('ucPlaner', 'mod_name', null, 'mod_name');		
 		$this->setConfValue('ucPlaner', 'semester_readable', null, 'semester_readable');		
 		$this->setConfValue('ucPlaner', 'ects', null, 'ects');		
+		$this->setConfValue('ucPlaner', 'movedown', null, 'movedown');		
+		$this->setConfValue('ucPlaner', 'moveup', null, 'moveup');		
 		
 	}
 

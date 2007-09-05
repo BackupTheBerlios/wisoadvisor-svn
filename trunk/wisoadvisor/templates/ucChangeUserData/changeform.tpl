@@ -53,6 +53,11 @@
 		<td>###:###STUDIES###:###</td>
 		<td class="helptext">Bitte gib Deinen Studiengang an.</td>
 	</tr>
+	<tr>
+		<td>Studienbeginn</td>
+		<td>###:###SEM_START###:###</td>
+		<td class="helptext">Bitte gib Deinen Studienbeginn an.</td>
+	</tr>
 		
   <!-- Ende v2 -->
 

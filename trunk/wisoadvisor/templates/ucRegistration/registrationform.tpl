@@ -69,6 +69,11 @@
 		<td>###:###studies###:###</td>
 		<td class="helptext">Bitte gib Deinen Studiengang an.</td>
 	</tr>
+	<tr>
+		<td>Studienbeginn</td>
+		<td>###:###sem_start###:###</td>
+		<td class="helptext">Bitte gib Deinen Studienbeginn an.</td>
+	</tr>
 		
 	<!--  Datenschutzerklaerung -->
 	
