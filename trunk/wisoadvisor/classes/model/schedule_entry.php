@@ -192,7 +192,7 @@ class ScheduleEntry extends ModelHelper {
     return $this->default_semester;
   }
   public function isAssessment() {
-    return $this->asessment;
+    return $this->assessment;
   }
 	
 	/*
@@ -247,6 +247,57 @@ class ScheduleEntry extends ModelHelper {
   
   public function getSemYear() {
     return $this->sem_year;
+  }
+  
+  public function isMoveableUpwards($user) {
+    
+    $ret = false;    
+	  $realSemCalc = new SemesterCalculator(); // tatsaechliches, aktuelles semester (initialisiert ueber date)
+	  $entrySemCalc = new SemesterCalculator(); // semester, fuer das der eintrag eingeplant wurde (siehe advisor__schedule)
+		$entrySemCalc->setSemesterWord($this->semester);
+		$entrySemCalc->setSemesterYear($this->sem_year);
+		$startSemCalc = new SemesterCalculator(); // semester, in dem der user zu studieren angefangen hat (siehe advisor__user)
+	  $startSemCalc->setBoth($user->getSemStart());
+    
+    // eine nach oben verschiebbare pruefung ...
+	  if ($this->mark_real <= 0) { // ... darf noch nicht abgelegt worden sein ...
+      if ($this->try == 1) { // ... darf keine wiederholungspruefung sein ...
+        if ($entrySemCalc->compare($realSemCalc) > 0) { // ... muss in der zukunft liegen ...
+		      if ($entrySemCalc->compare($startSemCalc) > 0) { // ... und darf nicht vor das startsemester geschoben werden
+		        $ret = true;
+		      }
+		    }
+      }
+    }	     
+    return $ret;
+  }
+	
+  public function isMoveableDownwards($user) {
+    
+    $ret = false; 
+	  $entrySemCalc = new SemesterCalculator(); // semester, fuer das der eintrag eingeplant wurde (siehe advisor__schedule)
+		$entrySemCalc->setSemesterWord($this->semester);
+		$entrySemCalc->setSemesterYear($this->sem_year);
+    
+    $maxAssSemCalc = new SemesterCalculator();
+    $maxAssSemCalc->setBoth($user->getSemStart());
+    $maxAssSemCalc->addSemester(2, false);
+    
+	  // eine nach unten verschiebbare pruefung ...
+	  if ($this->mark_real <= 0) { // ... darf noch nicht abgelegt worden sein ...
+      if ($this->try == 1) { // ... darf keine wiederholungspruefung sein ...
+        if ($this->assessment == 'true') { // ... und muss im falle einer assessment-pruefung ...
+          if ($entrySemCalc->compare($maxAssSemCalc) < 0) { // ... vor dem 3. semester abgelegt sein ...
+            $ret = true;
+          }
+		    } else { // ... bei bachelor-pruefungen sehen wir das nicht so eng wie die PO
+		      $ret = true;
+		    }
+      }
+    }	     
+    
+    return $ret;
+
   }
 	
 }

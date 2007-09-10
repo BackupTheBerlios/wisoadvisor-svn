@@ -493,7 +493,7 @@
        // 2006 is the first year with bachelor students
        // start of studies is always in winter
        $ret = '<select name="' . $iName . '">';
-       for ($i=2006;$i<(date('Y')+5);$i++) {
+       for ($i=2007;$i<(date('Y')+3);$i++) {
          $value='ws'.$i;
 		     $ret .= "<option ";
 		     if ($highlightedValue != '' && $highlightedValue == $value) {

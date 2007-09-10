@@ -5,7 +5,7 @@
 	<th width="37.5%">Veranstaltung</td>
 	<th width="10%">ECTS</th>
 	<th width="5%">V</th>
-	<th width="15%">Aktion</th>
+	<th colspan="2" width="15%">Aktion</th>
 	<th>Plannote</th>
 	<th>Note</th>
 </tr>

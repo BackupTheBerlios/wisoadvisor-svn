@@ -117,22 +117,20 @@ private function move($schid, $dir) {
   $user = User::getForId($this, $this->getSess()->getUid());
   $entry = ScheduleEntry::getForId($this, $schid);
   
-  $hStartSemester = new SemesterCalculator(); 
-  $hStartSemester->setBoth($user->getSemStart());
-  
   if ($entry) {
     
-    $hCurrentSemester = new SemesterCalculator();
-    $hCurrentSemester->setSemesterWord($entry->getSemester());
-    $hCurrentSemester->setSemesterYear($entry->getSemYear());
+    $hNewSemester = new SemesterCalculator();
+    $hNewSemester->setSemesterWord($entry->getSemester());
+    $hNewSemester->setSemesterYear($entry->getSemYear());
     
-    $semToAdd = ($dir=='down' ? 1 : -1);
-    $hCurrentSemester->addSemester($semToAdd, false);
+    $semToAdd = ($dir=='up' ? -1 : 1);
+    $hNewSemester->addSemester($semToAdd, false);
     
-    if ($hStartSemester->compare($hCurrentSemester) <= 0) {
-	    $entry->setSemester($hCurrentSemester->getSemesterWord());
-	    $entry->setSemYear($hCurrentSemester->getSemesterYear());    
-      $entry->storeInDb($this);    
+    if (($entry->isMoveableUpwards($user) && ($dir=='up')) ||
+        ($entry->isMoveableDownwards($user) && ($dir=='down'))) {
+	    $entry->setSemester($hNewSemester->getSemesterWord());
+	    $entry->setSemYear($hNewSemester->getSemesterYear());    
+      $entry->storeInDb($this);
     }
   }
 }
@@ -194,6 +192,7 @@ private function showPlan() {
 
 	$this->appendOutput($gen->getHTML());
   $this->appendOutput($htmlToAppend);
+  $this->appendOutput($this->printScheduleFooter());
   $this->setOutputType(USECASE_HTML);
   return true;
   
@@ -204,54 +203,49 @@ private function printEntry($user, $myentry) {
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'entrytemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
   
   // links und form zzgl. standards ins template parsen auffuellen
-  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mod_name'), $myentry->getModName());
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mod_name'), $myentry->getModName().($myentry->isAssessment()=='true'?'*':''));
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'ects'), $myentry->getEcts());
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'try'), $myentry->getTry());
-  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_plan'), ($myentry->getMarkPlanned() > 0 ? sprintf("%1.1f", $myentry->getMarkPlanned()) : ''));
-  $gen->apply($this->getConf()->getConfString('ucPlaner', 'actions'), $this->getEntryActions($user, $myentry));
-  $gen->apply($this->getConf()->getConfString('ucPlaner', 'form'), $this->getEntryForm($user, $myentry));
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'action_movedown'), $this->getEntryActionDown($user, $myentry));
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'action_moveup'), $this->getEntryActionUp($user, $myentry));
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_plan'), $this->getEntryForm($user, $myentry));
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_real'), ($myentry->getMarkReal() > 0 ? sprintf("%1.1f", $myentry->getMarkReal()) : ''));
   return $gen->getHTML();
   
 }
 
-private function getEntryActions($user, $myentry) {
-  
-  $realSemCalc = new SemesterCalculator(); // tatsaechliches, aktuelles semester (initialisiert ueber date)
+private function getEntryActionDown($user, $myentry) {
   
   $entrySemCalc = new SemesterCalculator(); // semester, fuer das der eintrag eingeplant wurde (siehe advisor__schedule)
 	$entrySemCalc->setSemesterWord($myentry->getSemester());
 	$entrySemCalc->setSemesterYear($myentry->getSemYear());
 
-	$startSemCalc = new SemesterCalculator(); // semester, in dem der user zu studieren angefangen hat (siehe advisor__user)
-  $startSemCalc->setBoth($user->getSemStart());
-    
-  $link_moveup = '<a href="' . $this->getOwnLink('move', Array(ucPlaner::PARAMETER_SCHID.'='.$myentry->getId(), 
-                                                               ucPlaner::PARAMETER_DIR.'=up', 
-                                                               ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
-                                                               '#'.$entrySemCalc->getPrevSemesterCalculator()->getBoth()))
-                             . '"><img alt="Um ein Semester vorziehen" title="Um ein Semester vorziehen" src="grafik/nach_oben.gif"/></a>';
-                             
-  $link_movedown = '<a href="' . $this->getOwnLink('move', Array(ucPlaner::PARAMETER_SCHID.'='.$myentry->getId(), 
-                                                                 ucPlaner::PARAMETER_DIR.'=down', 
-                                                                 ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
-                                                                 '#'.$entrySemCalc->getNextSemesterCalculator()->getBoth()))
-                               . '"><img alt="Um ein Semester schieben" title="Um ein Semester schieben" src="grafik/nach_unten.gif"/></a>';
-
-  $ret = ''; // per default alles verboten  
-  if ($realSemCalc->compare($entrySemCalc) == 0) {
-    $ret = $link_movedown; // aktuelles semester => nur nach oben schieben verboten
-  } else if ($realSemCalc->compare($entrySemCalc) == -1) {
-    if ($entrySemCalc->compare($startSemCalc) <= 0) {
-      $ret = $link_movedown; // akt. semester ist vor dem startsemester => nur nach oben schieben verboten
-    } else {
-      $ret = $link_movedown . '&nbsp;&nbsp;&nbsp;' . $link_moveup; // kuenftiges semester => alles erlaubt
-    }
-  } else {
-    // vergangenes semester => alles verboten
+  $ret = '';  
+  if ($myentry->isMoveableDownwards($user)) {
+	  $ret = '<a href="' . $this->getOwnLink('move', Array(ucPlaner::PARAMETER_SCHID.'='.$myentry->getId(), 
+	                                                       ucPlaner::PARAMETER_DIR.'=down', 
+	                                                       ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
+	                                                       '#'.$entrySemCalc->getNextSemesterCalculator()->getBoth()))
+	                     . '"><img alt="Um ein Semester schieben" title="Um ein Semester schieben" src="grafik/nach_unten.gif"/></a>';
   }
-  
   return $ret;
+}
+
+private function getEntryActionUp($user, $myentry) {
+
+  $entrySemCalc = new SemesterCalculator(); // semester, fuer das der eintrag eingeplant wurde (siehe advisor__schedule)
+	$entrySemCalc->setSemesterWord($myentry->getSemester());
+	$entrySemCalc->setSemesterYear($myentry->getSemYear());
+
+  $ret = '';  
+  if ($myentry->isMoveableUpwards($user)) {
+    $ret = '<a href="' . $this->getOwnLink('move', Array(ucPlaner::PARAMETER_SCHID.'='.$myentry->getId(), 
+                                                         ucPlaner::PARAMETER_DIR.'=up', 
+                                                         ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
+                                                         '#'.$entrySemCalc->getPrevSemesterCalculator()->getBoth()))
+                       . '"><img alt="Um ein Semester vorziehen" title="Um ein Semester vorziehen" src="grafik/nach_oben.gif"/></a>';
+  }
+  return $ret;  
 }
 
 private function getEntryForm($user, $myentry) {
@@ -269,9 +263,10 @@ private function getEntryForm($user, $myentry) {
   if ($myentry->getMarkReal() > 0) {
     $ret = $mark_plan_readable; // wenn eine pruefungsnote note im system existiert: einfach planwert anzeigen, nicht bearbeitbar
   } else {    
-    if ($entrySemCalc->compare($realSemCalc) >= 0) {
+    // plannote soll immer eingegeben werden koennen, wenn noch keine echte note vorhanden
+    //if ($entrySemCalc->compare($realSemCalc) >= 0) {
       $ret = $input_mark_plan; // wenn aktuelles semester oder in der zukunft: form anzeigen
-    }
+    //}
   }
   
   return $ret;
@@ -308,6 +303,11 @@ private function printPrognose($user, $curSemester, $duration) {
 private function printEntryFooter($sum_ects) {
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'entryfoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'sum_ects'), $sum_ects);
+  return $gen->getHTML();  
+}
+
+private function printScheduleFooter() {
+  $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'schedulefoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
   return $gen->getHTML();  
 }
 
