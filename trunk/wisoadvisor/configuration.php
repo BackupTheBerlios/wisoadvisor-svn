@@ -384,7 +384,7 @@ class WisoadvisorConfiguration extends Configuration
 		 	
 		 	$this->setConfValue('sql', 'user', 'getAll', 'SELECT * FROM '.$table['user'].' ORDER BY uid');
 		 	$this->setConfValue('sql', 'user', 'storeUpdate', 'UPDATE '.$table['user'].' SET username = "?", email = "?", passwd = "?", gender = "?", birthday = "?", tgid = "?", confirmed = "?", auth_code = "?", type = "?", matnr = "?", majid = "?", sem_start = "?" WHERE uid = "?"');
-			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, matnr, majid, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "user")');
+			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, matnr, majid, sem_start, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "user")');
 		 	
 		 	// Klasse TextElement
 		 	$this->setConfValue('sql', 'text_element', 'getForId', 'SELECT * FROM '.$table['textelements'].' WHERE teid=?');
@@ -509,11 +509,12 @@ class WisoadvisorConfiguration extends Configuration
 		
 		//reguläre Ausdrücke zur Überprüfung der Eingaben: 
 		//Hinweis: aufgrund der PHP-Stringbehandlung müssen die Regexe in doppelte Anführungszeichen gesetzt werden!
-		$this->setConfValue('ucChangeUserData', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gï¿½ltige (i.S. von mï¿½gliche) eMailadresse oder leer
-		$this->setConfValue('ucChangeUserData', 'regex', 'password', "/^([\&\ï¿½\!\?\=\%\ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucChangeUserData', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gültige (i.S. von mögliche) eMailadresse oder leer
+		$this->setConfValue('ucChangeUserData', 'regex', 'password', "/^([\&\§\!\?\=\%\ß\ü\ä\öa-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
 		$this->setConfValue('ucChangeUserData', 'regex', 'gender', "/^([muw]{1,1})$/i"); //Geschlecht
 		$this->setConfValue('ucChangeUserData', 'regex', 'birthday', "/^([\\d]{1,4})$/i"); //Jahreszahl oder 0
-		$this->setConfValue('ucChangeUserData', 'regex', 'username', "/^([ \ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucChangeUserData', 'regex', 'username', "/^([ \ß\ü\ä\öa-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucChangeUserData', 'regex', 'matnr', "/^([0-9_-]{0,15})$/i"); //0-15 Zeichen, nur Zahlen
 		
 		//Fehlermeldung(en):
 		$this->setConfValue('ucChangeUserData', 'error', 'username', 'Dein Name darf aus h&ouml;chstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
@@ -522,6 +523,7 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucChangeUserData', 'error', 'birthday', 'Die Geburtstagsangabe ist ung&uuml;ltig! ');
 		$this->setConfValue('ucChangeUserData', 'error', 'password', 'Dein Passwort muss aus mindestens 5 Zeichen bestehen. ');
 		$this->setConfValue('ucChangeUserData', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung m&uuml;ssen &uuml;bereinstimmen. ');
+		$this->setConfValue('ucChangeUserData', 'error', 'matnr', 'Deine Matrikelnummer ist ung&uuml;ltig. ');
 		
 		//Nachricht:
 		$this->setConfValue('ucChangeUserData', 'message_text', 'stored', 'Wir haben Deine &Auml;nderungen erfolgreich gespeichert.');
@@ -554,18 +556,20 @@ class WisoadvisorConfiguration extends Configuration
 		
 		//regulï¿½re Ausdrï¿½cke zur ï¿½berprï¿½fung der Eingaben: 
 		//Hinweis: aufgrund der PHP-Stringbehandlung mï¿½ssen die Regexe in doppelte Anfï¿½hrungszeichen gesetzt werden!
-		$this->setConfValue('ucRegistration', 'regex', 'username', "/^([ \ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
-		$this->setConfValue('ucRegistration', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gï¿½ltige (i.S. von mï¿½gliche) eMailadresse oder leer
-		$this->setConfValue('ucRegistration', 'regex', 'password', "/^([\&\ï¿½\!\?\=\%\ï¿½\ï¿½\ï¿½\ï¿½a-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucRegistration', 'regex', 'username', "/^([ \ß\ü\ä\öa-z0-9_-]{0,100})$/i"); //0-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
+		$this->setConfValue('ucRegistration', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gültige (i.S. von mögliche) eMailadresse oder leer
+		$this->setConfValue('ucRegistration', 'regex', 'password', "/^([\&\§\!\?\=\%\ß\ü\ä\öa-z0-9_-]{5,100})$/i"); //5-100 Zeichen, Alphabeth, Zahlen, teilw. Sonderzeichen
 		$this->setConfValue('ucRegistration', 'regex', 'gender', "/^([muw]{1,1})$/i"); //Geschlecht
 		$this->setConfValue('ucRegistration', 'regex', 'birthday', "/^([\\d]{1,4})$/i"); //Jahreszahl oder 0
-		
+		$this->setConfValue('ucRegistration', 'regex', 'matnr', "/^([0-9_-]{0,15})$/i"); //0-15 Zeichen, nur Zahlen
+				
 		//Fehlermeldung(en):
 		$this->setConfValue('ucRegistration', 'error', 'username', 'Dein Name darf aus h&ouml;chstens 100 Zeichen bestehen und darf keine Sonderzeichen enthalten. ');
 		$this->setConfValue('ucRegistration', 'error', 'email', 'Bitte gib eine g&uuml;ltige eMailadresse ein. ');
 		$this->setConfValue('ucRegistration', 'error', 'gender', 'Die Angabe des Geschlechts ist ung&uuml;lltig! ');
 		$this->setConfValue('ucRegistration', 'error', 'birthday', 'Die Geburtstagsangabe ist ung&uuml;lltig! ');
 		$this->setConfValue('ucRegistration', 'error', 'password', 'Dein Passwort muss aus mindestens 5 Zeichen bestehen. ');
+		$this->setConfValue('ucRegistration', 'error', 'matnr', 'Bitte gib eine g&uuml;ltige Matrikelnummer ein. ');
 		$this->setConfValue('ucRegistration', 'error', 'password_repeat', 'Passwort und Passwort-Wiederholung m&uuml;lssen &uuml;lbereinstimmen. ');
 		$this->setConfValue('ucRegistration', 'error', 'double_email', 'Wir konnten Dich nicht registrieren, weil die eMailadresse schon vergeben ist. ');
 		$this->setConfValue('ucRegistration', 'error', 'datenschutz_akzeptieren', 'Du musst der Verwendung Deiner Daten zustimmen, ansonsten kannst Du Dich nicht registrieren. ');
@@ -695,7 +699,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('ucSurvey', 'button', 'whysurvey', 'Hilfe');
 	 	$this->setConfValue('ucSurvey', 'button', 'feedback', 'Feedback');
 	 	$this->setConfValue('ucSurvey', 'button', 'next', 'Weiter >>');
-	 	$this->setConfValue('ucSurvey', 'button', 'back', '<< Zurï¿½ck');
+	 	$this->setConfValue('ucSurvey', 'button', 'back', '<< Zurück');
 	 	
 	 	$this->setConfValue('ucSurvey', 'replace', 'multiplechoice', '<br/><br/><span class="questionhelp">(Mehrfachantworten mï¿½glich)</span>');
 		$this->setConfValue('ucSurvey', 'message', 'required', 'Bitte beantworte diese Frage. Vorher kannst Du nicht im Test fortfahren.');
@@ -846,7 +850,9 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPlaner', 'firstsemester', null, 'firstsemester');		
 		$this->setConfValue('ucPlaner', 'lastsemester', null, 'lastsemester');		
 		$this->setConfValue('ucPlaner', 'duration', null, 'duration');				
-	  $this->setConfValue('ucPlaner', 'linkcreate', null, 'linkcreate');				
+		$this->setConfValue('ucPlaner', 'duration_total', null, 'duration_total');				
+		$this->setConfValue('ucPlaner', 'progbar', null, 'progbar');				
+		$this->setConfValue('ucPlaner', 'linkcreate', null, 'linkcreate');				
 	  // entry header
 		$this->setConfValue('ucPlaner', 'semester_readable', null, 'semester_readable');		
 	  $this->setConfValue('ucPlaner', 'linkplan', null, 'linkplan');				

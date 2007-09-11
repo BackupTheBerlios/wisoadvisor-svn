@@ -80,7 +80,9 @@ class ucRegistration extends UseCase
   		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'birthday'), $birthday)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'birthday').'<br/>';
 		//ist das Passwort ok?
   		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'password'), $password)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'password').'<br/>';
-		//stimmen Passwort und -Wiederholung überein?
+		//ist die MatNr ok?
+  		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'matnr'), $matnr)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'matnr').'<br/>';
+  		//stimmen Passwort und -Wiederholung überein?
 		if ($password != $passwordRepeat) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'password_repeat').'<br/>';
 		//wurde der Datenschutzhaken gesetzt?
 		if (($datenschutz == null) || ($datenschutz == '')) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'datenschutz_akzeptieren').'<br/>';

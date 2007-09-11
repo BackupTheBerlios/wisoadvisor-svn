@@ -181,7 +181,7 @@ private function showPlan() {
     } // foreach $myentry
 		
     $htmlToAppend .= $this->printEntryFooter($sum_ects); // final semester footer
-    $htmlToAppend = $this->printPrognose($user, $curEntrySemCalculator->getSemesterReadable(), $duration) . $htmlToAppend; // add prognose before
+    $htmlToAppend = $this->printPrognose($user, $curEntrySemCalculator, $duration) . $htmlToAppend; // add prognose before
     
   }
   
@@ -287,15 +287,42 @@ private function printEntryHeader($curSemester) {
   return $gen->getHTML();
 }
 
-private function printPrognose($user, $curSemester, $duration) {
+private function printPrognose($user, $lastSemester, $duration) {
   
   $hFirstSemester = new SemesterCalculator();
   $hFirstSemester->setBoth($user->getSemStart());
   
+  $hCurSemester = new SemesterCalculator();
+  
+  // text for prognose
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'prognosetemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'firstsemester'), $hFirstSemester->getSemesterReadable());
-  $gen->apply($this->getConf()->getConfString('ucPlaner', 'lastsemester'), $curSemester);
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'lastsemester'), $lastSemester->getSemesterReadable());
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'duration'), $duration);
+  
+  // progress bar, hard-coded layout, but who cares...
+  $i=0;
+  $itSemester = new SemesterCalculator();
+  $itSemester->setBoth($hFirstSemester->getBoth());
+  $bar = '<table style="border-width:2px; border-style:solid; border-color:#003366;"><tr>';
+  while ($itSemester->compare($lastSemester) <= 0) {
+    $color = ' bgcolor="#FFFFFF" ';
+    if ($itSemester->compare($hCurSemester) == 0) {
+      $color = ' bgcolor="#FFC30A" ';
+    }
+    $bar .= '<td ' .$color. ' width="50px" align="center" style="font-size:9pt;">';
+    $bar .= '<a href="#'.$itSemester->getSemesterWord().$itSemester->getSemesterYear().'">';
+    $bar .= strtoupper($itSemester->getSemesterWord()).'<br/>'.$itSemester->getSemesterYearReadable();
+    $bar .= '</a></td>';
+    $itSemester->addSemester(1, false);
+    $i++;
+  }
+  
+  
+  $bar .= '</tr></table>';
+  
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'duration_total'), $i);
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'progbar'), $bar);
   
   return $gen->getHTML();
 }

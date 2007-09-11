@@ -76,7 +76,9 @@ class ucChangeUserData extends UseCase
   		if (!preg_match($this->getConf()->getConfString('ucChangeUserData', 'regex', 'birthday'), $birthday)) $error .= $this->getConf()->getConfString('ucChangeUserData', 'error', 'birthday').'<br/>';
 		//ist das Passwort ok?
   		if (!preg_match($this->getConf()->getConfString('ucChangeUserData', 'regex', 'password'), $password)) $error .= $this->getConf()->getConfString('ucChangeUserData', 'error', 'password').'<br/>';
-		//stimmen Passwort und -Wiederholung überein?
+		//ist das MatNr ok?
+  		if (!preg_match($this->getConf()->getConfString('ucChangeUserData', 'regex', 'matnr'), $matnr)) $error .= $this->getConf()->getConfString('ucChangeUserData', 'error', 'matnr').'<br/>';
+  		//stimmen Passwort und -Wiederholung überein?
 		if ($password != $passwordRepeat) $error .= $this->getConf()->getConfString('ucChangeUserData', 'error', 'password_repeat').'<br/>';
 		
 		//wenn $error nicht leer ist, werden die Fehler angezeigt
