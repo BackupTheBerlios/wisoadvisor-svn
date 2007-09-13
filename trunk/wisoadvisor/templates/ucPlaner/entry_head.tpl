@@ -7,5 +7,7 @@
 	<th width="5%">V</th>
 	<th colspan="2" width="15%">Aktion</th>
 	<th>Plannote</th>
+	<th width="5%">&#216;</th>
 	<th>Note</th>
+	<th width="5%">&#216;</th>
 </tr>
