@@ -12,18 +12,23 @@ class ucSession extends UseCase
 		 * Ist er nicht angemeldet, erscheint eine Login-Box
 		 */
 		
-		if ($this->getSess()->isAuthenticated())
-		{
-			$generator = new HtmlGenerator( $this->getConf()->getConfString('ucSession', 'authenticated_tpl'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
+		if ($this->getSess()->isAuthenticated()) {
+		  
+			$template = $this->getConf()->getConfString('ucSession', 'authenticated_tpl');
+      $user = User::getForId($this, $this->getSess()->getUid());
+			if ($user->getType() == 'admin') {
+			  $template = $this->getConf()->getConfString('ucSession', 'authenticated_admin_tpl');
+			}
+		  $generator = new HtmlGenerator($template, $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
 			$generator->apply($this->getConf()->getConfString('ucSession', 'username'), $this->getSess()->getUserData('username'));
 			$generator->apply($this->getConf()->getConfString('ucSession', 'useremail'), $this->getSess()->getUserData('email'));
 			$generator->apply($this->getConf()->getConfString('ucSession', 'changedata'), $this->getUsecaseLink('changeuserdata'));
+			$generator->apply($this->getConf()->getConfString('ucSession', 'importdata'), $this->getUsecaseLink('importdata'));
 			$generator->apply($this->getConf()->getConfString('ucSession', 'logout'), $this->getUsecaseLink('logout'));
 			
 			$this->appendOutput($generator->getHTML());
-		}
-		else
-		{
+			
+		} else {
 			//in diesem Fall wird der Login-Usecase verwendet - mit speziellem Template und target
 			//AUSNAHME: Der useCase im Content-Bereich ist schon der Login-Usecase - schlieﬂlich wollen wir das nicht doppelt gemoppelt,
 			//um die armen User nicht zu verwirren...

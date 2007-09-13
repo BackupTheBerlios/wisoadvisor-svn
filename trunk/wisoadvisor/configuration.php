@@ -120,6 +120,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	// anwendungseigenen Klassen Advisor v2
 	 	$this->setConfValue('class', 'ucPlaner', null, $classPath.'uc_planer'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ucPerfOpt', null, $classPath.'uc_perfopt'.$phpClassSuffix);
+	 	$this->setConfValue('class', 'ucImporter', null, $classPath.'uc_importer'.$phpClassSuffix);
 	 	
 	 	//Spezialklassen
 	 	$this->setConfValue('class', 'ImageCreator', null, $classPath.'image_creator'.$phpClassSuffix);
@@ -145,6 +146,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	
 	 	// Model-Klassen v2
 	 	$this->setConfValue('class', 'ScheduleEntry', null, $modelPath.'schedule_entry'.$phpClassSuffix);
+	 	$this->setConfValue('class', 'ScheduleEntryStatistics', null, $modelPath.'schedule_entry_statistics'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'Module', null, $modelPath.'module'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'SemesterCalculator', null, $modelPath.'semester_calculator'.$phpClassSuffix);
 	 	
@@ -180,6 +182,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	// Matching advisor v2
 	 	$this->setConfValue('usecase', 'planer', null, 'ucPlaner');
 	 	$this->setConfValue('usecase', 'perfopt', null, 'ucPerfOpt');
+	 	$this->setConfValue('usecase', 'importdata', null, 'ucImporter');
 	 	
 	 	//rufe die Initialisierung der SQL-Statements auf
 	 	$this->configureSql();
@@ -206,6 +209,7 @@ class WisoadvisorConfiguration extends Configuration
  		// initialize advisor v2
  		$this->configureUcPlaner();
  		$this->configureUcPerfOpt();
+ 		$this->configureUcImporter();
  		
  		$this->configureImageCreator();
 	 }
@@ -264,7 +268,11 @@ class WisoadvisorConfiguration extends Configuration
     $table['modulegroups'] = $tablePrefix.'modulegroups'; // enthaelt die Modulgruppierungen (Pflicht/Schluessel/Kern/Vertiefung/Doppelpflicht)
     $table['schedule'] = $tablePrefix.'schedule'; // enthaelt die Pruefungsplaene (Verlaufsplanung)
     
-    
+	 	// import fuer advisor v2
+    $tablePrefixImport = 'import__';
+    $table['clean'] = $tablePrefixImport.'clean'; // enthaelt die bereinigten importierten Daten vom Pruefungsamt
+    $table['matching'] = $tablePrefixImport.'matching'; // enthaelt eine Zuordnung, welche Pruefungen des Pruefungsamts zu welchem Modul im System gehoeren
+	 	
 	 	//SQL-Statements
 		
 			//Allgemein
@@ -404,8 +412,8 @@ class WisoadvisorConfiguration extends Configuration
 		 	$this->setConfValue('sql', 'rating', 'getForResult', 'SELECT * FROM '.$table['ratings'].' WHERE chid = ? AND tgid = ? AND type = "?" AND lower_limit <= ? AND ? <= upper_limit');
 			
 		 	// Klasse Schedule
-      $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, semester, sem_year, try) VALUES ("?", "?", "?", "?", "?")');
-      $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned="?", semester="?", sem_year="?", try="?" WHERE schid = "?"');
+      $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, mark_planned, mark_real, semester, sem_year, try, alid, stid) VALUES (?, ?, "?", "?", "?", ?, ?, ?, ?)');
+      $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned=?, mark_real=?, semester="?", sem_year=?, try=?, alid=?, stid=? WHERE schid=?');
       $this->setConfValue('sql', 'schedule', 'deleteForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid=?');
       $this->setConfValue('sql', 'schedule', 'getForId', 'SELECT asch.*,
 																					                       am.*,
@@ -431,6 +439,16 @@ class WisoadvisorConfiguration extends Configuration
       $this->setConfValue('sql', 'module', 'getForId', 'SELECT * FROM '.$table['modules']. ' WHERE modid=?');
       $this->setConfValue('sql', 'module', 'getForMajor', 'SELECT * FROM '.$table['modules']. ' WHERE majid=?');
       
+      // Klasse ScheduleEntryStatistics
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgPlanByLecture', 'SELECT avg(mark_planned) AS avg_mark FROM '.$table['schedule']. ' WHERE mark_planned > 0 AND alid=? AND semester="?" AND sem_year="?"');
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgPlanByStudies', 'SELECT avg(mark_planned) AS avg_mark FROM '.$table['schedule']. ' WHERE mark_planned > 0 AND alid=? AND stid=?  AND semester="?" AND sem_year="?"');
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgPlanByMajor', 'SELECT avg(mark_planned) AS avg_mark FROM '.$table['schedule']. ' WHERE mark_planned > 0 AND modid=? AND semester="?" AND sem_year="?"');
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromScheduleByLecture', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['schedule']. ' WHERE mark_real > 0 AND alid=? AND semester="?" AND sem_year="?"');
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromScheduleByStudies', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['schedule']. ' WHERE mark_real > 0 AND alid=? AND stid=? AND semester="?" AND sem_year="?"');
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromScheduleByMajor', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['schedule']. ' WHERE mark_real > 0 AND modid=? AND semester="?" AND sem_year="?"');
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromImportByLecture', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['clean']. ' WHERE mark_real > 0 AND alid=? AND semester="?" AND sem_year="?"');
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromImportByStudies', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['clean']. ' WHERE mark_real > 0 AND alid=? AND stid=? AND semester="?" AND sem_year="?"');
+      $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromImportByMajor', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['clean']. ' WHERE mark_real > 0 AND alid=? AND majid=? AND semester="?" AND sem_year="?"');
 	 }
 
 	/**
@@ -463,12 +481,14 @@ class WisoadvisorConfiguration extends Configuration
 
 	 private function configureUcSession()
 	 {
-		$this->setConfValue('ucSession', 'authenticated_tpl', null, 'templates/ucSession/authenticated.tpl'); //Template fï¿½r authentifizierte Benutzer
+		$this->setConfValue('ucSession', 'authenticated_tpl', null, 'templates/ucSession/authenticated.tpl'); //Template für authentifizierte Benutzer
+		$this->setConfValue('ucSession', 'authenticated_admin_tpl', null, 'templates/ucSession/authenticated_admin.tpl'); //Template für authentifizierte Administratoren
 		//Variable Teile im Template:
 		$this->setConfValue('ucSession', 'username', null, 'USERNAME');
 		$this->setConfValue('ucSession', 'useremail', null, 'USEREMAIL');
 		$this->setConfValue('ucSession', 'logout', null, 'LOGOUTLINK');
 		$this->setConfValue('ucSession', 'changedata', null, 'CHANGEDATALINK');
+		$this->setConfValue('ucSession', 'importdata', null, 'IMPORTDATALINK');
 	 }
 
 	 private function configureUcSponsorBox()
@@ -617,9 +637,9 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucFeedback', 'regex', 'message', "/^([\\n\\r\\t\\d\\D\\s\\S\\w\\W\\:\\.\\&\\ï¿½\\ \\!\\?\\=\\%\\ï¿½\\ï¿½\\ï¿½\\ï¿½a-z0-9_-]+)$/i"); //nicht leer
 		
 		//Fehlermeldung(en):
-		$this->setConfValue('ucFeedback', 'error', 'email', 'Die Angabe Deiner eMailadresse ist freiwillig; wenn Du eine eMailadresse angibst, dann muss diese gï¿½ltig sein. ');
-		$this->setConfValue('ucFeedback', 'error', 'sender', 'Die Angabe Deines Namens ist freiwillig; wenn Du Deinen Namen angibst, darf dieser hï¿½chstens 255 Zeichen lang sein. ');
-		$this->setConfValue('ucFeedback', 'error', 'subject', 'Der angegebene Betreff ist leer oder enthï¿½lt ungï¿½ltige Zeichen - erlaubt sind nur Buchstaben, Ziffern und Satzzeichen. ');
+		$this->setConfValue('ucFeedback', 'error', 'email', 'Die Angabe Deiner eMailadresse ist freiwillig; wenn Du eine eMailadresse angibst, dann muss diese gültig sein. ');
+		$this->setConfValue('ucFeedback', 'error', 'sender', 'Die Angabe Deines Namens ist freiwillig; wenn Du Deinen Namen angibst, darf dieser höchstens 255 Zeichen lang sein. ');
+		$this->setConfValue('ucFeedback', 'error', 'subject', 'Der angegebene Betreff ist leer oder enthält ungültige Zeichen - erlaubt sind nur Buchstaben, Ziffern und Satzzeichen. ');
 		$this->setConfValue('ucFeedback', 'error', 'message', 'Die Nachricht darf nicht leer sein. ');
 		$this->setConfValue('ucFeedback', 'error', 'senderror', 'Wir konnten leider Dein Feedback aufgrund eines Systemfehlers nicht weiterleiten. ');
 		//eMail-Konfiguration:
@@ -647,7 +667,7 @@ class WisoadvisorConfiguration extends Configuration
 		//Hinweis: aufgrund der PHP-Stringbehandlung mï¿½ssen die Regexe in doppelte Anfï¿½hrungszeichen gesetzt werden! - deshalb auch immer der doppelte Backslash
 		$this->setConfValue('ucForgotPwd', 'regex', 'email', "/^(([a-z0-9_-]+(\\.[a-z0-9_-]+)*@([0-9a-z][0-9a-z-]*[0-9a-z]\\.)+([a-z]{2,4}|museum)))$/i"); //gï¿½ltige (i.S. von mï¿½gliche) eMailadresse oder leer
 		//Fehlermeldung(en):
-		$this->setConfValue('ucForgotPwd', 'error', 'email', 'Du hast keine gï¿½ltige eMailadresse angegeben. ');
+		$this->setConfValue('ucForgotPwd', 'error', 'email', 'Du hast keine gültige eMailadresse angegeben. ');
 		$this->setConfValue('ucForgotPwd', 'error', 'nosuchemail', 'Die angegebene eMailadresse existiert in unserer Datenbank nicht. ');
 		$this->setConfValue('ucForgotPwd', 'error', 'emailerror', 'Es ist ein Systemfehler aufgetreten - leider konnten wir Dir Deine Zugangsdaten nicht senden. ');
 		//eMail-Konfiguration:
@@ -701,7 +721,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('ucSurvey', 'button', 'next', 'Weiter >>');
 	 	$this->setConfValue('ucSurvey', 'button', 'back', '<< Zurück');
 	 	
-	 	$this->setConfValue('ucSurvey', 'replace', 'multiplechoice', '<br/><br/><span class="questionhelp">(Mehrfachantworten mï¿½glich)</span>');
+	 	$this->setConfValue('ucSurvey', 'replace', 'multiplechoice', '<br/><br/><span class="questionhelp">(Mehrfachantworten möglich)</span>');
 		$this->setConfValue('ucSurvey', 'message', 'required', 'Bitte beantworte diese Frage. Vorher kannst Du nicht im Test fortfahren.');
 		
 		//wohin soll nach Abschluss der Umfrage weitergeleitet werden, wohin bei Abbruch? (jeweils ein UseCase-Handle)
@@ -724,7 +744,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('ucOverview', 'line_icons_column_tpl', null, 'templates/ucOverview/line_icons_columns.tpl');
 	 	
 	 	$this->setConfValue('ucOverview', 'text', 'bar_title', 'Du bist unter den besten ###:###result###:### Prozent der Kandidaten.');
-	 	$this->setConfValue('ucOverview', 'text', 'bar_title_best', 'Glï¿½ckwunsch! Es gibt keinen Kandidaten, der besser ist als Du.');
+	 	$this->setConfValue('ucOverview', 'text', 'bar_title_best', 'Glückwunsch! Es gibt keinen Kandidaten, der besser ist als Du.');
 	 	
 	 	$this->setConfValue('ucOverview', 'button', 'email', '>> PDF anfordern');
 	 }
@@ -832,11 +852,17 @@ class WisoadvisorConfiguration extends Configuration
 
 	private function configureUcPlaner () {
 
-	  // template files
+	  // important for both planer and performance optimizer:
+    // true: allow and use data import from table import__clean and import__matching
+    // false: statistics and stuff is created only from participants of the system
+		$this->setConfValue('ucPlaner', 'useimportedmarks', null, 'false');
+	  
+		// template files
 		$this->setConfValue('ucPlaner', 'htmltemplate', null, 'templates/ucPlaner/planer.tpl');
 		$this->setConfValue('ucPlaner', 'schedulefoottemplate', null, 'templates/ucPlaner/planer_foot.tpl');
 		$this->setConfValue('ucPlaner', 'prognosetemplate', null, 'templates/ucPlaner/planer_prognose.tpl');
 		$this->setConfValue('ucPlaner', 'linkcreatetemplate', null, 'templates/ucPlaner/linkcreate.tpl');
+		$this->setConfValue('ucPlaner', 'linkchangeusertemplate', null, 'templates/ucPlaner/linkchangeuser.tpl');
 		$this->setConfValue('ucPlaner', 'entrytemplate', null, 'templates/ucPlaner/entry.tpl');
 		$this->setConfValue('ucPlaner', 'entrylockedalltemplate', null, 'templates/ucPlaner/entry_locked_all.tpl');
 		$this->setConfValue('ucPlaner', 'entrylockeduptemplate', null, 'templates/ucPlaner/entry_locked_up.tpl');
@@ -865,6 +891,8 @@ class WisoadvisorConfiguration extends Configuration
 	  $this->setConfValue('ucPlaner', 'try', null, 'try');
 	  $this->setConfValue('ucPlaner', 'mark_plan', null, 'mark_plan');
 	  $this->setConfValue('ucPlaner', 'mark_real', null, 'mark_real');
+	  $this->setConfValue('ucPlaner', 'mark_plan_avg', null, 'mark_plan_avg');
+	  $this->setConfValue('ucPlaner', 'mark_real_avg', null, 'mark_real_avg');
 	  // entry footer
 		$this->setConfValue('ucPlaner', 'sum_ects', null, 'sum_ects');		
 		
@@ -875,6 +903,10 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPerfOpt', 'username', null, 'username');		
 	}
 	
+	private function configureUcImporter () {
+		$this->setConfValue('ucImporter', 'htmltemplate', null, 'templates/ucImporter/importer.tpl');
+		$this->setConfValue('ucImporter', 'username', null, 'username');		
+	}
 }
 
 ?>
