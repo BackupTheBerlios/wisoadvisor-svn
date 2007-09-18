@@ -5,7 +5,7 @@
 \subsubsection{Konzeption}
 Das vorliegende Konzept zur Studieneingangsberatung (SEB) \abbrev{SEB}{Studieneingangsberatung} entstammt einer Studienarbeit über innovative Ansätze der Informationsvermittlung \cite{Nursinski:2007}.
 
-[...]
+Der Autor beruft sich bei seiner Konzeption primär auf ...
 
 \subsubsection{Prototyp}
 Der Prototyp für die SEB besteht aus statischen HTML-Seiten, \abbrev{HTML}{Hypertext Markup Language} die mit verweissensitiven Grafiken und teilweise mit JavaScript-Elementen interaktiv gestaltet werden. Besonderes Augenmerk wird auf die Navigation gerichtet, sodass der Benutzer immer genau weiß, wo er sich in der Navigation befindet. 
@@ -29,7 +29,7 @@ Obwohl TigerWiki bereits alle grundlegenden Formatierungsmöglichkeiten mitbracht
 \begin{itemize}
 \item Damit die im gesamten Wiso@visor verwendeten Grafiken nicht an verschiedenen Orten im Verzeichnisbaum liegen, lag es nahe, auch die im Wiki zu verwendenen Grafiken im Grafikverzeichnis des Advisor abzulegen. Dies aber hatte den Nachteil, dass im Code einer Wiki-Seite nun immer der relative Pfad zur Grafik mitangegeben werden musste. In der Konfigurationsdatei des Wikis ist nun ein \textbf{Pfad für Grafiken} definiert, der allen Grafiken und sonstigen Ressourcen vorangestellt wird. Das Warten der Seiteninhalte wird so erheblich erleichtert.
 \item TigerWiki kann Inhalte nur untereinander darstellen. Nun unterstützt das Wiki einfache (einzeilige) \textbf{Tabellen}, um Inhalte auch nebeneinander darstellen zu können. Verwendet wird dies beispielsweise bei den Aussagen der Professoren, wo neben dem jeweiligen Statement auch ein Foto platziert wird.
-\item Die verweissensitiven Grafiken des Prototypen erfordern aufwändigen HTML-Code. Fügt man diesen Code jedoch über das HTML-Element von TigerWiki ein, wird die Bearbeitung einer solchen Seite sehr schnell unübersichtlich. Der komplette Code dieser Grafiken wurde nun in externe HTML-Dateien ausgelagert; diese kann über eine \textbf{Include-Anweisung} eingefügt werden. Die Konsequenz daraus ist, dass die bearbeitbare Wiki-Seite weitgehend frei von HTML-Code bleibt.
+\item Die verweissensitiven Grafiken des Prototypen erfordern aufwändigen HTML-Code. Fügt man diesen Code über das HTML-Element von TigerWiki ein, wird die Bearbeitung einer Seite sehr schnell unübersichtlich. Der komplette Code dieser Grafiken wurde nun in externe HTML-Dateien ausgelagert; diese kann über eine \textbf{Include-Anweisung} eingefügt werden. Die Konsequenz daraus ist, dass die bearbeitbare Wiki-Seite weitgehend frei von HTML-Code bleibt.
 \end{itemize}
 
 Diese Modifikationen wurden dem ursprünglichen Entwickler der Software zugesandt und werden möglicherweise in eine künftige Version des Systems integriert.
