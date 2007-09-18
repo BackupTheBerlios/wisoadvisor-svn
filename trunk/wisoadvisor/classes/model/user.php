@@ -28,8 +28,8 @@ class User extends ModelHelper {
 	private $gender = null;
 	private $birthday = null;
 	private $matnr = null;
-	private $studies = null;
-	private $majid = null;
+	private $studies = null; // aus advisor__majors
+	private $majid = null; // aus advisor__majors
 	private $sem_start = null;
 	
 	private function __construct($uid) {

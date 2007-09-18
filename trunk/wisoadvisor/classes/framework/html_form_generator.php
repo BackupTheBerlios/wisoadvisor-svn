@@ -496,10 +496,10 @@
        for ($i=2007;$i<(date('Y')+3);$i++) {
          $value='ws'.$i;
 		     $ret .= "<option ";
-		     if ($highlightedValue != '' && $highlightedValue == $value) {
-		       $ret .= ' selected="true"';
+		     if (($highlightedValue != '' && $highlightedValue == $value) || (trim($highlightedValue)=='' && $i==2007)) {
+		       $ret .= ' selected="true" ';
 		     }
-         $ret .= 'value="'.$value.'">Wintersemester ' .$i.'/'. substr($i+1, strlen(rtrim($i+1))-2, 2);"</option>\n" ;
+         $ret .= 'value="'.$value.'">Wintersemester ' .$i.'/'. substr($i+1, strlen(rtrim($i+1))-2, 2)."</option>\n" ;
        }
 		   $ret .= '</select>';
        return $ret;

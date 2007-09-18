@@ -53,9 +53,9 @@ public function execute()	{
 
 /*
  * Die Plannoten werden als _POST-Argumente uebergeben:
- * Der Key eines Array-Elements lautet stets: schid_4711, wobei "schid" fest ist, und 4711 die ID des ScheduleEntries
- * Der Value des Elements ist dann die Plannote
- * Beispiel: paramArray['schid_4711'] = 1.0
+ * Der Key eines Array-Elements lautet stets: plan_4711 (oder real_4711), wobei "plan_" fest ist, und 4711 die ID des ScheduleEntries
+ * Der Value des Elements ist dann die geplante bzw. reale Note
+ * Beispiel: paramArray['plan_4711'] = 1.0
  * Alles klar?
 */
 private function savePlannedMarks() {
@@ -68,12 +68,21 @@ private function savePlannedMarks() {
     $key = key($paramArray);
     $val = floatval(str_replace(',', '.', current($paramArray)));
     
-    if (substr($key, 0, 5) == "schid") { // wenn "schid" davor steht, ...
-      $schid = substr($key, 6); // ... schneide die advisor__schedule.schid raus, ...
+    if (substr($key, 0, 4) == "plan") { // wenn "plan" davor steht, ...
+      $schid = substr($key, 5); // ... schneide die advisor__schedule.schid raus, ...
       if (($val >= 1.0) && ($val <= 5.0)) { // ... und wenn die eingegebene note passt, ...
         $myentry = ScheduleEntry::getForId($this, $schid);
         $myentry->setMarkPlanned($val);
         $myentry->storeInDb($this);  // ... schreib das glump in die datenbank
+      }
+    } else if (substr($key, 0, 4) == "real") { // dasselbe spielchen, wenn "real" davor steht, ...
+      if ($this->getConf()->getConfString('ucImporter', 'useimportedmarks') == 'false' || $user->getType() == 'admin') {
+	      $schid = substr($key, 5); // ... schneide wieder die advisor__schedule.schid raus, ...
+	      if (($val >= 0.0) && ($val <= 5.0)) { // ... und wenn die eingegebene note passt, ...
+	        $myentry = ScheduleEntry::getForId($this, $schid);
+	        $myentry->setMarkReal($val);
+	        $myentry->storeInDb($this);  // ... ab damit in die datenbank
+	      }
       }
     }
     next($paramArray); // und so weiter.
@@ -92,7 +101,7 @@ private function createNewScheduleInDb() {
 	// alle modules für majid holen
 	$modules = Module::getForMajor($this, $user->getMajId());
 	
-	// für jede module einen eintrag in schedule erstellen; semester ausgehend vom startsemester berechnen !!!
+	// für jede module einen eintrag in schedule erstellen; semester ausgehend vom startsemester berechnen
 	foreach ($modules as $myModule) {
 	  
 	  $myScheduleEntry = ScheduleEntry::getNew($this);
@@ -100,11 +109,13 @@ private function createNewScheduleInDb() {
     $hCalc->setBoth($user->getSemStart());
     
     $myScheduleEntry->setUserId($user->getId());
-    $myScheduleEntry->setModId($myModule->getModId());
-    $hCalc->addSemester($myModule->getSemesterDefault(), true);
+    $myScheduleEntry->setModId($myModule->getId());
+    $hCalc->addSemester($myModule->getSemesterDefault()-1);
     $myScheduleEntry->setSemester($hCalc->getSemesterWord());
     $myScheduleEntry->setSemYear($hCalc->getSemesterYear());
     $myScheduleEntry->setTry(1);
+    $myScheduleEntry->setAlid($myModule->getAlId());
+    $myScheduleEntry->setStid($myModule->getStId());
     
     $myScheduleEntry->storeInDb($this);
     
@@ -124,7 +135,7 @@ private function move($schid, $dir) {
     $hNewSemester->setSemesterYear($entry->getSemYear());
     
     $semToAdd = ($dir=='up' ? -1 : 1);
-    $hNewSemester->addSemester($semToAdd, false);
+    $hNewSemester->addSemester($semToAdd);
     
     if (($entry->isMoveableUpwards($user) && ($dir=='up')) ||
         ($entry->isMoveableDownwards($user) && ($dir=='down'))) {
@@ -138,16 +149,16 @@ private function move($schid, $dir) {
 private function showPlan() {
   
 	$duration = 0; // anzahl fachsemester
-  $htmlToAppend = ''; // alles generierte html des eigentlichen planes
+  $htmlForSchedule = ''; // alles generierte html des eigentlichen planes
   
 	$user = User::getForId($this, $this->getSess()->getUid());
 	$scheduleEntries = ScheduleEntry::getForUser($this, $user->getId(), $user->getMajId());
 
 	// no schedule found => show link to create a new one
 	if (empty($scheduleEntries)) {
-	  $htmlToAppend .= $this->printEmptySchedule();
+	  $htmlForSchedule .= $this->printEmptySchedule($user);
 	  
-	// found schedule => create html and store it in $htmlToAppend
+	// found schedule => create html and store it in $htmlForSchedule
 	} else {
 
 	  $sum_ects = 0; // pro semester
@@ -168,39 +179,45 @@ private function showPlan() {
 	      if ($firstrun) {
 	        $firstrun=false; // no footer before the first semester
 	      } else {
-	        $htmlToAppend .= $this->printEntryFooter($sum_ects); // footer for single semester
+	        $htmlForSchedule .= $this->printEntryFooter($sum_ects); // footer for single semester
 	      }
         $sum_ects=0;
         $duration++; 
-	      $htmlToAppend .= $this->printEntryHeader($curEntrySemCalculator); // schedule header
+	      $htmlForSchedule .= $this->printEntryHeader($curEntrySemCalculator); // schedule header
 	    }
 	    
 	    $sum_ects += $myentry->getEcts();                                                                                                	    
-	    $htmlToAppend .= $this->printEntry($user, $myentry); // entry
+	    $htmlForSchedule .= $this->printEntry($user, $myentry); // entry
 		
     } // foreach $myentry
 		
-    $htmlToAppend .= $this->printEntryFooter($sum_ects); // final semester footer
-    $htmlToAppend = $this->printPrognose($user, $curEntrySemCalculator, $duration) . $htmlToAppend; // add prognose before
+    $htmlForSchedule .= $this->printEntryFooter($sum_ects); // final semester footer
+    $htmlForSchedule = $this->printPrognose($user, $curEntrySemCalculator, $duration) . $htmlForSchedule; // add prognose before
     
   }
   
   // finally, build the page
-	$gen = new HtmlGenerator( $this->getConf()->getConfString('ucPlaner', 'htmltemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
-	$gen->apply($this->getConf()->getConfString('ucPlaner', 'username'), $user->getUserName());
-	$gen->apply($this->getConf()->getConfString('ucPlaner', 'studies'), $user->getStudies());
-
-	$this->appendOutput($gen->getHTML());
-  $this->appendOutput($htmlToAppend);
-  $this->appendOutput($this->printScheduleFooter());
+	$this->appendOutput($this->printScheduleHeader($user));
+  $this->appendOutput($htmlForSchedule);
+  $this->appendOutput($this->printScheduleFooter($user));
   $this->setOutputType(USECASE_HTML);
   return true;
   
 }
 
-private function printEntry($user, $myentry) {
+private function printScheduleHeader(User $user) {
+	$gen = new HtmlGenerator( $this->getConf()->getConfString('ucPlaner', 'htmltemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
+	$gen->apply($this->getConf()->getConfString('ucPlaner', 'username'), $user->getUserName());
+	$gen->apply($this->getConf()->getConfString('ucPlaner', 'studies'), $user->getStudies());
+  return $gen->getHTML();
+}
+
+private function printEntry(User $user, ScheduleEntry $myentry) {
   
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'entrytemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
+  
+  //$avgMarkPlan = ScheduleEntryStatistics::getAvgPlanByLecture($this, $myentry);
+  //$avgMarkReal = ScheduleEntryStatistics::getAvgRealByLecture($this, $myentry);
   
   // links und form zzgl. standards ins template parsen auffuellen
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'mod_name'), $myentry->getModName().($myentry->isAssessment()=='true'?'*':''));
@@ -208,13 +225,15 @@ private function printEntry($user, $myentry) {
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'try'), $myentry->getTry());
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'action_movedown'), $this->getEntryActionDown($user, $myentry));
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'action_moveup'), $this->getEntryActionUp($user, $myentry));
-  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_plan'), $this->getEntryForm($user, $myentry));
-  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_real'), ($myentry->getMarkReal() > 0 ? sprintf("%1.1f", $myentry->getMarkReal()) : ''));
-  return $gen->getHTML();
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_plan'), $this->getEntryFormForPlan($user, $myentry));
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_real'), $this->getEntryFormForReal($user, $myentry));
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_plan_avg'), ($avgMarkPlan > 0 ? sprintf("%1.1f", $avgMarkPlan) : ''));
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'mark_real_avg'), ($avgMarkReal > 0 ? sprintf("%1.1f", $avgMarkReal) : ''));
+    return $gen->getHTML();
   
 }
 
-private function getEntryActionDown($user, $myentry) {
+private function getEntryActionDown(User $user, ScheduleEntry $myentry) {
   
   $entrySemCalc = new SemesterCalculator(); // semester, fuer das der eintrag eingeplant wurde (siehe advisor__schedule)
 	$entrySemCalc->setSemesterWord($myentry->getSemester());
@@ -231,7 +250,7 @@ private function getEntryActionDown($user, $myentry) {
   return $ret;
 }
 
-private function getEntryActionUp($user, $myentry) {
+private function getEntryActionUp(User $user, ScheduleEntry $myentry) {
 
   $entrySemCalc = new SemesterCalculator(); // semester, fuer das der eintrag eingeplant wurde (siehe advisor__schedule)
 	$entrySemCalc->setSemesterWord($myentry->getSemester());
@@ -248,7 +267,7 @@ private function getEntryActionUp($user, $myentry) {
   return $ret;  
 }
 
-private function getEntryForm($user, $myentry) {
+private function getEntryFormForPlan(User $user, ScheduleEntry $myentry) {
 
   $realSemCalc = new SemesterCalculator(); // tatsaechliches, aktuelles semester (initialisiert ueber date)
   
@@ -257,7 +276,7 @@ private function getEntryForm($user, $myentry) {
 	$entrySemCalc->setSemesterYear($myentry->getSemYear());
 
   $mark_plan_readable = ($myentry->getMarkPlanned() > 0 ? sprintf("%1.1f", $myentry->getMarkPlanned()) : '');
-  $input_mark_plan = '<input style="width:66px;" type="text" name="schid_' . $myentry->getId() . '" value="' . $mark_plan_readable . '" />';
+  $input_mark_plan = '<input style="width:66px;" type="text" name="plan_' . $myentry->getId() . '" value="' . $mark_plan_readable . '" />';
 
   $ret = ''; // per default goar nix  
   if ($myentry->getMarkReal() > 0) {
@@ -273,13 +292,38 @@ private function getEntryForm($user, $myentry) {
   
 }
 
-private function printEmptySchedule() {
-	$gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'linkcreatetemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
-	$gen->apply($this->getConf()->getConfString('ucPlaner', 'linkcreate'), $this->getOwnLink('create'));
+private function getEntryFormForReal(User $user, ScheduleEntry $myentry) {
+
+  $mark_real_readable = ($myentry->getMarkReal() > 0 ? sprintf("%1.1f", $myentry->getMarkReal()) : '');
+  $input_mark_real = '<input style="width:66px;" type="text" name="real_' . $myentry->getId() . '" value="' . $mark_real_readable . '" />';
+
+  $ret = ''; // per default goar nix  
+  if ($this->getConf()->getConfString('ucImporter', 'useimportedmarks') == 'false' || $user->getType() == 'admin') {
+    $ret = $input_mark_real;
+  } else {    
+    $ret = $mark_real_readable;
+  }
+  
+  return $ret;
+  
+}
+
+
+private function printEmptySchedule(User $user) {
+  
+  $link = $this->getUsecaseLink('changeuserdata');
+  $tpl = $this->getConf()->getConfString('ucPlaner', 'linkchangeusertemplate');
+  if (trim($user->getMatNr()) != '' && trim($user->getSemStart()) != '' && $user->getMajId() > 0) {
+    $link = $this->getOwnLink('create');
+    $tpl = $this->getConf()->getConfString('ucPlaner', 'linkcreatetemplate');
+  }
+  
+	$gen = new HtmlGenerator($tpl, $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
+	$gen->apply($this->getConf()->getConfString('ucPlaner', 'linkcreate'), $link);
   return $gen->getHTML();  
 }
 
-private function printEntryHeader($curSemester) {
+private function printEntryHeader(SemesterCalculator $curSemester) {
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'entryheadtemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
 	$gen->apply($this->getConf()->getConfString('ucPlaner', 'linkplan'), $this->getOwnLink('plan', Array('#'.$curSemester->getBoth())));
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'semester_short'), $curSemester->getBoth());
@@ -287,7 +331,7 @@ private function printEntryHeader($curSemester) {
   return $gen->getHTML();
 }
 
-private function printPrognose($user, $lastSemester, $duration) {
+private function printPrognose(User $user, SemesterCalculator $lastSemester, $duration) {
   
   $hFirstSemester = new SemesterCalculator();
   $hFirstSemester->setBoth($user->getSemStart());
@@ -314,7 +358,7 @@ private function printPrognose($user, $lastSemester, $duration) {
     $bar .= '<a href="#'.$itSemester->getSemesterWord().$itSemester->getSemesterYear().'">';
     $bar .= strtoupper($itSemester->getSemesterWord()).'<br/>'.$itSemester->getSemesterYearReadable();
     $bar .= '</a></td>';
-    $itSemester->addSemester(1, false);
+    $itSemester->addSemester(1);
     $i++;
   }
   
@@ -333,7 +377,7 @@ private function printEntryFooter($sum_ects) {
   return $gen->getHTML();  
 }
 
-private function printScheduleFooter() {
+private function printScheduleFooter(User $user) {
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'schedulefoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
   return $gen->getHTML();  
 }

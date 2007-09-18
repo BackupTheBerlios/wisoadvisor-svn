@@ -16,15 +16,15 @@
  */ 
 class Module extends ModelHelper {
 	
-	private $modid = null;
-  private $majid = null;
+  private $stid = null;
+	private $majid = null;
   private $mgrpid = null;
 	private $alid = null;
   private $default_semester = null;
   private $assessment = null;
   
-  private function __construct($schid) {
-		parent::__construct($schid);
+  private function __construct($modid) {
+		parent::__construct($modid);
 	}
 	
 	/**
@@ -38,8 +38,8 @@ class Module extends ModelHelper {
 		$result = null;
 		if ($row != false) { // id existiert 
 			// Objekt existiert in DB -> erzeugen	
-      $result = new Module($row['schid']);
-      $result->modid = $row['modid'];
+      $result = new Module($row['modid']);
+      $result->stid = $row['stid'];
       $result->majid = $row['majid'];
       $result->mgrpid = $row['mgrpid'];
       $result->alid = $row['alid'];
@@ -110,20 +110,20 @@ class Module extends ModelHelper {
     return $this->asessment;
   }
 	
+  public function setStId($stid) {
+    $this->stid = $stid;
+  }
+
+  public function getStId() {
+    return $this->stid;
+  }
+
   public function setAlId($alid) {
     $this->alid = $alid;
   }
 
   public function getAlId() {
     return $this->alid;
-  }
-
-  public function setModId($modid) {
-    $this->modid = $modid;
-  }
-
-  public function getModId() {
-    return $this->modid;
   }
 
   public function setMgrpId($mgrpid) {

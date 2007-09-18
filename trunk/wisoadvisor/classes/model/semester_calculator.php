@@ -31,12 +31,8 @@ class SemesterCalculator {
     
   }
   
-	public function addSemester($numSemesters, $ignoreFirstSemester = true) {
+	public function addSemester($numSemesters) {
 	  
-	  if ($ignoreFirstSemester) {
-  	  $numSemesters--;
-	  }
-
     // bloody hack, sorry
     if ($numSemesters > 0) {
 	    for ($i=1;$i<=$numSemesters;$i++) {
@@ -77,12 +73,34 @@ class SemesterCalculator {
     return $this->sem_word;
   }
   
+  public function getSemesterWordReadable() {
+    $ret = 'Wintersemester';
+    if ($this->sem_word == 'ss') {
+      $ret = 'Sommersemester';
+    }
+    return $ret;
+  }
+  
   public function setSemesterYear($semyear) {
     $this->sem_year = $semyear;
   }
   public function getSemesterYear() {
     return $this->sem_year;
   }
+  
+  public function getSemesterYearReadable() {
+	  $ret='';
+    if ($this->sem_word == 'ss') {
+      $ret = $this->sem_year;
+	  } else {
+	    $nextSem= $this->sem_year+1;
+	    $shortSem = substr($nextSem, strlen(rtrim($nextSem))-2, 2);
+	    //$ret = strtoupper($iSemWord).' '.$iSemYear.'/'.$shortSem; 
+	    $ret = $this->sem_year.'/'.$shortSem; 
+	  }
+    return $ret;
+  }
+  
   
   public function getSemesterReadable() {
 	  return $this->getSemesterReadableStatic($this->sem_word, $this->sem_year);
@@ -124,14 +142,14 @@ class SemesterCalculator {
   public function getPrevSemesterCalculator() {
     $ret = new SemesterCalculator();
     $ret->setBoth($this->getBoth());
-    $ret->addSemester(-1, false);
+    $ret->addSemester(-1);
     return $ret;
   }
   
   public function getNextSemesterCalculator() {
     $ret = new SemesterCalculator();
     $ret->setBoth($this->getBoth());
-    $ret->addSemester(1, false);
+    $ret->addSemester(1);
     return $ret;    
   }
 }

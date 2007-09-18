@@ -114,7 +114,7 @@ class ScheduleEntryStatistics {
 	public static function getAvgRealByLecture (ModelContext $context, ScheduleEntry $entry) {
 
 	  $ret=-1;
- 	  if ($context->getConf()->getConfString('ucPlaner', 'useimportedmarks') == 'true') {
+ 	  if ($context->getConf()->getConfString('ucImporter', 'useimportedmarks') == 'true') {
 	    $ret = self::getAvgRealFromImportByLecture($context, $entry);
 	  } else {
 	    $ret = self::getAvgRealFromScheduleByLecture($context, $entry);
@@ -132,7 +132,7 @@ class ScheduleEntryStatistics {
 	public static function getAvgRealByStudies (ModelContext $context, ScheduleEntry $entry) {
 
 	  $ret=-1;
-	  if ($context->getConf()->getConfString('ucPlaner', 'useimportedmarks') == 'true') {
+	  if ($context->getConf()->getConfString('ucImporter', 'useimportedmarks') == 'true') {
 	     $ret = self::getAvgRealFromImportByStudies($context, $entry);
 	  } else {
 	    $ret = self::getAvgRealFromScheduleByStudies($context, $entry);
@@ -150,7 +150,7 @@ class ScheduleEntryStatistics {
 	public static function getAvgRealByMajor (ModelContext $context, ScheduleEntry $entry) {
 
 	  $ret=-1;
-	  if ($context->getConf()->getConfString('ucPlaner', 'useimportedmarks') == 'true') {
+	  if ($context->getConf()->getConfString('ucImporter', 'useimportedmarks') == 'true') {
       $ret = self::getAvgRealFromImportByMajor($context, $entry);
 	  } else {
 	    $ret = self::getAvgRealFromScheduleByMajor($context, $entry);

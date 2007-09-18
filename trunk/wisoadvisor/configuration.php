@@ -148,6 +148,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('class', 'ScheduleEntry', null, $modelPath.'schedule_entry'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ScheduleEntryStatistics', null, $modelPath.'schedule_entry_statistics'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'Module', null, $modelPath.'module'.$phpClassSuffix);
+	 	$this->setConfValue('class', 'ModuleGroup', null, $modelPath.'module_group'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'SemesterCalculator', null, $modelPath.'semester_calculator'.$phpClassSuffix);
 	 	
 	 	//Bibliotheken
@@ -435,6 +436,21 @@ class WisoadvisorConfiguration extends Configuration
 																														   AND al.alid = am.alid
                                                                AND am.majid=? 
 																													ORDER BY asch.sem_year ASC, asch.semester DESC, al.name ASC');
+      $this->setConfValue('sql', 'schedule', 'getForUserGrouped', 'SELECT asch.*,
+																					                         am.*,
+																																	 al.*
+																												     FROM '.$table['schedule']. ' asch,
+																															    '.$table['modules']. ' am,
+																															    '.$table['lectures']. ' al
+                                                             WHERE asch.uid=?
+																														   AND am.modid = asch.modid
+																														   AND al.alid = am.alid
+                                                               AND am.majid=? 
+																													ORDER BY am.mgrpid, am.assessment ASC, al.name ASC');
+      
+      // Klasse ModuleGroup
+      $this->setConfValue('sql', 'module_group', 'getForId', 'SELECT * FROM '.$table['modulegroups']. ' WHERE mgrpid=?');
+      
       // Klasse Module
       $this->setConfValue('sql', 'module', 'getForId', 'SELECT * FROM '.$table['modules']. ' WHERE modid=?');
       $this->setConfValue('sql', 'module', 'getForMajor', 'SELECT * FROM '.$table['modules']. ' WHERE majid=?');
@@ -852,11 +868,6 @@ class WisoadvisorConfiguration extends Configuration
 
 	private function configureUcPlaner () {
 
-	  // important for both planer and performance optimizer:
-    // true: allow and use data import from table import__clean and import__matching
-    // false: statistics and stuff is created only from participants of the system
-		$this->setConfValue('ucPlaner', 'useimportedmarks', null, 'false');
-	  
 		// template files
 		$this->setConfValue('ucPlaner', 'htmltemplate', null, 'templates/ucPlaner/planer.tpl');
 		$this->setConfValue('ucPlaner', 'schedulefoottemplate', null, 'templates/ucPlaner/planer_foot.tpl');
@@ -899,13 +910,50 @@ class WisoadvisorConfiguration extends Configuration
 	}
 
 	private function configureUcPerfOpt () {
-		$this->setConfValue('ucPerfOpt', 'htmltemplate', null, 'templates/ucPerfOpt/perfopt.tpl');
-		$this->setConfValue('ucPerfOpt', 'username', null, 'username');		
+	  
+		// html templates
+	  $this->setConfValue('ucPerfOpt', 'htmltemplate', null, 'templates/ucPerfOpt/perfopt.tpl');
+		$this->setConfValue('ucPerfOpt', 'htmlfoottemplate', null, 'templates/ucPerfOpt/perfopt_foot.tpl');
+		
+		$this->setConfValue('ucPerfOpt', 'linkcreatetemplate', null, 'templates/ucPlaner/linkcreate.tpl'); // use the same as ucPlaner here :-)
+		$this->setConfValue('ucPerfOpt', 'linkchangeusertemplate', null, 'templates/ucPlaner/linkchangeuser.tpl');  // use the same as ucPlaner here :-)
+		
+		$this->setConfValue('ucPerfOpt', 'entrytemplate', null, 'templates/ucPerfOpt/entry.tpl');
+		$this->setConfValue('ucPerfOpt', 'entryheadtemplate', null, 'templates/ucPerfOpt/entry_head.tpl');
+	  $this->setConfValue('ucPerfOpt', 'entryfoottemplate', null, 'templates/ucPerfOpt/entry_foot.tpl');
+	  
+	  // parameters for template entries to be replaced
+		// schedule header
+	  $this->setConfValue('ucPerfOpt', 'username', null, 'username');		
+		$this->setConfValue('ucPerfOpt', 'studies', null, 'studies');				
+		$this->setConfValue('ucPerfOpt', 'linkcreate', null, 'linkcreate');				
+	  // entry header
+		$this->setConfValue('ucPerfOpt', 'group', null, 'group');		
+		$this->setConfValue('ucPerfOpt', 'mark_group_plan', null, 'mark_group_plan');
+		$this->setConfValue('ucPerfOpt', 'mark_group_real', null, 'mark_group_real');
+		$this->setConfValue('ucPerfOpt', 'mark_total_plan', null, 'mark_total_plan');
+		$this->setConfValue('ucPerfOpt', 'mark_total_real', null, 'mark_total_real');
+		// entries
+		$this->setConfValue('ucPerfOpt', 'mod_name', null, 'mod_name');		
+		$this->setConfValue('ucPerfOpt', 'ects', null, 'ects');		
+		$this->setConfValue('ucPerfOpt', 'try', null, 'try');		
+		$this->setConfValue('ucPerfOpt', 'mark_plan', null, 'mark_plan');
+	  $this->setConfValue('ucPerfOpt', 'mark_real', null, 'mark_real');
+	  $this->setConfValue('ucPerfOpt', 'mark_plan_avg', null, 'mark_plan_avg');
+	  $this->setConfValue('ucPerfOpt', 'mark_real_avg', null, 'mark_real_avg');
+			
 	}
 	
 	private function configureUcImporter () {
+	  
+	  // important for both planer and performance optimizer:
+    // true: allow and use data import from table import__clean and import__matching
+    // false: statistics and stuff is created only from participants of the system
+		$this->setConfValue('ucImporter', 'useimportedmarks', null, 'false');
+	  	  
 		$this->setConfValue('ucImporter', 'htmltemplate', null, 'templates/ucImporter/importer.tpl');
-		$this->setConfValue('ucImporter', 'username', null, 'username');		
+		$this->setConfValue('ucImporter', 'linkstepimport', null, 'linkstepimport');		
+		$this->setConfValue('ucImporter', 'config_import', null, 'config_import');		
 	}
 }
 

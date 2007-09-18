@@ -23,6 +23,8 @@ class ScheduleEntry extends ModelHelper {
   private $semester = null;
   private $sem_year = null;
   private $try = null;
+  private $alid = null;
+  private $stid = null;
   private $majid = null;
   private $mgrpid = null;
   private $mod_name = null;
@@ -53,6 +55,8 @@ class ScheduleEntry extends ModelHelper {
       $result->mark_planned = $row['mark_planned'];
       $result->mark_real = $row['mark_real'];
       $result->try = $row['try'];
+      $result->alid = $row['alid'];
+      $result->stid = $row['stid'];
       $result->semester = $row['semester'];
       $result->sem_year = $row['sem_year'];
       $result->majid = $row['majid'];
@@ -110,7 +114,7 @@ class ScheduleEntry extends ModelHelper {
 	}
 	
   /**
-	 * Liefert alle ScheduleEntry-Objekte aus der Datenbank gelesen.
+	 * Liefert alle ScheduleEntry-Objekte aus der Datenbank, geordnet nach Semester.
 	 * 
 	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
 	 * @param $uid User ID
@@ -120,6 +124,25 @@ class ScheduleEntry extends ModelHelper {
 	public static function getForUser(ModelContext $context, $uid, $majid) {
 		// In DB suchen, ob existiert
 		$resultSet = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'getForUser'), Array($uid, $majid));
+		if ($resultSet == false) 
+			throw new ModelException("ScheduleEntry::getForUser: Fehler beim Lesen in der Datenbank:<br>".$context->getDb()->getError(), 0);
+		while (($row = $context->getDb()->fetch_array($resultSet)) != false) {
+			$result[] = self::getForDBRow($row);
+		}
+		return $result;
+	}
+	
+  /**
+	 * Liefert alle ScheduleEntry-Objekte aus der Datenbank, geordnet nach Bereichen.
+	 * 
+	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
+	 * @param $uid User ID
+	 * @param $majid Major ID
+	 * @return Array von ScheduleEntry-Objekten
+	 */
+	public static function getForUserGrouped(ModelContext $context, $uid, $majid) {
+		// In DB suchen, ob existiert
+		$resultSet = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'getForUserGrouped'), Array($uid, $majid));
 		if ($resultSet == false) 
 			throw new ModelException("ScheduleEntry::getForUser: Fehler beim Lesen in der Datenbank:<br>".$context->getDb()->getError(), 0);
 		while (($row = $context->getDb()->fetch_array($resultSet)) != false) {
@@ -144,9 +167,13 @@ class ScheduleEntry extends ModelHelper {
 			$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'storeInsert'), 
 														Array($this->uid, 
 														      $this->modid, 
+														      $this->mark_planned,
+														      $this->mark_real,
 														      $this->semester, 
 														      $this->sem_year,
-														      $this->try));
+														      $this->try,
+														      $this->alid,
+														      $this->stid));
 			//zusaetzlich ggf. die "richtige" ID aus der DB gleich setzen:
 			if ($result) $this->setId( $context->getDb()->lastId() );
 			else throw new ModelException("ScheduleEntry::storeInDb: Fehler beim Einfügen in die Datenbank:<br>".$context->getDb()->getError(), 0);
@@ -155,9 +182,12 @@ class ScheduleEntry extends ModelHelper {
 			//UPDATE an DB schicken:
 			$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'storeUpdate'), 
 														Array($this->mark_planned, 
+														      $this->mark_real,
 														      $this->semester, 
 														      $this->sem_year,
 														      $this->try,
+														      $this->alid,
+														      $this->stid,
 														      $this->id));
 			if (!$result) 
 				throw new ModelException("ScheduleEntry::storeInDb: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
@@ -169,6 +199,10 @@ class ScheduleEntry extends ModelHelper {
 	/*
 	 * only getters, but no setters for additional information
 	 */
+  public function getMgrpId() {
+    return $this->mgrpid;	  
+	}
+	
 	public function getMajId() {
     return $this->majid;	  
 	}
@@ -185,6 +219,7 @@ class ScheduleEntry extends ModelHelper {
     return $this->ects;
   }
 
+  
   public function getSemesterAngebot() {
     return $this->angebot_semester;
   }
@@ -249,6 +284,22 @@ class ScheduleEntry extends ModelHelper {
     return $this->sem_year;
   }
   
+  public function setAlid($alid) {
+    $this->alid = $alid;
+  }
+  
+  public function getAlid() {
+    return $this->alid;
+  }
+  
+  public function setStid($stid) {
+    $this->stid = $stid;
+  }
+  
+  public function getStid() {
+    return $this->stid;
+  }
+  
   public function isMoveableUpwards($user) {
     
     $ret = false;    
@@ -281,7 +332,7 @@ class ScheduleEntry extends ModelHelper {
     
     $maxAssSemCalc = new SemesterCalculator();
     $maxAssSemCalc->setBoth($user->getSemStart());
-    $maxAssSemCalc->addSemester(2, false);
+    $maxAssSemCalc->addSemester(2);
     
 	  // eine nach unten verschiebbare pruefung ...
 	  if ($this->mark_real <= 0) { // ... darf noch nicht abgelegt worden sein ...
