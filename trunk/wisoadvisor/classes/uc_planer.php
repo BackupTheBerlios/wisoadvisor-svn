@@ -279,14 +279,14 @@ private function getEntryFormForPlan(User $user, ScheduleEntry $myentry) {
   $input_mark_plan = '<input style="width:66px;" type="text" name="plan_' . $myentry->getId() . '" value="' . $mark_plan_readable . '" />';
 
   $ret = ''; // per default goar nix  
-  if ($myentry->getMarkReal() > 0) {
-    $ret = $mark_plan_readable; // wenn eine pruefungsnote note im system existiert: einfach planwert anzeigen, nicht bearbeitbar
-  } else {    
+  //if ($myentry->getMarkReal() > 0) {
+  //  $ret = $mark_plan_readable; // wenn eine pruefungsnote note im system existiert: einfach planwert anzeigen, nicht bearbeitbar
+  //} else {    
     // plannote soll immer eingegeben werden koennen, wenn noch keine echte note vorhanden
     //if ($entrySemCalc->compare($realSemCalc) >= 0) {
       $ret = $input_mark_plan; // wenn aktuelles semester oder in der zukunft: form anzeigen
     //}
-  }
+  //}
   
   return $ret;
   
@@ -297,12 +297,12 @@ private function getEntryFormForReal(User $user, ScheduleEntry $myentry) {
   $mark_real_readable = ($myentry->getMarkReal() > 0 ? sprintf("%1.1f", $myentry->getMarkReal()) : '');
   $input_mark_real = '<input style="width:66px;" type="text" name="real_' . $myentry->getId() . '" value="' . $mark_real_readable . '" />';
 
-  $ret = ''; // per default goar nix  
-  if ($this->getConf()->getConfString('ucImporter', 'useimportedmarks') == 'false' || $user->getType() == 'admin') {
+  //$ret = ''; // per default goar nix  
+  //if ($this->getConf()->getConfString('ucImporter', 'useimportedmarks') == 'false' || $user->getType() == 'admin') {
     $ret = $input_mark_real;
-  } else {    
-    $ret = $mark_real_readable;
-  }
+  //} else {    
+  // $ret = $mark_real_readable;
+  //}
   
   return $ret;
   

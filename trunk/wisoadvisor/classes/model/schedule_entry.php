@@ -113,7 +113,26 @@ class ScheduleEntry extends ModelHelper {
 		return $result;
 	}
 	
-  /**
+	/**
+	 * Liefert ein ScheduleEntry-Objekte aus der Datenbank gelesen.
+	 * 
+	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
+	 * @param User $user Benutzer
+	 * @param $schid ScheduleEntry ID
+	 * @return ScheduleEntry-Objekt
+	 */
+	public static function getForUserAndId(ModelContext $context, User $user, $schid) {
+		// In DB suchen, ob existiert
+		$resultSet = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'getForUserAndId'), Array($schid, $user->getId()));
+		if ($resultSet == false) 
+			throw new ModelException("ScheduleEntry::getForId: Fehler beim Lesen in der Datenbank:<br>".$context->getDb()->getError(), 0);
+		while (($row = $context->getDb()->fetch_array($resultSet)) != false) {
+			$result = self::getForDBRow($row);
+		}
+		return $result;
+	}
+	
+	/**
 	 * Liefert alle ScheduleEntry-Objekte aus der Datenbank, geordnet nach Semester.
 	 * 
 	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration

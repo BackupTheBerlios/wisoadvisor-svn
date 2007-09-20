@@ -486,6 +486,27 @@
      
 		 /**
 		  * @param $iName Name for DropDown
+		  * @param $iArray Array
+		  * @param $highlightedValue highlighted text
+		  */
+    public static function getDropDownFromArray ($iName, $iArray, $highlightedValue) {
+     
+			$ret = '<select name="' . $iName . '">';
+			foreach ($iArray as $key => $value) {
+			  $ret .= "<option ";
+			  if ($highlightedValue == $key) {
+			    $ret.= " selected=\"true\"";
+			  }
+			  $ret.= " value=\"$key\">" . $value . "</option>\n" ;
+			}
+			
+			$ret .= '</select>';
+			return $ret;
+    }
+     
+     
+     /**
+		  * @param $iName Name for DropDown
 		  * @param $highlightedValue highlighted text
 		  */
      public static function getDropDownSemester($iName, $highlightedValue) {
