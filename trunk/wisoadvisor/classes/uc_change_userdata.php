@@ -63,7 +63,10 @@ class ucChangeUserData extends UseCase
 		$matnr = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_MATNR);
 		$sem_start = $this->getParam()->getParameter(ucChangeUserData::PARAMETER_SEMSTART);
 		
-		//in $ error werden evtl. Fehlermeldungen gesammelt.
+		//in $message werden alle Rueckmeldungen gesammelt.
+		$message = '';
+		
+		//in $error werden evtl. Fehlermeldungen gesammelt.
 		$error = '';
 		
 		//zuerst checken: ist die eMailadresse gültig?
@@ -82,12 +85,13 @@ class ucChangeUserData extends UseCase
 		if ($password != $passwordRepeat) $error .= $this->getConf()->getConfString('ucChangeUserData', 'error', 'password_repeat').'<br/>';
 		
 		//wenn $error nicht leer ist, werden die Fehler angezeigt
-		if ($error != '')
-		{
-			$this->showChangeForm($error);
-		}
-		else
-		{
+		if ($error != '') {
+		  $message = $error;
+		} else {
+		  
+			//einfach das Formular wieder mit dem Hinweis, dass alles gespeichert wurde, anzeigen:
+			$message .= $this->getConf()->getConfString('ucChangeUserData', 'message_text', 'stored').'<br/>';
+		  
 			//ansonsten: die geänderten Daten schreiben	
 			//dazu wird erst ein User-Objekt angelegt und befüllt:
 			$user = User::getForId($this, $this->getSess()->getUid());
@@ -98,18 +102,24 @@ class ucChangeUserData extends UseCase
 			$user->setBirthday($birthday);
 			$user->setPassword($password);
       $user->setMatNr($matnr);
+      
+      // wenn studiengang oder startsemester veraendert: pruefungsplan ausradieren
+      if (($user->getMajId() != $studies) || ($user->getSemStart() != $sem_start)) {
+        ScheduleEntry::deleteAllForUser($this, $user->getId());
+			  $message .= $this->getConf()->getConfString('ucChangeUserData', 'message_text', 'schedule').'<br/>';
+        
+      }      
       $user->setMajId($studies);
       $user->setSemStart($sem_start);
       
 			$user->storeInDb($this);
 			
-			//ausserdem: Das Session-Objekt aktualisieren
-			//dazu wird neu Authentifiziert:
+			//ausserdem: Das Session-Objekt aktualisieren; dazu wird neu Authentifiziert:
 			$this->getSess()->authenticate($user->getEMail(), $user->getPassword());
 			
-			//einfach das Formular wieder mit dem Hinweis, dass alles gespeichert wurde, anzeigen:
-			$this->showChangeForm($this->getConf()->getConfString('ucChangeUserData', 'message_text', 'stored').'<br/>');
 		}
+		// form wieder anzeigen, aber mit botschaft
+		$this->showChangeForm($message);
 	}
 
 	/**

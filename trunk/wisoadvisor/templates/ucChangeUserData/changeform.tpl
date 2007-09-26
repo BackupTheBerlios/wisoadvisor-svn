@@ -40,8 +40,9 @@
 
 	<tr>
 		<td colspan="3"><br/>Die folgenden Daten solltest Du dann angeben, wenn Du bereits Student an der WiSo
-		bist und die erweiterten Funktionen des Wiso@visor nutzen m&ouml;chtest. Darunter fallen z. B. die Studienverlaufsplanung
-		und die Noten&uuml;bersicht.</td>
+		bist und die erweiterten Funktionen des Wiso@visor nutzen m&ouml;chtest. Darunter fallen der Pr&uuml;fungsplan		
+		und die Noten&uuml;bersicht. &Auml;nderungen bei Studiengang und Studienbeginn haben zur Folge, dass ein eventuell 
+		bereits vorhandener Pr&uuml;fungsplan &uuml;berschrieben wird.</td>
 	</tr>
 	<tr>
 		<td>Matrikelnummer</td>

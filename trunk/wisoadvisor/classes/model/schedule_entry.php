@@ -88,8 +88,8 @@ class ScheduleEntry extends ModelHelper {
 	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
 	 * @param int $uid Die Uid des Benutzers
 	 */
-	public static function deleteForUser(ModelContext $context, $uid) {
-		$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'deleteForUser'), Array($uid));
+	public static function deleteAllForUser(ModelContext $context, $uid) {
+		$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'deleteAllForUser'), Array($uid));
 	  if (!$result) {
 	    throw new ModelException("ScheduleEntry::deleteForUser: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
 	  }
@@ -319,7 +319,7 @@ class ScheduleEntry extends ModelHelper {
     return $this->stid;
   }
   
-  public function isMoveableUpwards($user) {
+  public function isMoveableUpwards(User $user) {
     
     $ret = false;    
 	  $realSemCalc = new SemesterCalculator(); // tatsaechliches, aktuelles semester (initialisiert ueber date)
@@ -342,7 +342,7 @@ class ScheduleEntry extends ModelHelper {
     return $ret;
   }
 	
-  public function isMoveableDownwards($user) {
+  public function isMoveableDownwards(User $user) {
     
     $ret = false; 
 	  $entrySemCalc = new SemesterCalculator(); // semester, fuer das der eintrag eingeplant wurde (siehe advisor__schedule)
@@ -369,6 +369,6 @@ class ScheduleEntry extends ModelHelper {
     return $ret;
 
   }
-	
+  
 }
 ?>

@@ -3,6 +3,7 @@
   <th width="75%" rowspan="2"><a class="wtopic" style="text-decoration: none; cursor:pointer;" onClick="OpenDivForm('###:###group###:###', 'imgFormDivCustData', '', '','FormDivCustData', '&Auml;ndern', 'Schlie&szlig;en');">###:###group###:###</a></th>
   <th>Plan</th>
   <th>Note</th>
+  <th rowspan="2"><img src="grafik/###:###smiley###:###" /></th>
 </tr>
 <tr>  
   <th>###:###mark_group_plan###:###</th>
@@ -15,9 +16,10 @@
 <tr>
 	<th width="55%">&nbsp;</th>
 	<th>ECTS</th>
-	<th>V</th>
+	<!-- <th>V</th> -->
 	<th>Plan</th>
 	<th>&#216;</th>
 	<th>Note</th>
 	<th>&#216;</th>
+	<th>&nbsp;</th>
 </tr>

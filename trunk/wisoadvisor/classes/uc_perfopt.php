@@ -17,10 +17,6 @@ public function execute()	{
 	  $this->setOutputType(USECASE_HTML);
 	  switch ($this->getStep()) {
 			
-			case 'setup':
-			  $this->showSetup();
-			  break;
-	    
 			case 'details':
 				$schid = $this->getParam()->getParameter(ucPerfOpt::PARAMETER_SCHID);
 				if ($schid) {
@@ -39,31 +35,26 @@ public function execute()	{
 	return $ret;
 }
 
-private function showSetup() {
-  
-  /*
-   * showSetup soll anzeigen
-   *   -- POPT-Parameter (neue Tabelle definieren)
-   *   -- eine Form, um diese zu ändern
-   */
-  
-}
-
 private function showDetails($schid) {
   
   $user = User::getForId($this, $this->getSess()->getUid());
   $entry = ScheduleEntry::getForUserAndId($this, $user, $schid);
   
   if (! $entry) {
-    $this->appendOutput('<h2>Cheats sind nicht erlaubt!</h2>Eine Meldung an den Administrator wurde abgesetzt.');
+    // schid wurde in der URL manuell veraendert => detailansicht ist nur fuer schids des angemeldeten benutzers erlaubt
+    $this->appendOutput('<h2>Achti Krachti!</h2>Cheats sind nicht erlaubt! <br/>Eine Meldung an den Administrator wurde abgesetzt.');
     return true;
   }
+  
+  $cntParticipants = 0;
+  $cntBetter = 0;
+  $cntWorse = 0;
+  $cntEqual = 0;
   
   $aggLevel = $this->getParam()->getParameter('level');
   $this->appendOutput($this->printDetailsHeader($user, $entry, $aggLevel));
  
- /* *** start graph *** */
-
+ /* *** start graph => wird direkt hier erzeugt, wegen des HTML-Tags <img ...> (Graph wird on-the-fly erzeugt) *** */
   $realMarksArray = ScheduleEntryStatistics::getCntReal($this, $entry, $aggLevel);
   if ($realMarksArray) {
     
@@ -73,20 +64,35 @@ private function showDetails($schid) {
 	  
 	  foreach ($realMarksArray as $hMark) {
 	    $pos = array_search($hMark['mark_real'], $xArray);
-	    if ($pos) {
+		  if ($pos !== false) { // important: use special operator here ($pos can both be false and 0, but 0 is a valid pos in xArray)
 	      $yArray[$pos] = $hMark['cnt_mark'];
 	    }
+	    // besser hier als in der datenbank zaehlen 
+      // => keine extra db routinen notwendig, um zwischen import und schedule zu unterscheiden
+      $cntParticipants += $hMark['cnt_mark'];
+	    if ($hMark['mark_real'] < $entry->getMarkReal()) {
+	      $cntBetter += $hMark['cnt_mark'];
+	    } else if ($hMark['mark_real'] == $entry->getMarkReal()) {
+	      $cntEqual += $hMark['cnt_mark'];	      
+	    } else {
+	      $cntWorse += $hMark['cnt_mark'];	      
+	    }
+      
 	  }
 	  
 	  // hand over data by session variables to graph script; ugly but works
 	  $_SESSION['daten']['y'] = $yArray; 
-	  $_SESSION['title'] = 'Notenverteilung';
-	  $_SESSION['daten']['x'] = $xArray;	
-	  $this->appendOutput('<img src="graph.php?' .time(). '" />');
-  }
-	  
-  /* *** end graph *** */
+	  $_SESSION['title'] = '';
+	  $_SESSION['daten']['x'] = $xArray;		  
+	  $this->appendOutput('<p><img src="graph.php?' .time(). '" /></p>');
+    
+  }	  
+  /* *** ende graph *** */
 
+  // rankings; equal -1, weil der user selbst ausgenommen werden soll
+  $this->appendOutput($this->printDetailsFooter($user, $entry, $cntParticipants, $cntBetter, $cntEqual-1, $cntWorse));
+  
+  return true;
 }
 
 
@@ -112,13 +118,13 @@ private function showScorecard() {
 
 	  // erstmal die durchschnittsnoten usw. berechnen
     foreach ($scheduleEntries as $myentry) {
-      if ($myentry->getMarkReal() > 0 && $myentry->getMarkReal() <= 4.0) {        
+      if ($myentry->getMarkReal() > 0) { // && $myentry->getMarkReal() <= 4.0) {        
         $hMarksRealGroupArray[$myentry->getMgrpId()]['ects'] += $myentry->getEcts();
         $hMarksRealGroupArray[$myentry->getMgrpId()]['mark'] += $myentry->getEcts() * $myentry->getMarkReal();        
         $hMarksRealTotalArray['ects'] += $myentry->getEcts();
         $hMarksRealTotalArray['mark'] += $myentry->getEcts() * $myentry->getMarkReal();
       }
-      if ($myentry->getMarkPlanned() > 0 && $myentry->getMarkPlanned() <= 4.0) {
+      if ($myentry->getMarkPlanned() > 0) { // && $myentry->getMarkPlanned() <= 4.0) {
         $hMarksPlanGroupArray[$myentry->getMgrpId()]['ects'] += $myentry->getEcts();
         $hMarksPlanGroupArray[$myentry->getMgrpId()]['mark'] += $myentry->getEcts() * $myentry->getMarkPlanned();        
         $hMarksPlanTotalArray['ects'] += $myentry->getEcts();
@@ -188,6 +194,25 @@ private function printDetailsHeader(User $user, ScheduleEntry $entry, $aggLevel)
 	return $gen->getHTML();
 }
 
+private function printDetailsFooter($user, $entry, $cntParticipants, $cntBetter, $cntEqual, $cntWorse) {
+	
+  $percentBetter = ScheduleEntryStatistics::perCent($cntBetter, $cntParticipants);
+  $percentEqual  = ScheduleEntryStatistics::perCent($cntEqual, $cntParticipants);
+  $percentWorse  = ScheduleEntryStatistics::perCent($cntWorse, $cntParticipants);
+  
+  $gen = new HtmlGenerator($this->getConf()->getConfString('ucPerfOpt', 'detailfoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'cnt_participants'), $cntParticipants);
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'cnt_better'), $cntBetter);
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'cnt_equal'), $cntEqual);
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'cnt_worse'), $cntWorse);
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'percent_better'), $percentBetter);
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'percent_equal'), $percentEqual);
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'percent_worse'), $percentWorse);
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'link_popt'), $this->getOwnLink());
+  
+  return $gen->getHTML();
+}
+
 private function printScorecardHeader(User $user) {
 	$gen = new HtmlGenerator( $this->getConf()->getConfString('ucPerfOpt', 'htmltemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'username'), $user->getUserName());
@@ -203,6 +228,7 @@ private function printScorecardFooter(User $user, $hMarksPlanTotalArray, $hMarks
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPerfOpt', 'htmlfoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));  
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_total_plan'), $hMarkPlan);
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_total_real'), $hMarkReal);
+	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley'), $this->getScorecardIcon($hMarkReal, 48));
 	
 	return $gen->getHTML();  
 }
@@ -231,6 +257,7 @@ private function printGroupHeader($mgrpid, $hMarkPlanArray, $hMarkRealArray) {
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'group'), $hGroup->getName());
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_group_plan'), $hMarkPlan);
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_group_real'), $hMarkReal);
+	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley'), $this->getScorecardIcon($hMarkReal, 48));
 	
   return $gen->getHTML();
 }
@@ -260,9 +287,28 @@ private function printGroupEntry(User $user, ScheduleEntry $myentry) {
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_plan_avg'), ($avgMarkPlan > 0 ? sprintf("%1.1f", $avgMarkPlan) : ''));
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_real'), ($myentry->getMarkReal() > 0 ? sprintf("%1.1f", $myentry->getMarkReal()) : ''));
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_real_avg'), ($avgMarkReal > 0 ? sprintf("%1.1f", $avgMarkReal) : ''));
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley'), $this->getScorecardIcon($myentry->getMarkReal(), 22)); 
   return $gen->getHTML();
   
 }
+
+protected function getScorecardIcon($mark, $size='22') {
+    
+  $stages = Array (1.3, 2.0, 3.0, 4.0);
+   
+  $ret = 'leer.gif';
+  if ($mark > 0) {
+    $finalStage=1;
+    foreach ($stages as $hStage) {
+      if ($mark > $hStage) {
+        $finalStage++;
+      }
+    }
+    $ret = 'sc_stage' . $finalStage . '_' . $size . '.png';
+  }
+  return $ret;    
+}
+	
 
 
 } // class

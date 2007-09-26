@@ -94,9 +94,8 @@ private function createNewScheduleInDb() {
   
 	$user = User::getForId($this, $this->getSess()->getUid());
   
-	// bisherigen Plan loeschen, ohne Ruecksicht auf Verluste :-)
-  // TODO: Abgleich mit Studiengang, zwecks gleicher, bereits eingeplanter Module !!!
-  ScheduleEntry::deleteForUser($this, $user->getId());
+	// bisherigen Plan loeschen, ohne Ruecksicht auf Verluste
+  ScheduleEntry::deleteAllForUser($this, $user->getId());
   
 	// alle modules für majid holen
 	$modules = Module::getForMajor($this, $user->getMajId());
@@ -192,7 +191,7 @@ private function showPlan() {
     } // foreach $myentry
 		
     $htmlForSchedule .= $this->printEntryFooter($sum_ects); // final semester footer
-    $htmlForSchedule = $this->printPrognose($user, $curEntrySemCalculator, $duration) . $htmlForSchedule; // add prognose before
+    $htmlForSchedule = $this->printPrognose($user, $curEntrySemCalculator, $duration) . $htmlForSchedule ; // add prognose before
     
   }
   
@@ -239,13 +238,22 @@ private function getEntryActionDown(User $user, ScheduleEntry $myentry) {
 	$entrySemCalc->setSemesterWord($myentry->getSemester());
 	$entrySemCalc->setSemesterYear($myentry->getSemYear());
 
-  $ret = '';  
+  $hLastSemesterRule = new SemesterCalculator(); // Ende der Regelstudienzeit; danach wird Grafik rot
+  $hLastSemesterRule->setBoth($user->getSemStart());
+  $hLastSemesterRule->addSemester($user->getSemesterRule() -1);
+		
+  $ret = '';
+  $red = '';
   if ($myentry->isMoveableDownwards($user)) {
+    if ($entrySemCalc->compare($hLastSemesterRule) >= 0) {
+      $red = '_rot';
+    }
+    
 	  $ret = '<a href="' . $this->getOwnLink('move', Array(ucPlaner::PARAMETER_SCHID.'='.$myentry->getId(), 
 	                                                       ucPlaner::PARAMETER_DIR.'=down', 
 	                                                       ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
 	                                                       '#'.$entrySemCalc->getNextSemesterCalculator()->getBoth()))
-	                     . '"><img alt="Um ein Semester schieben" title="Um ein Semester schieben" src="grafik/nach_unten.gif"/></a>';
+	                     . '"><img alt="Um ein Semester schieben" title="Um ein Semester schieben" src="grafik/nach_unten'. $red.'.gif"/></a>';
   }
   return $ret;
 }
@@ -333,12 +341,23 @@ private function printEntryHeader(SemesterCalculator $curSemester) {
 
 private function printPrognose(User $user, SemesterCalculator $lastSemester, $duration) {
   
+  // Studienbeginn
   $hFirstSemester = new SemesterCalculator();
   $hFirstSemester->setBoth($user->getSemStart());
   
+  // Ende der Regelstudienzeit
+  $hLastSemesterRule = new SemesterCalculator();
+  $hLastSemesterRule->setBoth($user->getSemStart());
+  $hLastSemesterRule->addSemester($user->getSemesterRule() -1);
+  
+  // Semester, das gem. PO nicht ueberschritten werden darf (idR 2 Semester nach Regelstudienzeit)
+  $hReallyLastSemester = new SemesterCalculator();
+  $hReallyLastSemester->setBoth($user->getSemStart());
+  $hReallyLastSemester->addSemester($user->getSemesterRule() + $user->getSemesterTolerance() -1);
+  
+  // aktuelles Semester
   $hCurSemester = new SemesterCalculator();
   
-  // text for prognose
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'prognosetemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'firstsemester'), $hFirstSemester->getSemesterReadable());
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'lastsemester'), $lastSemester->getSemesterReadable());
@@ -348,13 +367,28 @@ private function printPrognose(User $user, SemesterCalculator $lastSemester, $du
   $i=0;
   $itSemester = new SemesterCalculator();
   $itSemester->setBoth($hFirstSemester->getBoth());
+  
+  $warning = '<tr>';  
+  $messageIndex = 'inrange';
   $bar = '<table style="border-width:2px; border-style:solid; border-color:#003366;"><tr>';
+  
   while ($itSemester->compare($lastSemester) <= 0) {
-    $color = ' bgcolor="#FFFFFF" ';
+    $colorBar = ' bgcolor="#FFFFFF" '; // by default everything's ok => GRUEN
     if ($itSemester->compare($hCurSemester) == 0) {
-      $color = ' bgcolor="#FFC30A" ';
+      $colorBar = ' bgcolor="#FFC30A" '; // aktuelles semester => GELB
     }
-    $bar .= '<td ' .$color. ' width="50px" align="center" style="font-size:9pt;">';
+    $colorWarning = ' bgcolor="#00FF00"'; // by default everything's ok => GRUEN
+    if ($itSemester->compare($hLastSemesterRule) > 0) {
+      $messageIndex = 'tolerance';
+      $colorWarning = ' bgcolor="#FFC30A"'; // aktuelles semester noch im toleranzbereich => GELB
+      if ($itSemester->compare($hReallyLastSemester) > 0) {
+        $messageIndex = 'tilt';
+        $colorWarning = ' bgcolor="#EC2222"'; // studienzeit ueberschritten => ROT
+      }
+    }
+    
+    $warning .= '<td ' . $colorWarning . '>&nbsp;</td>';
+    $bar .= '<td ' .$colorBar. ' width="50px" align="center" style="font-size:9pt;">';
     $bar .= '<a href="#'.$itSemester->getSemesterWord().$itSemester->getSemesterYear().'">';
     $bar .= strtoupper($itSemester->getSemesterWord()).'<br/>'.$itSemester->getSemesterYearReadable();
     $bar .= '</a></td>';
@@ -363,12 +397,17 @@ private function printPrognose(User $user, SemesterCalculator $lastSemester, $du
   }
   
   
-  $bar .= '</tr></table>';
+  $bar .= '</tr>' . $warning . '</tr></table>';
   
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'warning'), $this->getConf()->getConfString('ucPlaner', 'message', $messageIndex));
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'duration_total'), $i);
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'progbar'), $bar);
   
   return $gen->getHTML();
+}
+
+private function printPrognoseText(User $user, SemesterCalculator $lastSemester, $duration) {
+  
 }
 
 private function printEntryFooter($sum_ects) {

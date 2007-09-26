@@ -31,6 +31,8 @@ class User extends ModelHelper {
 	private $studies = null; // aus advisor__majors
 	private $majid = null; // aus advisor__majors
 	private $sem_start = null;
+	private $semester_rule = null; // aus advisor__studies
+	private $semester_tolerance = null; // aus advisor__studies
 	
 	private function __construct($uid) {
 		parent::__construct($uid);
@@ -61,6 +63,8 @@ class User extends ModelHelper {
 			$result->majid = $row['majid'];
 			$result->studies = $row['fullname'];
 			$result->sem_start = $row['sem_start'];
+			$result->semester_rule = $row['semester_rule'];
+			$result->semester_tolerance = $row['semester_tolerance'];
 		}
 		// Objekt zurueckliefern
 		return $result;
@@ -170,6 +174,14 @@ class User extends ModelHelper {
 	
 	public function getSemStart() {
     return $this->sem_start;
+	}
+	
+	public function getSemesterRule() {
+    return $this->semester_rule;
+	}
+	
+	public function getSemesterTolerance() {
+    return $this->semester_tolerance;
 	}
 	
 	public function getMajId() {

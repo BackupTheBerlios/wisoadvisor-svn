@@ -22,7 +22,7 @@ class ScheduleEntryStatistics {
   const AGGREGATION_MAJOR = 'major';
 	
 	protected function getArrayFromDb(ModelContext $context, ScheduleEntry $entry, $sql, $paramArray) {
-
+    
     $resultSet = $context->getDb()->preparedQuery($sql, $paramArray);
 		if ($resultSet == false) 
 			throw new ModelException("ScheduleEntryStatistics::getArrayFromDb: Fehler beim Lesen in der Datenbank:<br>".$context->getDb()->getError(), 0);
@@ -422,6 +422,30 @@ public static function getCntReal (ModelContext $context, ScheduleEntry $entry, 
                                  $entry->getSemester(), 
                                  $entry->getSemYear()));
   }
+  
+
+/* #################################################################################################################################################
+ * EIN PAAR GLOBAL VERFUEGBARE STATISTIK-FUNKTIONEN
+ */
+
+
+ /**
+	 * Berechnet und formatiert einen Prozentsatz
+	 * 
+	 * @param $iPart Anteil
+	 * @param $iTotal Gesamtheit
+	 * @return formatierten Prozentsatz (%.2f)
+	 */
+  public static function perCent($iPart, $iTotal) {
+
+	  $ret = 0;
+	  if ($iTotal > 0) {
+	    $ret = sprintf("%.2f", ($iPart / $iTotal) * 100);
+	  }
+	  return $ret;
+
+  }
+  
   
 }
 ?>

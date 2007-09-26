@@ -384,7 +384,15 @@ class WisoadvisorConfiguration extends Configuration
 		 	$this->setConfValue('sql', 'characteristic', 'getForBlock', 'SELECT DISTINCT c.chid, c.characteristic, c.gid , c.lower_target, c.upper_target, c.show_result FROM '.$table['char'].' c, '.$table['questions'].' q, '.$table['questionblocks'].' qb, '.$table['surveys'].' s WHERE c.chid = q.chid AND q.qbid = qb.qbid AND qb.sid = s.sid AND s.blid = ?');
 		 	
 		 	// Klasse User
-		 	$this->setConfValue('sql', 'user', 'getForId', 'SELECT au.*, am.fullname FROM '.$table['user'].' au, '.$table['majors'].' am  WHERE uid=? AND am.majid = au.majid');		 	
+		 	$this->setConfValue('sql', 'user', 'getForId', 'SELECT au.*, 
+                                                             am.*,
+                                                             ast.*
+                                                        FROM '.$table['user'].' au, 
+                                                             '.$table['majors'].' am,
+                                                             '.$table['studies'].' ast
+                                                       WHERE uid=? 
+                                                         AND am.majid = au.majid
+                                                         AND am.stid = ast.stid');
 		 	$this->setConfValue('sql', 'user', 'getAll', 'SELECT * FROM '.$table['user'].' ORDER BY uid');
 		 	$this->setConfValue('sql', 'user', 'storeUpdate', 'UPDATE '.$table['user'].' SET username = "?", email = "?", passwd = "?", gender = "?", birthday = "?", tgid = "?", confirmed = "?", auth_code = "?", type = "?", matnr = "?", majid = "?", sem_start = "?" WHERE uid = "?"');
 			$this->setConfValue('sql', 'user', 'storeInsert', 'INSERT INTO '.$table['user'].' (username, email, passwd, gender, birthday, tgid, confirmed, auth_code, matnr, majid, sem_start, type) VALUES ("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "user")');
@@ -409,7 +417,7 @@ class WisoadvisorConfiguration extends Configuration
 		 	// Klasse Schedule
       $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, mark_planned, mark_real, semester, sem_year, try, alid, stid) VALUES (?, ?, "?", "?", "?", ?, ?, ?, ?)');
       $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned=?, mark_real=?, semester="?", sem_year=?, try=?, alid=?, stid=? WHERE schid=?');
-      $this->setConfValue('sql', 'schedule', 'deleteForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid=?');
+      $this->setConfValue('sql', 'schedule', 'deleteAllForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid=?');
       $this->setConfValue('sql', 'schedule', 'getForId', 'SELECT asch.*, am.*, al.* FROM '.$table['schedule']. ' asch,'.$table['modules']. ' am, '.$table['lectures']. ' al WHERE asch.schid=? AND am.modid = asch.modid AND al.alid = am.alid');
       $this->setConfValue('sql', 'schedule', 'getForUserAndId', 'SELECT asch.*, am.*, al.* FROM '.$table['schedule']. ' asch, '.$table['modules']. ' am, '.$table['lectures']. ' al WHERE asch.schid=? AND asch.uid=? AND am.modid = asch.modid AND al.alid = am.alid');
       $this->setConfValue('sql', 'schedule', 'getForUser', 'SELECT asch.*,
@@ -559,6 +567,7 @@ class WisoadvisorConfiguration extends Configuration
 		
 		//Nachricht:
 		$this->setConfValue('ucChangeUserData', 'message_text', 'stored', 'Wir haben Deine &Auml;nderungen erfolgreich gespeichert.');
+		$this->setConfValue('ucChangeUserData', 'message_text', 'schedule', 'Dein Pr&uuml;fungsplan wurde zur&uuml;ckgesetzt.');
 	 }
 	 
 	/**
@@ -876,6 +885,11 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPlaner', 'entryheadtemplate', null, 'templates/ucPlaner/entry_head.tpl');
 	  $this->setConfValue('ucPlaner', 'entryfoottemplate', null, 'templates/ucPlaner/entry_foot.tpl');
 	  
+	  // messages for prognose
+	  $this->setConfValue('ucPlaner', 'message', 'inrange', '');
+	  $this->setConfValue('ucPlaner', 'message', 'tolerance', '<p>Die Studienzeit &uuml;berschreitet die Regelstudienzeit, befindet sich aber noch im zulässigen Zeitraum.</p>');
+	  $this->setConfValue('ucPlaner', 'message', 'tilt', '<p>Deine Studienzeit &uuml;berschreitet die lt. Pr&uuml;fungsordnung zul&auml;ssige Regelstudienzeit, einschlie&szlig;lich aller tolerierten Spielr&auml;ume. </p>');
+	  
 	  // parameters for template entries to be replaced
 		// schedule header
 	  $this->setConfValue('ucPlaner', 'username', null, 'username');		
@@ -886,7 +900,8 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPlaner', 'duration_total', null, 'duration_total');				
 		$this->setConfValue('ucPlaner', 'progbar', null, 'progbar');				
 		$this->setConfValue('ucPlaner', 'linkcreate', null, 'linkcreate');				
-	  // entry header
+		$this->setConfValue('ucPlaner', 'warning', null, 'warning');				
+		// entry header
 		$this->setConfValue('ucPlaner', 'semester_readable', null, 'semester_readable');		
 	  $this->setConfValue('ucPlaner', 'linkplan', null, 'linkplan');				
 		$this->setConfValue('ucPlaner', 'semester_short', null, 'semester_short');				
@@ -912,7 +927,8 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPerfOpt', 'htmlfoottemplate', null, 'templates/ucPerfOpt/perfopt_foot.tpl');
 		
 	  $this->setConfValue('ucPerfOpt', 'detailheadtemplate', null, 'templates/ucPerfOpt/detail_head.tpl');
-		
+	  $this->setConfValue('ucPerfOpt', 'detailfoottemplate', null, 'templates/ucPerfOpt/detail_foot.tpl');
+	  
 		$this->setConfValue('ucPerfOpt', 'linkcreatetemplate', null, 'templates/ucPlaner/linkcreate.tpl'); // use the same as ucPlaner here :-)
 		$this->setConfValue('ucPerfOpt', 'linkchangeusertemplate', null, 'templates/ucPlaner/linkchangeuser.tpl');  // use the same as ucPlaner here :-)
 		
@@ -939,12 +955,21 @@ class WisoadvisorConfiguration extends Configuration
 	  $this->setConfValue('ucPerfOpt', 'mark_real', null, 'mark_real');
 	  $this->setConfValue('ucPerfOpt', 'mark_plan_avg', null, 'mark_plan_avg');
 	  $this->setConfValue('ucPerfOpt', 'mark_real_avg', null, 'mark_real_avg');
-    // detail view
+	  $this->setConfValue('ucPerfOpt', 'smiley', null, 'smiley');
+	  // detail view
     $this->setConfValue('ucPerfOpt', 'schid', null, 'schid');				
     $this->setConfValue('ucPerfOpt', 'matnr', null, 'matnr');				
 		$this->setConfValue('ucPerfOpt', 'semester_readable', null, 'semester_readable');		
 		$this->setConfValue('ucPerfOpt', 'linkdetails', null, 'linkdetails');				
 		$this->setConfValue('ucPerfOpt', 'dropdown_levels', null, 'dropdown_levels');				
+		$this->setConfValue('ucPerfOpt', 'cnt_participants', null, 'cnt_participants');				
+		$this->setConfValue('ucPerfOpt', 'cnt_better', null, 'cnt_better');				
+		$this->setConfValue('ucPerfOpt', 'cnt_worse', null, 'cnt_worse');				
+		$this->setConfValue('ucPerfOpt', 'cnt_equal', null, 'cnt_equal');				
+		$this->setConfValue('ucPerfOpt', 'percent_better', null, 'percent_better');				
+		$this->setConfValue('ucPerfOpt', 'percent_worse', null, 'percent_worse');				
+		$this->setConfValue('ucPerfOpt', 'percent_equal', null, 'percent_equal');				
+		$this->setConfValue('ucPerfOpt', 'link_popt', null, 'link_popt');				
 		
 	}
 	
