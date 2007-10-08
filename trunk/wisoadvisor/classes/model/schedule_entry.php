@@ -91,11 +91,23 @@ class ScheduleEntry extends ModelHelper {
 	public static function deleteAllForUser(ModelContext $context, $uid) {
 		$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'deleteAllForUser'), Array($uid));
 	  if (!$result) {
-	    throw new ModelException("ScheduleEntry::deleteForUser: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
+	    throw new ModelException("ScheduleEntry::deleteAllForUser: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
 	  }
   }
 	
 	/**
+	 * Loescht eine speziellen ScheduleEntry
+	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration
+	 * @param int $schid ID des Eintrags
+	 */
+	public static function deleteForId(ModelContext $context, $schid) {
+		$result = $context->getDb()->preparedQuery($context->getConf()->getConfString('sql', 'schedule', 'deleteForId'), Array($schid));
+	  if (!$result) {
+	    throw new ModelException("ScheduleEntry::deleteForId: Fehler beim Schreiben in die Datenbank:<br>".$context->getDb()->getError(), 0);
+	  }
+  }
+	
+  /**
 	 * Liefert ein ScheduleEntry-Objekte aus der Datenbank gelesen.
 	 * 
 	 * @param ModelContext $context Kontext zum Zugriff auf Datenbank und Konfiguration

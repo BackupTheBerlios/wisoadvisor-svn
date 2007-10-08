@@ -120,7 +120,10 @@ private function showScorecard() {
     foreach ($scheduleEntries as $myentry) {
       if ($myentry->getMarkReal() > 0) { // && $myentry->getMarkReal() <= 4.0) {        
         $hMarksRealGroupArray[$myentry->getMgrpId()]['ects'] += $myentry->getEcts();
-        $hMarksRealGroupArray[$myentry->getMgrpId()]['mark'] += $myentry->getEcts() * $myentry->getMarkReal();        
+        $hMarksRealGroupArray[$myentry->getMgrpId()]['mark'] += $myentry->getEcts() * $myentry->getMarkReal();
+        if ($myentry->getMarkReal() > $hMarksRealGroupArray[$myentry->getMgrpId()]['mark_max']) {
+          $hMarksRealGroupArray[$myentry->getMgrpId()]['mark_max'] = $myentry->getMarkReal(); // die schlechteste note bestimmt das symbol in der bsc
+        }
         $hMarksRealTotalArray['ects'] += $myentry->getEcts();
         $hMarksRealTotalArray['mark'] += $myentry->getEcts() * $myentry->getMarkReal();
       }
@@ -129,7 +132,7 @@ private function showScorecard() {
         $hMarksPlanGroupArray[$myentry->getMgrpId()]['mark'] += $myentry->getEcts() * $myentry->getMarkPlanned();        
         $hMarksPlanTotalArray['ects'] += $myentry->getEcts();
         $hMarksPlanTotalArray['mark'] += $myentry->getEcts() * $myentry->getMarkPlanned();        
-      }
+      }      
 	  }
 	  
 	  $firstrun = true; // beim ersten lauf keinen footer anzeigen, ...
@@ -222,13 +225,20 @@ private function printScorecardHeader(User $user) {
 
 private function printScorecardFooter(User $user, $hMarksPlanTotalArray, $hMarksRealTotalArray) {
 
-  $hMarkPlan = ($hMarksPlanTotalArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarksPlanTotalArray['mark']/$hMarksPlanTotalArray['ects']), 0, 3) : '';
-  $hMarkReal = ($hMarksRealTotalArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarksRealTotalArray['mark']/$hMarksRealTotalArray['ects']), 0, 3) : '';
+  $hMarkPlan = ($hMarksPlanTotalArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarksPlanTotalArray['mark']/$hMarksPlanTotalArray['ects']), 0, 3) : '&nbsp;';
+  $hMarkReal = ($hMarksRealTotalArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarksRealTotalArray['mark']/$hMarksRealTotalArray['ects']), 0, 3) : '&nbsp;';
   
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPerfOpt', 'htmlfoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));  
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_total_plan'), $hMarkPlan);
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_total_real'), $hMarkReal);
-	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley'), $this->getScorecardIcon($hMarkReal, 48));
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley_tolerance_text'), $this->getConf()->getConfString('ucPerfOpt', 'smiley_tolerance'));
+	
+	// $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley'), $this->getScorecardIcon($hMarkReal, 48));
+  $smiley = $this->getConf()->getConfString('ucPerfOpt', 'img_good');
+  if ($hMarkPlan + $this->getConf()->getConfString('ucPerfOpt', 'smiley_tolerance') < $hMarkReal) {
+    $smiley = $this->getConf()->getConfString('ucPerfOpt', 'img_bad');
+  }
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley_total'), $smiley);
 	
 	return $gen->getHTML();  
 }
@@ -253,11 +263,15 @@ private function printGroupHeader($mgrpid, $hMarkPlanArray, $hMarkRealArray) {
   $hMarkPlan = ($hMarkPlanArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarkPlanArray['mark']/$hMarkPlanArray['ects']), 0, 3) : '&nbsp;';
   $hMarkReal = ($hMarkRealArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarkRealArray['mark']/$hMarkRealArray['ects']), 0, 3) : '&nbsp;';
   
+  //$hImageForGroup = $hMarkReal;
+  $hImageForGroup = substr(sprintf("%1.11f", $hMarkRealArray['mark_max']), 0, 3); 
+  
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPerfOpt', 'entryheadtemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'group'), $hGroup->getName());
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_group_plan'), $hMarkPlan);
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_group_real'), $hMarkReal);
-	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley'), $this->getScorecardIcon($hMarkReal, 48));
+	
+	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley'), $this->getScorecardIcon($hImageForGroup, 48));
 	
   return $gen->getHTML();
 }

@@ -147,6 +147,8 @@ class WisoadvisorConfiguration extends Configuration
 	 	// Model-Klassen v2
 	 	$this->setConfValue('class', 'ScheduleEntry', null, $modelPath.'schedule_entry'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ScheduleEntryStatistics', null, $modelPath.'schedule_entry_statistics'.$phpClassSuffix);
+	 	$this->setConfValue('class', 'Major', null, $modelPath.'major'.$phpClassSuffix);
+	 	$this->setConfValue('class', 'Studies', null, $modelPath.'studies'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'Module', null, $modelPath.'module'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ModuleGroup', null, $modelPath.'module_group'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'SemesterCalculator', null, $modelPath.'semester_calculator'.$phpClassSuffix);
@@ -417,6 +419,7 @@ class WisoadvisorConfiguration extends Configuration
 		 	// Klasse Schedule
       $this->setConfValue('sql', 'schedule', 'storeInsert', 'INSERT INTO '.$table['schedule']. ' (uid, modid, mark_planned, mark_real, semester, sem_year, try, alid, stid) VALUES (?, ?, "?", "?", "?", ?, ?, ?, ?)');
       $this->setConfValue('sql', 'schedule', 'storeUpdate', 'UPDATE '.$table['schedule']. ' SET mark_planned=?, mark_real=?, semester="?", sem_year=?, try=?, alid=?, stid=? WHERE schid=?');
+      $this->setConfValue('sql', 'schedule', 'deleteForId', 'DELETE FROM '.$table['schedule']. ' WHERE schid=?');
       $this->setConfValue('sql', 'schedule', 'deleteAllForUser', 'DELETE FROM '.$table['schedule']. ' WHERE uid=?');
       $this->setConfValue('sql', 'schedule', 'getForId', 'SELECT asch.*, am.*, al.* FROM '.$table['schedule']. ' asch,'.$table['modules']. ' am, '.$table['lectures']. ' al WHERE asch.schid=? AND am.modid = asch.modid AND al.alid = am.alid');
       $this->setConfValue('sql', 'schedule', 'getForUserAndId', 'SELECT asch.*, am.*, al.* FROM '.$table['schedule']. ' asch, '.$table['modules']. ' am, '.$table['lectures']. ' al WHERE asch.schid=? AND asch.uid=? AND am.modid = asch.modid AND al.alid = am.alid');
@@ -445,6 +448,12 @@ class WisoadvisorConfiguration extends Configuration
       
       // Klasse ModuleGroup
       $this->setConfValue('sql', 'module_group', 'getForId', 'SELECT * FROM '.$table['modulegroups']. ' WHERE mgrpid=?');
+      
+      // Klasse Studies
+      $this->setConfValue('sql', 'studies', 'getForId', 'SELECT * FROM '.$table['studies']. ' WHERE stid=?');
+      
+      // Klasse Major
+      $this->setConfValue('sql', 'majors', 'getForId', 'SELECT * FROM '.$table['majors']. ' WHERE majid=?');
       
       // Klasse Module
       $this->setConfValue('sql', 'module', 'getForId', 'SELECT * FROM '.$table['modules']. ' WHERE modid=?');
@@ -956,6 +965,8 @@ class WisoadvisorConfiguration extends Configuration
 	  $this->setConfValue('ucPerfOpt', 'mark_plan_avg', null, 'mark_plan_avg');
 	  $this->setConfValue('ucPerfOpt', 'mark_real_avg', null, 'mark_real_avg');
 	  $this->setConfValue('ucPerfOpt', 'smiley', null, 'smiley');
+	  $this->setConfValue('ucPerfOpt', 'smiley_total', null, 'smiley_total');
+	  $this->setConfValue('ucPerfOpt', 'smiley_tolerance_text', null, 'smiley_tolerance_text');
 	  // detail view
     $this->setConfValue('ucPerfOpt', 'schid', null, 'schid');				
     $this->setConfValue('ucPerfOpt', 'matnr', null, 'matnr');				
@@ -969,7 +980,15 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPerfOpt', 'percent_better', null, 'percent_better');				
 		$this->setConfValue('ucPerfOpt', 'percent_worse', null, 'percent_worse');				
 		$this->setConfValue('ucPerfOpt', 'percent_equal', null, 'percent_equal');				
-		$this->setConfValue('ucPerfOpt', 'link_popt', null, 'link_popt');				
+		$this->setConfValue('ucPerfOpt', 'link_popt', null, 'link_popt');
+		// smileys for total view
+		$this->setConfValue('ucPerfOpt', 'smiley_tolerance', null, '0.5');
+		$this->setConfValue('ucPerfOpt', 'img_good', null, 'sc_smiley_happy.gif');
+		$this->setConfValue('ucPerfOpt', 'img_bad', null, 'sc_smiley_ugh.gif');
+		
+  
+		
+
 		
 	}
 	

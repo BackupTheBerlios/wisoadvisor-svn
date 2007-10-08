@@ -51,11 +51,9 @@ class ScheduleEntryStatistics {
 	  $hEntrySem->setSemesterWord($entry->getSemester());
 	  $hEntrySem->setSemesterYear($entry->getSemYear());
 	  
-	  // wenn note vorhanden, dann durchschnitt des betreffenden semesters anzeigen
-	  if ($entry->getMarkReal() > 0) {
-	    $ret = $hEntrySem;
-	  // ansonsten einfach den durchschnittswert des vergangenen vorlesungszyklus (-2 bei ws/ss, -1 bei both)
-	  } else {	    
+	  // wenn note vorhanden, dann durchschnitt des betreffenden semesters anzeigen, ansonsten den aktuellen durchschnitt
+	  $ret = $hEntrySem;
+	  if ($entry->getMarkReal() > 0) {	    
 	    $hCurSem->addSemester($entry->getSemesterAngebot()=='both'?-1:-2);
 	    $ret = $hCurSem;
 	  }

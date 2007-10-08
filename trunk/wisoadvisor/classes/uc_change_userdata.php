@@ -103,12 +103,12 @@ class ucChangeUserData extends UseCase
 			$user->setPassword($password);
       $user->setMatNr($matnr);
       
-      // wenn studiengang oder startsemester veraendert: pruefungsplan ausradieren
+      // wenn startsemester oder schwerpunkt veraendert: pruefungsplan ausradieren
       if (($user->getMajId() != $studies) || ($user->getSemStart() != $sem_start)) {
         ScheduleEntry::deleteAllForUser($this, $user->getId());
-			  $message .= $this->getConf()->getConfString('ucChangeUserData', 'message_text', 'schedule').'<br/>';
-        
-      }      
+			  $message .= $this->getConf()->getConfString('ucChangeUserData', 'message_text', 'schedule').'<br/>';        
+      }
+      
       $user->setMajId($studies);
       $user->setSemStart($sem_start);
       

@@ -48,7 +48,7 @@ class ModuleGroup extends ModelHelper {
 	 * @return User Das Objekt
 	 */
 	public static function getNew(ModelContext $context) {
-		return new ModuleGroup(Module::ID_NEW);
+		return new ModuleGroup(ModuleGroup::ID_NEW);
 	}
 	
 

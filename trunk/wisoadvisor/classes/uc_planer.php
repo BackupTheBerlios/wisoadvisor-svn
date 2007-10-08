@@ -141,6 +141,13 @@ private function move($schid, $dir) {
 	    $entry->setSemester($hNewSemester->getSemesterWord());
 	    $entry->setSemYear($hNewSemester->getSemesterYear());    
       $entry->storeInDb($this);
+    /*  
+    } else if ($entry->is($user) && ($dir=='try')) {
+      $entry->setId(ScheduleEntry::ID_NEW);
+	    $entry->setSemester($hNewSemester->getSemesterWord());
+	    $entry->setSemYear($hNewSemester->getSemesterYear());    
+	    $entry->setTry($entry->getTry() +1);
+      $entry->storeInDb($this);*/
     }
   }
 }
@@ -215,8 +222,8 @@ private function printEntry(User $user, ScheduleEntry $myentry) {
   
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'entrytemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
   
-  //$avgMarkPlan = ScheduleEntryStatistics::getAvgPlanByLecture($this, $myentry);
-  //$avgMarkReal = ScheduleEntryStatistics::getAvgRealByLecture($this, $myentry);
+  $avgMarkPlan = ScheduleEntryStatistics::getAvgPlanByLecture($this, $myentry);
+  $avgMarkReal = ScheduleEntryStatistics::getAvgRealByLecture($this, $myentry);
   
   // links und form zzgl. standards ins template parsen auffuellen
   $gen->apply($this->getConf()->getConfString('ucPlaner', 'mod_name'), $myentry->getModName().($myentry->isAssessment()=='true'?'*':''));
@@ -246,14 +253,14 @@ private function getEntryActionDown(User $user, ScheduleEntry $myentry) {
   $red = '';
   if ($myentry->isMoveableDownwards($user)) {
     if ($entrySemCalc->compare($hLastSemesterRule) >= 0) {
-      $red = '_rot';
+      $red = '_red';
     }
     
 	  $ret = '<a href="' . $this->getOwnLink('move', Array(ucPlaner::PARAMETER_SCHID.'='.$myentry->getId(), 
 	                                                       ucPlaner::PARAMETER_DIR.'=down', 
 	                                                       ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
 	                                                       '#'.$entrySemCalc->getNextSemesterCalculator()->getBoth()))
-	                     . '"><img alt="Um ein Semester schieben" title="Um ein Semester schieben" src="grafik/nach_unten'. $red.'.gif"/></a>';
+	                     . '"><img alt="Um ein Semester schieben" title="Um ein Semester schieben" src="grafik/planer_movedown'. $red.'.png"/></a>';
   }
   return $ret;
 }
@@ -270,7 +277,7 @@ private function getEntryActionUp(User $user, ScheduleEntry $myentry) {
                                                          ucPlaner::PARAMETER_DIR.'=up', 
                                                          ucPlaner::PARAMETER_CUR.'='.$entrySemCalc->getBoth(), 
                                                          '#'.$entrySemCalc->getPrevSemesterCalculator()->getBoth()))
-                       . '"><img alt="Um ein Semester vorziehen" title="Um ein Semester vorziehen" src="grafik/nach_oben.gif"/></a>';
+                       . '"><img alt="Um ein Semester vorziehen" title="Um ein Semester vorziehen" src="grafik/planer_moveup.png"/></a>';
   }
   return $ret;  
 }
@@ -406,9 +413,6 @@ private function printPrognose(User $user, SemesterCalculator $lastSemester, $du
   return $gen->getHTML();
 }
 
-private function printPrognoseText(User $user, SemesterCalculator $lastSemester, $duration) {
-  
-}
 
 private function printEntryFooter($sum_ects) {
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'entryfoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
@@ -418,6 +422,8 @@ private function printEntryFooter($sum_ects) {
 
 private function printScheduleFooter(User $user) {
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPlaner', 'schedulefoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
+  $gen->apply($this->getConf()->getConfString('ucPlaner', 'linkcreate'), $this->getOwnLink('create'));
+  
   return $gen->getHTML();  
 }
 
