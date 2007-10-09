@@ -145,6 +145,7 @@ class WisoadvisorConfiguration extends Configuration
 	 	$this->setConfValue('class', 'Rating', null, $modelPath.'rating'.$phpClassSuffix);
 	 	
 	 	// Model-Klassen v2
+	 	$this->setConfValue('class', 'UserParameter', null, $modelPath.'userparameter'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ScheduleEntry', null, $modelPath.'schedule_entry'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'ScheduleEntryStatistics', null, $modelPath.'schedule_entry_statistics'.$phpClassSuffix);
 	 	$this->setConfValue('class', 'Major', null, $modelPath.'major'.$phpClassSuffix);
@@ -270,6 +271,7 @@ class WisoadvisorConfiguration extends Configuration
     $table['modules'] = $tablePrefix.'modules'; // enthaelt den Musterstundenplan
     $table['modulegroups'] = $tablePrefix.'modulegroups'; // enthaelt die Modulgruppierungen (Pflicht/Schluessel/Kern/Vertiefung/Doppelpflicht)
     $table['schedule'] = $tablePrefix.'schedule'; // enthaelt die Pruefungsplaene (Verlaufsplanung)
+    $table['userparameter'] = $tablePrefix.'userparameter'; // enthaelt benutzerspezifischen Parameter
     
 	 	// import fuer advisor v2
     $tablePrefixImport = 'import__';
@@ -478,6 +480,14 @@ class WisoadvisorConfiguration extends Configuration
       $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromImportByStudies', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['clean']. ' WHERE mark_real > 0 AND alid=? AND stid=? AND semester="?" AND sem_year="?"');      
       $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromScheduleByMajor', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['schedule']. ' WHERE mark_real > 0 AND modid=? AND semester="?" AND sem_year="?"');
       $this->setConfValue('sql', 'scheduleentrystatistics', 'getAvgRealFromImportByMajor', 'SELECT avg(mark_real) AS avg_mark FROM '.$table['clean']. ' WHERE mark_real > 0 AND alid=? AND majid=? AND semester="?" AND sem_year="?"');      
+      
+		 	// benutzerspezifische Parameter
+      $this->setConfValue('sql', 'userparameter', 'getForId', 'SELECT * FROM '.$table['userparameter'].' WHERE upid=?');
+      $this->setConfValue('sql', 'userparameter', 'getForUser', 'SELECT * FROM '.$table['userparameter'].' WHERE uid=?');
+      $this->setConfValue('sql', 'userparameter', 'getOneForUser', 'SELECT * FROM '.$table['userparameter'].' WHERE uid=? AND key1="?" AND key2="?" AND key3="?"');      
+		 	$this->setConfValue('sql', 'userparameter', 'storeUpdate', 'UPDATE '.$table['userparameter'].' SET uid="?", key1="?", key2="?", key3="?", value="?" WHERE upid="?"');
+			$this->setConfValue('sql', 'userparameter', 'storeInsert', 'INSERT INTO '.$table['userparameter'].' (uid, key1, key2, key3, value) VALUES ("?", "?", "?", "?", "?")');
+      
 	 }
 
 	/**
@@ -940,17 +950,21 @@ class WisoadvisorConfiguration extends Configuration
 	  
 		$this->setConfValue('ucPerfOpt', 'linkcreatetemplate', null, 'templates/ucPlaner/linkcreate.tpl'); // use the same as ucPlaner here :-)
 		$this->setConfValue('ucPerfOpt', 'linkchangeusertemplate', null, 'templates/ucPlaner/linkchangeuser.tpl');  // use the same as ucPlaner here :-)
+		$this->setConfValue('ucPerfOpt', 'linkchangeusertemplate', null, 'templates/ucPlaner/linkchangeuser.tpl');  // use the same as ucPlaner here :-)
 		
 		$this->setConfValue('ucPerfOpt', 'entrytemplate', null, 'templates/ucPerfOpt/entry.tpl');
 		$this->setConfValue('ucPerfOpt', 'entryheadtemplate', null, 'templates/ucPerfOpt/entry_head.tpl');
 	  $this->setConfValue('ucPerfOpt', 'entryfoottemplate', null, 'templates/ucPerfOpt/entry_foot.tpl');
+	  
+	  $this->setConfValue('ucPerfOpt', 'configurationtemplate', null, 'templates/ucPerfOpt/configuration.tpl');
 	  
 	  // parameters for template entries to be replaced
 		// schedule header
 	  $this->setConfValue('ucPerfOpt', 'username', null, 'username');		
 		$this->setConfValue('ucPerfOpt', 'studies', null, 'studies');				
 		$this->setConfValue('ucPerfOpt', 'linkcreate', null, 'linkcreate');				
-	  // entry header
+		$this->setConfValue('ucPerfOpt', 'linkconfigure', null, 'linkconfigure');
+		// entry header
 		$this->setConfValue('ucPerfOpt', 'group', null, 'group');		
 		$this->setConfValue('ucPerfOpt', 'mark_group_plan', null, 'mark_group_plan');
 		$this->setConfValue('ucPerfOpt', 'mark_group_real', null, 'mark_group_real');
@@ -982,14 +996,13 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPerfOpt', 'percent_equal', null, 'percent_equal');				
 		$this->setConfValue('ucPerfOpt', 'link_popt', null, 'link_popt');
 		// smileys for total view
-		$this->setConfValue('ucPerfOpt', 'smiley_tolerance', null, '0.5');
 		$this->setConfValue('ucPerfOpt', 'img_good', null, 'sc_smiley_happy.gif');
 		$this->setConfValue('ucPerfOpt', 'img_bad', null, 'sc_smiley_ugh.gif');
-		
-  
-		
-
-		
+		// configuration
+		$this->setConfValue('ucPerfOpt', 'config', 'tolerance', 'popt_tolerance');
+		$this->setConfValue('ucPerfOpt', 'config', 'worstmark', 'popt_worstmark');
+		$this->setConfValue('ucPerfOpt', 'config', 'submit', 'popt_submit');
+				
 	}
 	
 	private function configureUcImporter () {

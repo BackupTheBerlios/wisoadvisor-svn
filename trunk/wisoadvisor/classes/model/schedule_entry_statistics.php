@@ -53,7 +53,7 @@ class ScheduleEntryStatistics {
 	  
 	  // wenn note vorhanden, dann durchschnitt des betreffenden semesters anzeigen, ansonsten den aktuellen durchschnitt
 	  $ret = $hEntrySem;
-	  if ($entry->getMarkReal() > 0) {	    
+	  if ($entry->getMarkReal() <= 0) {	    
 	    $hCurSem->addSemester($entry->getSemesterAngebot()=='both'?-1:-2);
 	    $ret = $hCurSem;
 	  }

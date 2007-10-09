@@ -14,7 +14,6 @@
 </table>
 
 <p>&nbsp;</p>
-<p>&nbsp;</p>
 <h3>Legende</h3>
 <table border="0" >
 <tr>

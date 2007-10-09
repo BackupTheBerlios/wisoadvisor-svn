@@ -658,3 +658,23 @@ CREATE TABLE `advisor__schedule` (
   INDEX advisor__schedule_index_markplan(mark_planned),
   INDEX advisor__schedule_index_markreal(mark_real)  
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1;
+
+
+
+
+
+
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+CREATE TABLE `advisor__userparameter` (
+  `upid` int(10) unsigned NOT NULL auto_increment,
+  `uid` int(10) unsigned NOT NULL,
+  `key1` varchar(64) collate latin1_general_ci default NULL,
+  `key2` varchar(64) collate latin1_general_ci default NULL,
+  `key3` varchar(64) collate latin1_general_ci default NULL,
+  `value` varchar(64) collate latin1_general_ci default NULL,
+  PRIMARY KEY  (`upid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci AUTO_INCREMENT=1 ;

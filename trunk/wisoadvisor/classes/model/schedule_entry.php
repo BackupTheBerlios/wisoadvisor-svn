@@ -64,7 +64,7 @@ class ScheduleEntry extends ModelHelper {
       $result->mod_name = $row['name'];
       $result->sws = $row['sws'];
       $result->ects = $row['ects'];
-      $result->angebot_semester = $row['angebot_semester'];
+      $result->angebot_semester = $row['sem_angebot'];
       $result->default_semester = $row['default_semester'];
       $result->assessment = $row['assessment'];
 		}

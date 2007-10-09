@@ -3,6 +3,13 @@ class ucPerfOpt extends UseCase {
 	
   const PARAMETER_SCHID = 'schid';
   
+	const PARAMETER_TOLERANCE = 'popt_tolerance';
+	const PARAMETER_WORSTMARK = 'popt_worstmark';
+
+	const DEFAULT_TOLERANCE = '0.5';
+	const DEFAULT_WORSTMARK = 'true';
+	
+	
 //Ausführung: Business-Logik
 public function execute()	{
 
@@ -15,9 +22,14 @@ public function execute()	{
 	} else {
 
 	  $this->setOutputType(USECASE_HTML);
+	  
 	  switch ($this->getStep()) {
 			
-			case 'details':
+	    case 'configure':
+	      $this->showConfiguration();
+	      break;
+	      
+	    case 'details':
 				$schid = $this->getParam()->getParameter(ucPerfOpt::PARAMETER_SCHID);
 				if ($schid) {
    				$this->showDetails($schid);
@@ -27,12 +39,75 @@ public function execute()	{
         break;
       
 			default:
-        $this->showScorecard();        
+	      $this->saveParams();
+			  $this->showScorecard();        
 	  }
 
     $ret = true;
 	}
 	return $ret;
+}
+
+private function saveParams() {
+  
+  $uid = $this->getSess()->getUid();
+  
+  $tol = $this->getParam()->getParameter(ucPerfOpt::PARAMETER_TOLERANCE);
+  if ($tol) {
+    $paramTolerance = UserParameter::getOneForUser($this, $uid, 'popt', 'param', 'tolerance');
+    if (! $paramTolerance) {
+      $paramTolerance = UserParameter::getNew($this);
+      $paramTolerance->setUserId($uid);
+      $paramTolerance->setKeys('popt', 'param', 'tolerance');
+    }
+    $tol = floatval(str_replace(',', '.', $tol));
+    $paramTolerance->setValue($tol);
+    $paramTolerance->storeInDb($this); 
+  }
+  
+  
+  $wrt = $this->getParam()->getParameter(ucPerfOpt::PARAMETER_WORSTMARK);
+  if ($wrt) {
+    $paramWorstMark = UserParameter::getOneForUser($this, $this->getSess()->getUid(), 'popt', 'param', 'worstmark');
+    if (! $paramWorstMark) {
+      $paramWorstMark = UserParameter::getNew($this);
+      $paramWorstMark->setUserId($uid);
+      $paramWorstMark->setKeys('popt', 'param', 'worstmark');
+    }
+    $paramWorstMark->setValue($wrt);
+    $paramWorstMark->storeInDb($this);
+  }
+    
+}
+
+private function showConfiguration() {
+  
+  $user = User::getForId($this, $this->getSess()->getUid());
+  
+  $paramTolerance = UserParameter::getOneForUser($this, $user->getId(), 'popt', 'param', 'tolerance');
+  $paramWorstMark = UserParameter::getOneForUser($this, $user->getId(), 'popt', 'param', 'worstmark');
+  
+  $valTolerance = ($paramTolerance ? $paramTolerance->getValue() : ucPerfOpt::DEFAULT_TOLERANCE);
+  $valWorstMark = ($paramWorstMark ? $paramWorstMark->getValue() : ucPerfOpt::DEFAULT_WORSTMARK);
+  
+  $generator = new HtmlGenerator($this->getConf()->getConfString('ucPerfOpt', 'configurationtemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
+	$formGen = new HtmlFormGenerator();
+	
+	$generator->apply($this->getConf()->getConfString('ucPerfOpt', 'config', 'tolerance'), $formGen->getInput(ucPerfOpt::PARAMETER_TOLERANCE, $valTolerance));
+
+	$cboWorstMark = $formGen->getDropDownFromArray(ucPerfOpt::PARAMETER_WORSTMARK, 
+	                                               Array('true' => 'Schlechteste Note im Bereich',
+	                                                     'false' => 'Durchschnittsnote'),
+	                                               $valWorstMark);
+	$generator->apply($this->getConf()->getConfString('ucPerfOpt', 'config', 'worstmark'), $cboWorstMark);
+
+	
+	$generator->apply($this->getConf()->getConfString('ucPerfOpt', 'config', 'submit'), $formGen->getSubmitButton('surveyor_next_button', 'Speichern'));
+	
+	$output = $formGen->getForm('poptconfigform', $this->getOwnLink(), $generator->getHTML());
+		
+	$this->appendOutput($output);
+
 }
 
 private function showDetails($schid) {
@@ -56,7 +131,36 @@ private function showDetails($schid) {
  
  /* *** start graph => wird direkt hier erzeugt, wegen des HTML-Tags <img ...> (Graph wird on-the-fly erzeugt) *** */
   $realMarksArray = ScheduleEntryStatistics::getCntReal($this, $entry, $aggLevel);
-  if ($realMarksArray) {
+
+  /* test data 
+  $realMarksArray = Array(Array('mark_real' => '1.0',
+                                'cnt_mark'  => '3'),
+                          Array('mark_real' => '1.3',
+                                'cnt_mark'  => '8'),
+                          Array('mark_real' => '1.7',
+                                'cnt_mark'  => '16'),
+                          Array('mark_real' => '2.0',
+                                'cnt_mark'  => '9'),
+                          Array('mark_real' => '2.3',
+                                'cnt_mark'  => '17'),
+                          Array('mark_real' => '2.7',
+                                'cnt_mark'  => '12'),
+                          Array('mark_real' => '3.0',
+                                'cnt_mark'  => '8'),
+                          Array('mark_real' => '3.3',
+                                'cnt_mark'  => '8'),
+                          Array('mark_real' => '3.7',
+                                'cnt_mark'  => '2'),
+                          Array('mark_real' => '4.0',
+                                'cnt_mark'  => '21'),
+                          Array('mark_real' => '4.3',
+                                'cnt_mark'  => '8'),                                
+                          Array('mark_real' => '4.7',
+                                'cnt_mark'  => '2'),                                
+                          Array('mark_real' => '5.0',
+                                'cnt_mark'  => '5'));
+    */
+    if ($realMarksArray) {
     
 	  // necessary init, because graph won't show it otherwise
 	  $xArray = array("1.0", "1.3", "1.7", "2.0", "2.3", "2.7", "3.0", "3.3", "3.7", "4.0", "4.3", "4.7", "5.0");  
@@ -84,6 +188,7 @@ private function showDetails($schid) {
 	  $_SESSION['daten']['y'] = $yArray; 
 	  $_SESSION['title'] = '';
 	  $_SESSION['daten']['x'] = $xArray;		  
+	  
 	  $this->appendOutput('<p><img src="graph.php?' .time(). '" /></p>');
     
   }	  
@@ -149,7 +254,8 @@ private function showScorecard() {
 	      } else {
 	        $htmlForScorecard .= $this->printGroupFooter(); // footer for single group
 	      }
-	      $htmlForScorecard .= $this->printGroupHeader($myentry->getMgrpId(), 
+	      $htmlForScorecard .= $this->printGroupHeader($user,
+	                                                   $myentry->getMgrpId(), 
 	                                                   $hMarksPlanGroupArray[$myentry->getMgrpId()], 
 	                                                   $hMarksRealGroupArray[$myentry->getMgrpId()]);
 	    }
@@ -220,22 +326,26 @@ private function printScorecardHeader(User $user) {
 	$gen = new HtmlGenerator( $this->getConf()->getConfString('ucPerfOpt', 'htmltemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'username'), $user->getUserName());
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'studies'), $user->getStudies());
-  return $gen->getHTML();
+	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'linkconfigure'), $this->getOwnLink('configure'));
+	return $gen->getHTML();
 }
 
 private function printScorecardFooter(User $user, $hMarksPlanTotalArray, $hMarksRealTotalArray) {
 
+  $paramTolerance = UserParameter::getOneForUser($this, $user->getId(), 'popt', 'param', 'tolerance');
+  $valTolerance = ($paramTolerance ? $paramTolerance->getValue() : ucPerfOpt::DEFAULT_TOLERANCE);
+  
   $hMarkPlan = ($hMarksPlanTotalArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarksPlanTotalArray['mark']/$hMarksPlanTotalArray['ects']), 0, 3) : '&nbsp;';
   $hMarkReal = ($hMarksRealTotalArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarksRealTotalArray['mark']/$hMarksRealTotalArray['ects']), 0, 3) : '&nbsp;';
   
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPerfOpt', 'htmlfoottemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));  
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_total_plan'), $hMarkPlan);
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_total_real'), $hMarkReal);
-  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley_tolerance_text'), $this->getConf()->getConfString('ucPerfOpt', 'smiley_tolerance'));
+  
+	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley_tolerance_text'), $valTolerance);
 	
-	// $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley'), $this->getScorecardIcon($hMarkReal, 48));
   $smiley = $this->getConf()->getConfString('ucPerfOpt', 'img_good');
-  if ($hMarkPlan + $this->getConf()->getConfString('ucPerfOpt', 'smiley_tolerance') < $hMarkReal) {
+  if ($hMarkPlan + $valTolerance < $hMarkReal) {
     $smiley = $this->getConf()->getConfString('ucPerfOpt', 'img_bad');
   }
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley_total'), $smiley);
@@ -257,14 +367,20 @@ private function printEmptyScorecard(User $user) {
   return $gen->getHTML();  
 }
 
-private function printGroupHeader($mgrpid, $hMarkPlanArray, $hMarkRealArray) {
+private function printGroupHeader($user, $mgrpid, $hMarkPlanArray, $hMarkRealArray) {
+  
+  $paramWorstMark = UserParameter::getOneForUser($this, $user->getId(), 'popt', 'param', 'worstmark');
+  $valWorstMark = ($paramWorstMark ? $paramWorstMark->getValue() : ucPerfOpt::DEFAULT_WORSTMARK);
   
   $hGroup = ModuleGroup::getForId($this, $mgrpid);
   $hMarkPlan = ($hMarkPlanArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarkPlanArray['mark']/$hMarkPlanArray['ects']), 0, 3) : '&nbsp;';
   $hMarkReal = ($hMarkRealArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarkRealArray['mark']/$hMarkRealArray['ects']), 0, 3) : '&nbsp;';
   
-  //$hImageForGroup = $hMarkReal;
-  $hImageForGroup = substr(sprintf("%1.11f", $hMarkRealArray['mark_max']), 0, 3); 
+  if ($valWorstMark == 'true') {
+    $hImageForGroup = substr(sprintf("%1.11f", $hMarkRealArray['mark_max']), 0, 3); 
+  } else {
+    $hImageForGroup = $hMarkReal;
+  }
   
   $gen = new HtmlGenerator($this->getConf()->getConfString('ucPerfOpt', 'entryheadtemplate'), $this->getConf()->getConfString('template', 'indicator', 'pre'), $this->getConf()->getConfString('template', 'indicator', 'after'));
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'group'), $hGroup->getName());

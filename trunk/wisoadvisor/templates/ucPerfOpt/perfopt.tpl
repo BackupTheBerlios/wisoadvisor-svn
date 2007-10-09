@@ -54,4 +54,4 @@ var isIEDiv = false;
 <h2>Noten&uuml;bersicht für ###:###username###:###<br/>###:###studies###:###</h2>
 <p>In dieser &Uuml;bersicht findest Du Deine Noten, aggregiert zu den einzelnen Studienbereichen. Klicke auf die Bereiche,
 um Details zu den Bereichen anzuzeigen. Details zu den einzelnen Pr&uuml;fungen erh&auml;ltst Du, wenn Du anschlie&szlig;end 
-auf die Pr&uuml;fung klickst.</p>
+auf die Pr&uuml;fung klickst. Die Anzeige personalisieren kannst Du <a href="###:###linkconfigure###:###">hier</a>.</p>
