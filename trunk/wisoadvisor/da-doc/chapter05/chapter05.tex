@@ -1,15 +1,59 @@
 \section{Studienverlaufsplanung}
 \label{sec:Studienverlaufsplanung}
 
-\subsection{Konzept und Prototyp}
+\subsection{Konzeption und Prototyp}
 \subsubsection{Konzeption}
-Das vorliegende Konzept zur Studienverlaufsplanung (SVP) \abbrev{SVP}{Studienverlaufsplanung} entstammt der dieser Arbeit vorangegangenen Diplomarbeit zu Bildungscontrolling und Bildungsevaluation \cite{Berchtold:2007}.
+\label{sec:PlanerKonzeption}
+Das vorliegende Konzept zur Studienverlaufsplanung (SVP) \abbrev{SVP}{Studienverlaufsplanung} entstammt einer dieser Arbeit vorangegangenen Diplomarbeit aus dem Themenkomplex Bildungsevaluation und Bildungscontrolling \cite{Berchtold:2007}. Der Entwicklung des dort dokumentierten Rahmenkonzepts und des zugehörigen Prototypen gingen mehrere Projektbesprechungen voraus, an denen neben Mitarbeitern des Lehrstuhls für Wirtschaftsinformatik III auch der Autor der vorliegenden Arbeit beteiligt war.
 
-Der Autor beruft sich bei seiner Konzeption primär auf ...
+~
 
-\subsubsection{Prototyp}
+Der Zweck der SVP ist es, den Studenten von Beginn an beim Planen seines Studienverlaufs zu unterstützen und ihm eine ganzheitliche Planung seines Studiums zu ermöglichen. Die Studienverläufe der Bachelor-Studiengänge sind zwar einerseits weitgehend festgelegt, und tatsächlich beinhaltet bereits die Prüfungsordnung Pläne, wie die zu absolvierenden Module auf die einzelnen Fachsemester verteilt werden sollten (vgl. FAU 2007, S. 25-32). Aber andererseits wurden zahlreiche Regularien im Vergleich zu den Diplomstudiengängen komplett neu geschaffen, wie z. B. die unterschiedliche Anzahl erlaubter Wiederholungen von Prüfungen in Assessment- und Bachelor-Phase oder die maximale Anzahl von Semestern, um die die Regelstudienzeit überschritten werden darf. 
 
-\subsection{Anforderungen an die Implementierung}
+~
 
-\subsection{Umsetzung des Konzepts im WiSo@visor}
+Als wesentliche Bestandteile der SVP werden folgende Punkte gesehen \cite<vgl.>[S. 70-74]{Berchtold:2007}:
+\begin{itemize}
+	\item \textbf{Erstellung eines Prüfungsplans:} Der Sinn eines Prüfungsplanes besteht darin, die Arbeitsbelastung möglichst gleichmäßig auf die Fachsemester zu verteilen. Durch die Musterstundenpläne der Prüfungsordnung und die Zyklen der Bachelor-Module ist dieser Plan zwar bereits grob vorgegeben, es soll dem einzelnen Studenten aber dennoch möglich sein, seinen Plan zu modifizieren.
+	\item \textbf{Erfassung von Erwartungswerten:} Mit der Eingabe eines Erwartungswertes in der SVP soll sich der Student Ziele für die einzelnen Module setzen. Ein Erwartungswert ist also eine geplante Note. Als Orientierungshilfe sollen dem Studenten pro Modul Durschnittswerte vergangener Erwartungswerte und tatsächlicher Prüfungsergebnisse angezeigt werden. Aus pädagogischer Sicht ist dieser Erwartungswert sowohl als transferfördernde Maßnahme als auch als Motivationshilfe zu verstehen.
+	\item \textbf{Prognose von Studiendauer und -ende:} Gerade vor dem Hintergrund der in \ref{sec:StudienverlaufAnDerWiSo} erwähnten maximalen Zeiträume, um die der Bachlor-Student Assessment-Phase bzw. Regelstudienzeit übertreten darf, erscheint eine derartige Prognose immens wichtig. So soll die Prognose den Studenten dazu motivieren, sein Studium möglichst innerhalb der Regelstudienzeit abzuschließen.
+	\item \textbf{Interaktive Hinweise:} Das System soll den Studenten über seine aktuelle Planung und deren Konsequenzen auf dem Laufenden halten. Dieser Aspekt des Konzeptes ist allerdings primär eine Konsequenz der prototypischen Implementierung (siehe \ref{sec:PlanerPrototyp}).
+\end{itemize}
 
+\subsubsection{Prototypische Implementierung}
+\label{sec:PlanerPrototyp}
+
+Der Prototyp zur SVP ist eine reine Desktop-Applikation und wurde als Formular in Microsoft Access entwickelt (siehe Abbildung \ref{fig:berchtold-svp}). Der Benutzer sieht sich anfangs einem komplett leeren Prüfugsplan gegenüber und muss dann nach Auswahl von Semester, Matrikelnummer und Prüfung jede Prüfung einzeln einplanen. Das Auswahlfeld zur Auswahl einer Prüfung zeigt hier pauschal alle im System vorhandenen Prüfungen an, also auch solche, die im Studiengang des Benutzers eigentlich nicht vorgesehen sind, sowie bereits eingeplante Prüfungen.
+
+Nach dem Einplanen einer Prüfung wird der Prüfungsplan in der Mitte der Maske aktualisiert; diese Liste bezieht sich dabei stets auf das zuvor ausgewählte Semester. Direkt in diese Liste kann der Benutzer seine Erwartungswerte eingeben. Gleichzeitig mit Aktualisierung des Prüfungsplans werden die Status- und Prognoseinformationen im rechten oberen Bereich aktualisiert. 
+
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=1.0\textwidth]{chapter05/berchtold-svp.png}
+	\caption{Prototyp der Studienverlaufsplanung}
+	\label{fig:berchtold-svp}
+	\cite{Berchtold:2007}
+\end{figure}
+
+Beim Beeenden der Dialogmaske wird eine Konsistenzprüfung durchgeführt; diese prüft den Prüfungsplan auf Vollständigkeit und Korrektheit und mahnt den Benutzer ggf. an, die Planung fortzusetzen. 
+
+[...]
+
+\subsubsection{Weitere Anforderungen an das Produktivsystem}
+\label{sec:PlanerAnforderungen}
+Neben den in \ref{sec:PlanerKonzeption} beschriebenen Konzepten und den existierenden Ansprüchen an den WiSo@visor \cite<vgl.>[S. 21-40]{Strecker:2006} soll die produktiv einsetzbare SVP folgende Anforderungen berücksichtigen:
+
+\begin{itemize}
+	\item \textbf{Unabhängigkeit von der Quelle der Notendaten:} In den Projektbesprechungen stellte sich heraus, dass es eine entscheidende Herausforderung der SVP (und insb. des in \ref{sec:PerformanceOptimizer} beschriebenen "`Performance Optimizer"') sein würde, die den Statistiken zu Grunde liegenden Notendaten zu beschaffen. Die technische Idealvorstellung, nämlich das gesamte SMS direkt oder bspw.\abbrev{bspw.}{beispielsweise} mittels Web Services an die Datenbank des Prüfungsamtes zu koppeln, ist aus Datenschutzgründen nicht zu rechtfertigen. Das System muss also zum einen eine "`Notfalllösung"' beinhalten, in der sich die Statistiken nur auf die Teilnehmer des Systems beziehen. Zum anderen muss aber berücksichtigt werden, dass evtl. doch noch externe Daten integriert werden können.	
+	\item \textbf{Verbesserte Usability:} Wie in \ref{sec:PlanerPrototyp} erwähnt, ist es im Prototypen der SVP nötig, jede verfügbare Prüfung manuell auszuwählen und anschließend einzuplanen. Erst danach erhält der Benutzer Rückmeldungen, ob z. B. die gewählte Prüfung für seinen Studiengang (respektive Schwerpunkt) zulässig ist, ob sie ggf. bereits eingeplant wurde, etc. Eine wesentliche Erleichterung für den Benutzer wäre also, das System ausgehend von den Musterstundenplänen den \textbf{kompletten Studienverlauf anlegen} zu lassen, sodass der Benutzer weder Prüfungen einzuplanen vergisst, noch sich darüber wundert, warum er eine Prüfung nicht einplanen darf, die er vom System zur Auswahl bekommt. Im Grunde wird dadurch auch die Konsistenzprüfung, die der Prototyp durchführt, wenn der Benutzer den Dialog verlässt, überflüssig. Ferner soll die Übersichtlichkeit der SVP dadurch erhöht werden, dass die Anzeige nicht auf ein Semester begrenzt werden soll; stattdessen soll sondern der gesamten Studienverlauf \textbf{auf einer Seite} abgebildet werden.	
+\end{itemize}
+
+\subsection{Integration des Konzepts in den WiSo@visor}
+
+\subsection{Ausblick und Erweiterungsmöglichkeiten}
+
+[... => BLAH über PA-DATEN]
+
+Zudem wäre denkbar, dem Studenten die Möglichkeit zu bieten, für eine Prüfung mehrere Versuche einplanen zu lassen. Unter dem Gesichtspunkt, dem Studenten eine langfristige und realistische strategische Planung zu ermöglichen, erscheint dies durchaus sinnvoll. Aus pädagogischer Sicht scheint nach Auffassung des Autors dieser Arbeit eine solche Option jedoch fragwürdig, da eine derartige Funktion den Studenten tendenziell demotivieren und somit das Gegenteil des ursprünglichen Ziels der SVP erreichen könnte.
+
+Aus statistischer Sicht wäre sinnvoll, die aggregierten Module (z. B. Sprachen und Vertiefungsbereiche) in die tatsächlichen Lehrveranstaltungen aufzutrennen. Langfristig würde dies allerdings bedeuten, das vollständige Modulhandbuch der Bachelor-Studiengänge im System abzubilden, was einen deutlichen Mehraufwand hinsichtlich der Datenpflege  zur Folge hätte.

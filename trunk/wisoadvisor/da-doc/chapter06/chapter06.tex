@@ -1,15 +1,44 @@
 \section{Performance Optimizer}
 \label{sec:PerformanceOptimizer}
 
-\subsection{Konzept und Prototyp}
+\subsection{Konzeption und Prototyp}
 \subsubsection{Konzeption}
-Das vorliegende Konzept zum Performance Optimizer (POPT) \abbrev{POPT}{Performance Optimizer} \cite{Berchtold:2007}.
+Das vorliegende Konzept zum "`Performance Optimizer"' (POPT) \abbrev{POPT}{Performance Optimizer} entstammt ebenfalls der bereits zuvor erwähnten Diplomarbeit \cite{Berchtold:2007}.
 
-Der Autor beruft sich bei seiner Konzeption primär auf ...
+Dem Konzept liegt die betriebswirtschaftliche Theorie zum Controlling-Instrument der "`Balanced Scorecard"' (BSC)\abbrev{BSC}{Balanced Scorecard} und deren Implementierung in SAP Strategic Enterprise Management zu Grunde \cite<vgl. hierzu>[S. 13-36]{MertensMeier:2005}. 
 
-\subsubsection{Prototyp}
+Abbildung \ref{fig:sap_bsc_mertensmeier2005} zeigt exemplarisch eine Balanced Scorecard, auf der die vier traditionellen Perspektiven (hier z. B. "`Financial Perspective"') und die zugehörigen Strategieelelemente (z. B. "`Become no. one supplier in installed base"') dargestellt werden. Unterhalb des Strategieelemente befinden sich schließlich die Kennzahlen (z. B. "`Market Rank Software"'). 
 
-\subsection{Anforderungen an die Implementierung}
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.66\textwidth]{chapter06/sap_bsc_mertensmeier2005.png}
+	\caption{Balanced Scorecard in SAP Strategic Enterprise Management}
+	\label{fig:sap_bsc_mertensmeier2005}
+	\cite{MertensMeier:2005}
+\end{figure}
+
+Das Auffälligste an dieser Implementierung von SAP ist, dass die einzelnen Aggregationsebenen durch Icons farblich gekennzeichnet sind (das Icon einer übergeordneten Ebene entspricht dabei i. d. R. \abbrev{i. d. R. }{in der Regel} dem des schlechtesten ihr untergeordneten Wertes). Neben dieser Übersicht bietet die SAP-Implementierung auch eine sog. Analysesicht, auf der sämtliche Perspektiven, Strategielemente und Kennzahlen in einer Baumstruktur dargestellt werden \cite<siehe>[S. 18]{MertensMeier:2005}.
+
+Eben diese multiperspektivische, auf mehreren Aggregationsebenen angesiedelte und optisch ansprechende Darstellung von Leistungswerten bildet die Grundlage des Konzepts zum "`Performance Optimizer"': Dem Studenten sollen in einer BSC, deren einzelne Perspektiven durch die Studienbereiche seines Studiengans (vgl. \ref{sec:StudienverlaufAnDerWiSo}) repräsentiert werden, Gesamt-, Teil- und Einzelnoten visualisiert werden.
+
+Als weitere Bestandteile des POPT wurden festgelegt \cite<vgl.>[S. 101-105]{Berchtold:2007}:
+\begin{itemize}
+  \item \textbf{Simulation:} Zusätzlich zur Darstellung der tatsächlichen Noten soll der Student die Möglichkeit bekommen, die seiner Meinung idealen und schlimmsten Ergebnisse seiner Prüfungen anzugeben, um so deren Auswirkungen auf sein Notengefüge sehen zu können.
+  \item \textbf{Benchmarking:} Mit einer Benchmarking-Komponente wäre der Student in der Lage, seine eigene Position in der gesamten Notenstruktur einer Prüfung auszumachen. Derartige Informationen wurden bisher nur von einzelnen Lehrstühlen der WiSo bereitgestellt; die Veröffentlichung von Prüfungsergebnissen -- sei es als Aushang am Schwarzen Brett oder als Download -- wurde jedoch im Sommersemester 2007 durch das zuständige Prüfungsamt unterbunden. Eine Benchmarking-Komponente im Rahmen des POPT wäre also nicht nur ein adäquater Ersatz, sondern auch einheitlich für alle Prüfungen verfügbar.
+  \item \textbf{Identifikation von Strukturbrüchen im Leistungsprofil:} Der Grundgedanke hinter diesem Aspekt ist, nicht nur ex post "`Ausrutscher"' im Notengefüge zu identifizieren, sondern aus solchen vereinzelten Einbrüchen Tendenzen und Warnungen für künftige Prüfungen abzuleiten.
+  \item \textbf{Abgabe von Feedback:} Insb. \abbrev{insb.}{insbesondere} im Zusammenhang mit den zuvor genannten Strukturbrüchen wäre es notwendig, vom Studenten ein transferförderndes Feedback abgeben zu lassen, mit dem er eine schlechte Prüfungsleistung begründen muss.
+  \item \textbf{Personalisierung durch individuelles Setup:} Dieser Aspekt betrifft primär die Visualisierung der Gesamt- und Teilergebnisse; der einzelne Benutzer soll selbst entscheiden können, wie ihm seine Noten im Einzelnen dargestellt werden. 
+\end{itemize}
+
+\subsubsection{Prototypische Implementierung}
+
+\subsubsection{Weitere Anforderungen an das Produktivsystem}
+
+Generell problematisch an der Sichtweise des "`Performance Optimizer"' als Balanced Scorecard ist in Bezug auf die studentische Situation, dass die BSC eine Ausgewogenheit impliziert, d. h. eine Gleichberechtigung ihrer Dimensionen. Aus der Verteilung der ECTS-Punkte auf die einzelnen Studienbereiche der Bachelor-Studiengänge wird jedoch ersichtlich, dass sich diese dramatisch in ihrer Gewichtung unterscheiden. Das Adjektiv "`balanced"' ist somit nicht angebracht. Letztlich handelt es sich beim POPT primär "`nur"' um eine um Durchschnittswerte und Häufigkeitsverteilungen ergänzte \textbf{Notenübersicht} \cite<zur Problematik mangelnder sprachlicher Präzision siehe>[S. 34-39]{Mertens:2005}.
+
+Problematisch an der Simulationskomponente scheint, dass dem Studenten zusätzlich zum bereits im Prüfungsplan abgebenen Erwartungswert (vgl. \ref{sec:PlanerKonzeption}) jetzt ... ***
+
 
 \subsection{Umsetzung des Konzepts im WiSo@visor}
 
+\subsection{Ausblick und Erweiterungsmöglichkeiten}

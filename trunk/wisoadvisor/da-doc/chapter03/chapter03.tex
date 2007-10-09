@@ -4,6 +4,58 @@
 \subsection{Entstehung und Evolution}
 
 \subsection{Einordnung in das Verständnis dieser Arbeit}
+Wie in \ref{sec:ControllingKonzept} erläutert, besteht die erste Säule des Controlling-Konzeptes aus der Studieneignungsberatung. Der angehende Student einerseits inhaltlichen Einblicke in das Studium, andererseits ermittelt ihm das System auf der Grundlage seiner Antworten Tendenzen, für welche Studienrichtungen er möglicherweise besonders geeignet wäre.
+
+[...]
 
 \subsection{Technologische Aspekte}
 
+\subsubsection{Entwicklungsumgebung}
+
+Die folgenden Ausführungen beziehen sich auf \cite[S. 52-56]{Strecker:2006}.
+
+Ein genereller Anspruch an die Software war, webbasierte Eignungsberatung auf Basis von einfacher HTML-Technologie zu betreiben. STRECKER stellt in einem Vergleich existierender ähnlich gelagerter Beratungstests fest, dass diese fast ausschließlich das weit komplexere Flash einsetzen, was sich häufig negativ auf die Bedienbarkeit auswirkt \cite[S. 43-45]{Strecker:2006}. 
+
+So kann man den WiSo@visor als eine beinahe "`klassische"' LAMP-Applikation bezeichnen (LAMP für die Kombination Linux-Apache-mySQL-PHP): 
+
+Der WiSo@visor wurde mit der Skriptsprache \textbf{PHP}\abbrev{PHP}{PHP: Hypertext Processor} in der Version 5 entwickelt. Diese Sprache hat nicht nur den Vorteil, kostenlos zu sein, sondern ist vor allem plattformunabhängig einsetzbar; es existieren Plugins für alle gängigen Webserver. Bereits in sehr frühen Versionen war es mit PHP ohne großen Aufwand möglich, auf verschiedene Datenbanksysteme zuzugreifen. Die jüngeren Versionen von PHP forcieren vor allem objektorientierte Ansätze.
+
+Sowohl in der Entwicklungs- als auch in derzeitigen Produktivumgebung wird der \textbf{Apache-Webserver} eingesetzt, der mit über 50\% Marktanteil nach wie vor der am häufigsten eingesetzte Webserver ist \cite{netcraft:2007}.
+
+Als Datenbanksystem fungiert derzeit \textbf{mySQL}; die Datenbankschicht jedoch so gestaltet, dass sie ohne großen Aufwand auf die Open-Source-Datenbank Firebird konvertiert werden kann. Fortschrittlichere Konzepte, wie etwa ACID-konforme Transaktionen, werden vom WiSo@visor -- einschließlich seines Frameworks (siehe hierzu \ref{sec:AdvisorArchitektur}) -- nicht genutzt.
+
+Zum Erstellen von PDF-Dokumenten\abbrev{PDF}{Portable Document Format} und zum Versenden von E-Mails werden in die Software zusätzlich Bibliotheken von Drittanbietern einbezogen.
+
+\subsubsection{Systemarchitektur}
+\label{sec:AdvisorArchitektur}
+
+Die folgenden Ausführungen beziehen sich auf \cite[S. 56-77]{Strecker:2006}.
+
+Der WiSo@visor verfolgt ein weitgehend objektorientiertes Design. Dabei wird getrennt zwischen Framework-, Model- und Use-Case-Klassen (siehe Abbildung \ref{fig:adv-arch}).
+
+\begin{figure}[h]
+	\centering
+		\includegraphics[width=0.5\textwidth]{chapter03/adv-arch.png}
+	\caption{Architektur des WiSo@visor}
+	\label{fig:adv-arch}
+	\cite<eigene Darstellung, in Anlehnung an>{Strecker:2006}
+\end{figure}
+
+Das \textbf{Framework} des WiSo@visor übernimmt dabei die grundlegenden Aufgaben der Applikation. Darunter fallen die zentrale Konfiguration, die Datenbankanbindung, die Benutzer- und Sitzungsverwaltung sowie Generatoren zum Erzeugen von HTML-Code über Templates. Daneben stellt das Framework einen zentralen Einstiegspunkt in Form der Datei "`index.php"' bereit, die je nach übergebenem Parameter den eigentlich Use-Case instanziiert. 
+
+Die \textbf{Model-Klassen} abstrahieren die Datenbankzugriffe. Für jede Tabelle in der Datenbank existiert eine Model-Klasse, die die üblichen Zugriffsmöglichkeiten bereitstellt (Select/Insert/Update/Delete). Über Getter- und Setter-Methoden kann auf die einzelnen Attribute zugegriffen werden.
+
+Die \textbf{Use-Case-Klassen} bilden die eigentliche Anwendungslogik. Use-Cases lassen sich für verschiedene Ausgabearten definieren, so etwa für die Ausgabe von Grafikdateien oder PDF-Dokumente. Die am häufigsten vorkommende Form von Use-Cases sind allerdings HTML-Ausgaben. 
+
+~
+
+Der gesamte Ablauf der dem WiSo@visor zu Grunde liegenden Logik gestaltet sich wie folgt:
+
+\begin{enumerate}
+	\item Der Anwender fordert eine Seite an, z. B. über den Menüpunkt "`Deine Nutzerdaten"' (exemplarische URL\abbrev{URL}{Unified Resource Locator}: http://server.de/wisoadvisor/index.php?action=changeuserdata).
+	\item Das Framework wertet den Parameter "`action"' aus und instanziiert den zum Wert dieses Parameters gehörigen Use-Case "`ucChangeUserData"'. Diese Zuordnung erfolgt im Mapping-Abschnitt des zentralen Konfigurationsobjektes.
+	\item Das Framework ruft die Methode "`execute"' des Use-Case-Objektes auf.
+	\item Das Use-Case-Objekt prüft den evtl.\abbrev{evtl.}{eventuell} übergebenen Parameter "`step"' und ruft dann die zum Handlungsschritt gehörige Methode auf.
+	\item Diese Methode definiert die Art der Ausgabe; im Normalfall handelt es sich um HTML-Ausgaben.
+	\item Bei einer HTML-Ausgabe befüllt die Methode nun mit Hilfe der Generator-Klassen des Frameworks eine Template-Datei; die Werte stammen im Normalfall aus der Datenbank und werden über die Model-Klassen geladen.
+\end{enumerate}
