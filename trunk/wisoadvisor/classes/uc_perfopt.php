@@ -413,6 +413,16 @@ private function printGroupEntry(User $user, ScheduleEntry $myentry) {
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mod_name'), $hName);
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'ects'), $myentry->getEcts());
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'try'), $myentry->getTry());
+
+  // farben fuer abweichungen plannote <-> echte note
+  if ($myentry->getMarkReal() > 0) {
+	  $color=$this->getConf()->getConfString('ucPerfOpt', 'color', 'ok');
+	  if ($myentry->getMarkReal() > $myentry->getMarkPlanned()) {
+	    $color=$this->getConf()->getConfString('ucPerfOpt', 'color', 'not_ok');
+	  }
+  }
+  
+  $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_color'), $color);  
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_plan'), ($myentry->getMarkPlanned() > 0 ? sprintf("%1.1f", $myentry->getMarkPlanned()) : ''));
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_plan_avg'), ($avgMarkPlan > 0 ? sprintf("%1.1f", $avgMarkPlan) : ''));
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_real'), ($myentry->getMarkReal() > 0 ? sprintf("%1.1f", $myentry->getMarkReal()) : ''));

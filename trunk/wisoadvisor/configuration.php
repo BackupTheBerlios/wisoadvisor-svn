@@ -976,11 +976,17 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPerfOpt', 'try', null, 'try');		
 		$this->setConfValue('ucPerfOpt', 'mark_plan', null, 'mark_plan');
 	  $this->setConfValue('ucPerfOpt', 'mark_real', null, 'mark_real');
+	  $this->setConfValue('ucPerfOpt', 'mark_color', null, 'mark_color');
 	  $this->setConfValue('ucPerfOpt', 'mark_plan_avg', null, 'mark_plan_avg');
 	  $this->setConfValue('ucPerfOpt', 'mark_real_avg', null, 'mark_real_avg');
 	  $this->setConfValue('ucPerfOpt', 'smiley', null, 'smiley');
 	  $this->setConfValue('ucPerfOpt', 'smiley_total', null, 'smiley_total');
 	  $this->setConfValue('ucPerfOpt', 'smiley_tolerance_text', null, 'smiley_tolerance_text');
+
+	  $this->setConfValue('ucPerfOpt', 'color', 'ok', '#A9FDC2');
+	  $this->setConfValue('ucPerfOpt', 'color', 'not_ok', '#FF5D5D');
+	  
+	  
 	  // detail view
     $this->setConfValue('ucPerfOpt', 'schid', null, 'schid');				
     $this->setConfValue('ucPerfOpt', 'matnr', null, 'matnr');				
