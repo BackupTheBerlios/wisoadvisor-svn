@@ -14,6 +14,7 @@
 	  <p>&nbsp;{HOME}<br/>
 	     &nbsp;&nbsp;<a class="menulink" href="?page=Lehrveranstaltungen">Lehrveranstaltungen</a><br />
 	     &nbsp;&nbsp;<a class="menulink" href="?page=Einrichtungen">Einrichtungen</a><br />
+	     &nbsp;&nbsp;<a class="menulink" href="?page=Leben">Studentisches Leben</a><br />
 	   </p>
 		<div id="common_links">
 			<a href="../index.php" class="menulink"><img src="../grafik/pfeil.gif"/>&nbsp;Startseite</a><br/>
