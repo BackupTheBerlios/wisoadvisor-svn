@@ -22,28 +22,18 @@
 
   <td><img src="grafik/leer.gif" width="10"></td>
 
-  <td><img src="grafik/sc_stage4_22.png" /></td>
-  <td>bis Note 4,0</td>
-
-  <td><img src="grafik/leer.gif" width="10"></td>
-
-  <td><img src="grafik/sc_smiley_happy_22.gif" /></td>
-  <td>Note besser oder gleich gut wie geplant</td>
+  <td colspan="5">###:###worstmark_text###:###</td>
 
 </tr>
+
 <tr>
   <td><img src="grafik/sc_stage2_22.png" /></td>
   <td>bis Note 2,0</td>
 
   <td><img src="grafik/leer.gif" width="0"></td>
 
-  <td><img src="grafik/sc_stage5_22.png" /></td>
-  <td>schlechter als 4,0</td>
-
-  <td><img src="grafik/leer.gif" width="10"></td>
-
-  <td><img src="grafik/sc_smiley_ugh_22.gif" /></td>
-  <td>Note um mehr als ###:###smiley_tolerance_text###:### schlechter als geplant</td>
+  <td><img src="grafik/sc_smiley_happy_22.gif" /></td>
+  <td>Gesamtnote besser oder gleich gut wie geplant</td>
 
 </tr>
 <tr>
@@ -53,6 +43,26 @@
 
   <td><img src="grafik/leer.gif" width="10"></td>
 
+  <td><img src="grafik/sc_smiley_ugh_22.gif" /></td>
+  <td>Gesamtnote um mehr als ###:###smiley_tolerance_text###:### schlechter als geplant</td>
 
 </tr>
+
+<tr>
+
+  <td><img src="grafik/sc_stage4_22.png" /></td>
+  <td>bis Note 4,0</td>
+
+  <td><img src="grafik/leer.gif" width="10"></td>
+
+</tr>
+
+<tr>
+  <td><img src="grafik/sc_stage5_22.png" /></td>
+  <td>schlechter als 4,0</td>
+
+  <td><img src="grafik/leer.gif" width="10"></td>
+
+</tr>
+
 </table>
