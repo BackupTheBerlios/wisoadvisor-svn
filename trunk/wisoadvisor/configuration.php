@@ -982,7 +982,8 @@ class WisoadvisorConfiguration extends Configuration
 	  $this->setConfValue('ucPerfOpt', 'smiley', null, 'smiley');
 	  $this->setConfValue('ucPerfOpt', 'smiley_total', null, 'smiley_total');
 	  $this->setConfValue('ucPerfOpt', 'smiley_tolerance_text', null, 'smiley_tolerance_text');
-
+	  $this->setConfValue('ucPerfOpt', 'worstmark_text', null, 'worstmark_text');
+	  
 	  $this->setConfValue('ucPerfOpt', 'color', 'ok', '#A9FDC2');
 	  $this->setConfValue('ucPerfOpt', 'color', 'not_ok', '#FF5D5D');
 	  
@@ -1008,6 +1009,11 @@ class WisoadvisorConfiguration extends Configuration
 		$this->setConfValue('ucPerfOpt', 'config', 'tolerance', 'popt_tolerance');
 		$this->setConfValue('ucPerfOpt', 'config', 'worstmark', 'popt_worstmark');
 		$this->setConfValue('ucPerfOpt', 'config', 'submit', 'popt_submit');
+		
+		// textbausteine fuer worstmark-parameter
+		$this->setConfValue('ucPerfOpt', 'worstmark', 'true', 'LEDs der Bereiche symbolisieren die schlechtesten Einzelnoten.');
+		$this->setConfValue('ucPerfOpt', 'worstmark', 'false', 'LEDs der Bereiche symbolisieren die Durchschnittsnoten.');
+		
 				
 	}
 	

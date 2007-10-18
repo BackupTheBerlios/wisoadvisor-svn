@@ -333,8 +333,11 @@ private function printScorecardHeader(User $user) {
 private function printScorecardFooter(User $user, $hMarksPlanTotalArray, $hMarksRealTotalArray) {
 
   $paramTolerance = UserParameter::getOneForUser($this, $user->getId(), 'popt', 'param', 'tolerance');
-  $valTolerance = ($paramTolerance ? $paramTolerance->getValue() : ucPerfOpt::DEFAULT_TOLERANCE);
+  $paramWorstMark = UserParameter::getOneForUser($this, $user->getId(), 'popt', 'param', 'worstmark');
   
+  $valTolerance = ($paramTolerance ? $paramTolerance->getValue() : ucPerfOpt::DEFAULT_TOLERANCE);
+  $valWorstMark = ($paramWorstMark ? $paramWorstMark->getValue() : ucPerfOpt::DEFAULT_WORSTMARK);
+    
   $hMarkPlan = ($hMarksPlanTotalArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarksPlanTotalArray['mark']/$hMarksPlanTotalArray['ects']), 0, 3) : '&nbsp;';
   $hMarkReal = ($hMarksRealTotalArray['ects'] > 0) ? substr(sprintf("%1.11f", $hMarksRealTotalArray['mark']/$hMarksRealTotalArray['ects']), 0, 3) : '&nbsp;';
   
@@ -343,14 +346,15 @@ private function printScorecardFooter(User $user, $hMarksPlanTotalArray, $hMarks
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'mark_total_real'), $hMarkReal);
   
 	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley_tolerance_text'), $valTolerance);
+	$gen->apply($this->getConf()->getConfString('ucPerfOpt', 'worstmark_text'), $this->getConf()->getConfString('ucPerfOpt', 'worstmark', $valWorstMark));
 	
   $smiley = $this->getConf()->getConfString('ucPerfOpt', 'img_good');
   if ($hMarkPlan + $valTolerance < $hMarkReal) {
     $smiley = $this->getConf()->getConfString('ucPerfOpt', 'img_bad');
   }
   $gen->apply($this->getConf()->getConfString('ucPerfOpt', 'smiley_total'), $smiley);
-	
-	return $gen->getHTML();  
+
+  return $gen->getHTML();  
 }
 
 private function printEmptyScorecard(User $user) {
