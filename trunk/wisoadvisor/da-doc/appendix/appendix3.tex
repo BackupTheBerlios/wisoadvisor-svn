@@ -1,0 +1,76 @@
+\section{Softwareentwicklung}
+
+\subsection{Verwendete CASE-Tools}
+\abbrev{CASE}{Computer Aided Software Engineering}
+
+Die folgende Tabelle gibt eine Übersicht der im Rahmen dieser Arbeit verwendeten CASE-Tools und ihrer Einsatzzwecke.
+
+\begin{table}[ht]
+\small
+	\centering
+		\begin{tabular}{|l|l|l|}
+
+			\hline
+			\textbf{Programm}      & \textbf{Zweck} \\
+			\hline
+			Eclipse 3.2.2          & Entwicklungsumgebung \\
+			\hline
+			PDT                    & Plugin für Eclipse zur PHP-Entwicklung \\
+			\hline
+			Subclipse              & Plugin für Eclipse zur Versionsverwaltung mit Subversion \\
+			\hline
+			XAMPP 1.5.3a           & Lokaler Apache-Webserver mit mySQL, PHP und phpMyAdmin \\
+			\hline
+			DBDesigner 4           & Datenbankdesign und -pflege \\
+			\hline
+			BerliOS                & Host für Projektmanagement und Versionsverwaltung \\
+			\hline
+		\end{tabular}
+	\caption{Verwendete CASE-Tools}
+	\label{tab:casetools}
+\end{table}
+
+
+\subsection{Hinzufügen neuer Komponenten zum WiSo@visor}
+
+Die folgende Kurzanleitung zeigt, wie ein neuer Use-Case namens "`ucHello"' samt HTML-Ausgabe über ein Template zum WiSo@visor hinzugefügt wird. Damit soll es künftigen Entwicklern erleichtert werden, den WiSo@visor um neue Komponenten zu erweitern.
+
+\begin{enumerate}
+	\item Verzeichnis \textbf{/classes}: Neue Datei "`uc\_hello.php"' mit der von der Klasse "`UseCase"' abgeleiteten Klasse "`ucHello"'anlegen.
+	\item Klasse \textbf{ucHello}: Die Methode "`execute"' (public) anlegen.
+	\item Klasse \textbf{ucHello}: Eine Methode "`sayHello"' anlegen; diese Methode aus der Methode "`execute"' aufrufen.
+	\item Datei \textbf{/configuration.php}: Klasse "`ucHello"' unter den "`anwendungseigenen Klassen"' bekannt machen: \\
+		 	\$this->setConfValue('class', 'ucHello', null, \$classPath.'uc\_hello'.\$phpClassSuffix);
+  \item Datei \textbf{/configuration.php}: Klasse "`ucHello"' zum Wert des Action-Parameters zuordnen ("`Matching"'): \\
+  	 	\$this->setConfValue('usecase', 'hello', null, 'ucHello');
+\end{enumerate}
+
+Damit kann der Use-Case über die URL \texttt{http://server/index.php?action=hello} aufgerufen werden.
+
+~
+
+Die folgenden Schritte zeigen nun, wie die oben angelegte Methode "`sayHello"' über die Template-Engine einen Text ausgibt.
+
+\begin{enumerate}
+	\item Verzeichnis \textbf{/templates}: Neues Unterverzeichnis "`ucHello"' anlegen.
+	\item Verzeichnis \textbf{/templates/ucHello}: Neue Datei "`hello.tpl"' anlegen.
+	\item Datei \textbf{hello.tpl}: Exemplarisch folgenden HTML-Code verwenden: \\
+	<p>Hello \#\#\#:\#\#\#replacement\#\#\#:\#\#\#!</p>
+	\item Datei \textbf{/configuration.php}: Methode "`configureUcHello"' (private) anlegen und diese am Ende des Konstruktors aufrufen.
+  \item Datei \textbf{/configuration.php, configureUcHello}: Die Template-Datei bekannt machen: \\
+  		\$this->setConfValue('ucHello', 'htmltemplate', null, 'templates/ucHello/hello.tpl');
+  \item Datei \textbf{/configuration.php, configureUcHello}: Das im Template zu ersetzende Token bekannt machen:
+	    \$this->setConfValue('ucHello', 'replacement', null, 'replacement');		
+  \item Klasse \textbf{ucHello, sayHello}: Ein Objekt der Klasse "`HtmlGenerator"' instanziieren: \\
+      \$gen = new HtmlGenerator(\$this->getConf()->getConfString('ucHello', 'htmltemplate'), \\
+                                \$this->getConf()->getConfString('template', 'indicator', 'pre'), \\
+                                \$this->getConf()->getConfString('template', 'indicator', 'after'));
+   \item Klasse \textbf{ucHello, sayHello}: Dem Generator-Objekt mitteilen, welches Token durch welchen Wert ersetzt werden soll: \\
+       \$name = 'Qwert Zuiopü'\\
+       \$gen->apply(\$this->getConf()->getConfString('ucHello', 'replacement'), \$name);
+   \item Klasse \textbf{ucHello, sayHello}: Dem Generator-Objekt den HTML-Code generieren lassen und an die Ausgabe des Use-Cases anhängen: \\
+     \$this->appendOutput(\$gen->getHTML()); \\
+     \$this->setOutputType(USECASE\_HTML)); 
+\end{enumerate}
+
+Der Use-Case gibt nun bei Aufruf den Satz "`Hello Qwert Zuiopü!"' wieder. Sinnvoller als eine statischer einzusetzender Wert ist natürlich ein dynamisch aus der Datenbank geladener. Mit den Anweisungen dieser Kurzanleitung dürften allerdings die ersten großen Hürden überwunden werden können.
