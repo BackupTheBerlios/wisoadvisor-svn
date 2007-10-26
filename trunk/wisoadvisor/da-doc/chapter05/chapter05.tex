@@ -15,15 +15,15 @@ Der Zweck der SVP ist es, den Studenten von Beginn an beim Planen seines Studien
 Als wesentliche Bestandteile der SVP werden folgende Punkte gesehen \cite<vgl.>[S. 70-74]{Berchtold:2007}:
 \begin{itemize}
 	\item \textbf{Erstellung eines Prüfungsplans:} Der Sinn eines Prüfungsplanes besteht darin, die Arbeitsbelastung möglichst gleichmäßig auf die Fachsemester zu verteilen. Durch die Musterstundenpläne der Prüfungsordnung und die Zyklen der Bachelor-Module ist dieser Plan zwar bereits grob vorgegeben, es soll dem einzelnen Studenten aber dennoch möglich sein, seinen Plan zu modifizieren.
-	\item \textbf{Erfassung von Erwartungswerten:} Mit der Eingabe eines Erwartungswertes in der SVP soll sich der Student Ziele für die einzelnen Module setzen. Ein Erwartungswert ist also eine geplante Note. Als Orientierungshilfe sollen dem Studenten pro Modul Durschnittswerte vergangener Erwartungswerte und tatsächlicher Prüfungsergebnisse angezeigt werden. Aus pädagogischer Sicht ist dieser Erwartungswert sowohl als transferfördernde Maßnahme als auch als Motivationshilfe zu verstehen.
-	\item \textbf{Prognose von Studiendauer und -ende:} Gerade vor dem Hintergrund der in \ref{sec:StudienverlaufAnDerWiSo} erwähnten maximalen Zeiträume, um die der Bachlor-Student Assessment-Phase bzw. Regelstudienzeit übertreten darf, erscheint eine derartige Prognose immens wichtig. So soll die Prognose den Studenten dazu motivieren, sein Studium möglichst innerhalb der Regelstudienzeit abzuschließen.
-	\item \textbf{Interaktive Hinweise:} Das System soll den Studenten über seine aktuelle Planung und deren Konsequenzen auf dem Laufenden halten. Dieser Aspekt des Konzeptes ist allerdings primär eine Konsequenz der prototypischen Implementierung (siehe \ref{sec:PlanerPrototyp}).
+	\item \textbf{Erfassung von Erwartungswerten:} Mit der Eingabe eines Erwartungswertes in der SVP soll sich der Student Ziele für die einzelnen Module setzen. Ein Erwartungswert ist also eine geplante Note. Als Orientierungshilfe sollen dem Studenten pro Modul Durchschnittswerte vergangener Erwartungswerte und tatsächlicher Prüfungsergebnisse angezeigt werden. Aus pädagogischer Sicht ist dieser Erwartungswert sowohl als transferfördernde Maßnahme als auch als Motivationshilfe zu verstehen.
+	\item \textbf{Prognose von Studiendauer und -ende:} Gerade vor dem Hintergrund der in \ref{sec:StudienverlaufAnDerWiSo} erwähnten maximalen Zeiträume, um die der Bachelor-Student Assessment-Phase bzw. Regelstudienzeit übertreten darf, erscheint eine derartige Prognose immens wichtig. So soll die Prognose den Studenten dazu motivieren, sein Studium möglichst innerhalb der Regelstudienzeit abzuschließen.
+	\item \textbf{Interaktive Hinweise:} Das System soll den Studenten über seine aktuelle Planung und deren Folgen auf dem Laufenden halten. Dieser Aspekt des Konzeptes ist allerdings primär eine Konsequenz der prototypischen Implementierung (siehe \ref{sec:PlanerPrototyp}).
 \end{itemize}
 
 \subsubsection{Prototypische Implementierung}
 \label{sec:PlanerPrototyp}
 
-Der Prototyp zur SVP ist eine reine Desktop-Applikation und wurde als Formular in Microsoft Access entwickelt (siehe Abbildung \ref{fig:berchtold-svp}). Der Benutzer sieht sich anfangs einem komplett leeren Prüfugsplan gegenüber und muss dann nach Auswahl von Semester, Matrikelnummer und Prüfung jede Prüfung einzeln einplanen. Das Auswahlfeld zur Auswahl einer Prüfung zeigt hier pauschal alle im System vorhandenen Prüfungen an, also auch solche, die im Studiengang des Benutzers eigentlich nicht vorgesehen sind, sowie bereits eingeplante Prüfungen.
+Der Prototyp zur SVP ist eine reine Desktop-Applikation und wurde als Formular in Microsoft Access entwickelt (siehe Abbildung \ref{fig:berchtold-svp}). Der Benutzer sieht sich anfangs einem komplett leeren Prüfungsplan gegenüber und muss dann nach Auswahl von Semester und Matrikelnummer jede Prüfung einzeln einplanen. Das Kombinationsfeld zur Auswahl einer Prüfung zeigt hier pauschal alle im System vorhandenen Prüfungen an, also auch diejenigen, die der Benutzer bereits abgelegt hat, sowie diejenigen, die im Studiengang des Benutzers eigentlich nicht vorgesehen sind.
 
 Nach dem Einplanen einer Prüfung wird der Prüfungsplan in der Mitte der Maske aktualisiert; diese Liste bezieht sich dabei stets auf das zuvor ausgewählte Semester. Direkt in diese Liste kann der Benutzer seine Erwartungswerte eingeben. Gleichzeitig mit Aktualisierung des Prüfungsplans werden die Status- und Prognoseinformationen im rechten oberen Bereich aktualisiert. 
 
@@ -37,23 +37,113 @@ Nach dem Einplanen einer Prüfung wird der Prüfungsplan in der Mitte der Maske ak
 
 Beim Beeenden der Dialogmaske wird eine Konsistenzprüfung durchgeführt; diese prüft den Prüfungsplan auf Vollständigkeit und Korrektheit und mahnt den Benutzer ggf. an, die Planung fortzusetzen. 
 
-[...]
-
 \subsubsection{Weitere Anforderungen an das Produktivsystem}
 \label{sec:PlanerAnforderungen}
 Neben den in \ref{sec:PlanerKonzeption} beschriebenen Konzepten und den existierenden Ansprüchen an den WiSo@visor \cite<vgl.>[S. 21-40]{Strecker:2006} soll die produktiv einsetzbare SVP folgende Anforderungen berücksichtigen:
 
 \begin{itemize}
-	\item \textbf{Unabhängigkeit von der Quelle der Notendaten:} In den Projektbesprechungen stellte sich heraus, dass es eine entscheidende Herausforderung der SVP (und insb. des in \ref{sec:PerformanceOptimizer} beschriebenen "`Performance Optimizer"') sein würde, die den Statistiken zu Grunde liegenden Notendaten zu beschaffen. Die technische Idealvorstellung, nämlich das gesamte SMS direkt oder bspw.\abbrev{bspw.}{beispielsweise} mittels Web Services an die Datenbank des Prüfungsamtes zu koppeln, ist aus Datenschutzgründen nicht zu rechtfertigen. Das System muss also zum einen eine "`Notfalllösung"' beinhalten, in der sich die Statistiken nur auf die Teilnehmer des Systems beziehen. Zum anderen muss aber berücksichtigt werden, dass evtl. doch noch externe Daten integriert werden können.	
-	\item \textbf{Verbesserte Usability:} Wie in \ref{sec:PlanerPrototyp} erwähnt, ist es im Prototypen der SVP nötig, jede verfügbare Prüfung manuell auszuwählen und anschließend einzuplanen. Erst danach erhält der Benutzer Rückmeldungen, ob z. B. die gewählte Prüfung für seinen Studiengang (respektive Schwerpunkt) zulässig ist, ob sie ggf. bereits eingeplant wurde, etc. Eine wesentliche Erleichterung für den Benutzer wäre also, das System ausgehend von den Musterstundenplänen den \textbf{kompletten Studienverlauf anlegen} zu lassen, sodass der Benutzer weder Prüfungen einzuplanen vergisst, noch sich darüber wundert, warum er eine Prüfung nicht einplanen darf, die er vom System zur Auswahl bekommt. Im Grunde wird dadurch auch die Konsistenzprüfung, die der Prototyp durchführt, wenn der Benutzer den Dialog verlässt, überflüssig. Ferner soll die Übersichtlichkeit der SVP dadurch erhöht werden, dass die Anzeige nicht auf ein Semester begrenzt werden soll; stattdessen soll sondern der gesamten Studienverlauf \textbf{auf einer Seite} abgebildet werden.	
+	\item \textbf{Unabhängigkeit von der Quelle der Notendaten:} In den Projektbesprechungen stellte sich heraus, dass es eine entscheidende Herausforderung  sein würde, die den statistischen Daten zu Grunde liegenden Notendaten zu beschaffen. In der SVP betrifft dies lediglich die Durschnittsnoten, im "`Performance Optimizer"' dagegen auch Notenverteilungen und Häufigkeiten (siehe \ref{sec:PerformanceOptimizer}). Die technische Idealvorstellung, nämlich das gesamte System direkt oder bspw.\abbrev{bspw.}{beispielsweise} mittels Web Services an die Datenbank des Prüfungsamtes zu koppeln, ist aus Datenschutzgründen nicht zu rechtfertigen. Das System muss also zum einen eine "`Notfalllösung"' beinhalten, in der sich die Statistiken nur auf die Teilnehmer des Systems beziehen. Zum anderen muss aber berücksichtigt werden, dass evtl. doch noch externe Daten integriert werden können.	
+	\item \textbf{Verbesserte Usability:} Wie in \ref{sec:PlanerPrototyp} erwähnt, ist es im Prototypen der SVP nötig, jede verfügbare Prüfung manuell auszuwählen und anschließend einzuplanen. Erst danach erhält der Benutzer Rückmeldungen, ob z. B. die gewählte Prüfung für seinen Studiengang (respektive Schwerpunkt) zulässig ist, ob sie ggf. bereits eingeplant wurde, etc. Eine wesentliche Erleichterung für den Benutzer wäre also, das System ausgehend von den Musterstundenplänen den \textbf{kompletten Studienverlauf anlegen} zu lassen, sodass der Benutzer weder Prüfungen einzuplanen vergisst, noch sich darüber wundert, warum er eine Prüfung nicht einplanen darf, die er vom System zur Auswahl bekommt. Im Grunde wird dadurch auch die Konsistenzprüfung, die der Prototyp durchführt, wenn der Benutzer den Dialog verlässt, überflüssig. Ferner soll die Übersichtlichkeit der SVP dadurch erhöht werden, dass die Anzeige nicht auf ein Semester begrenzt werden soll; stattdessen soll der gesamten Studienverlauf \textbf{auf einer Seite} abgebildet werden.	
 \end{itemize}
 
-\subsection{Integration des Konzepts in den WiSo@visor}
+\subsection{Implementierung des Konzepts}
+
+\subsubsection{Datenmodell}
+
+Das in Abbildung \ref{fig:datenmodell} dargestellte Datenmodell bildet die Basis für die im Rahmen dieser Arbeit implementierten Konzepte  "`Studienverlaufsplanung"' und "`Performance Optimizer"'.
+
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=1.0\textwidth]{chapter05/datenmodell.png}
+	\caption{Datenmodell der Erweiterungen}
+	\label{fig:datenmodell}
+	\cite<~eigene Darstellung>{}
+\end{figure}
+
+Die Tabellen bedeuten dabei im Einzelnen:
+
+\begin{itemize}
+	\item \textbf{advisor\_\_user:} Die Tabelle mit den Stammdaten der Benutzer existierte bereits im WiSo@visor, musste allerdings um Matrikelnummer, Studiengang und Studienbeginn ergänzt werden.
+	\item \textbf{advisor\_\_userparameter:} Analog zur globalen Konfiguration des WiSo@visor wurden mit dieser Arbeit benutzerspezifische Einstellungen eingeführt. Sie werden derzeit nur vom "`Performance Optimizer"' benutzt (siehe \ref{sec:ImplementierungPopt}).
+	\item \textbf{advisor\_\_studies:} Diese Tabelle enthält die Studiengänge der WiSo. Es ist möglich, für einen Studiengang mehrere Generationen zu definieren. So kann das System eventuellen Änderungen der Prüfungsordnungen begegnen.
+	\item \textbf{advisor\_\_majors:} Die Studiengänge haben i. d. R. Studienschwerpunkte. Hat ein Studiengang keinen Schwerpunkt (wie etwa "`International Business Studies"') ist hier dennoch ein einzelner Eintrag nötig.
+	\item \textbf{advisor\_\_lectures:} Diese Tabelle enthält ein auf die berücksichtigten Studiengänge abgestimmtes Vorlesungsverzeichnis.
+	\item \textbf{advisor\_\_modules:} In dieser Tabelle werden die Vorlesungen den Studienschwerpunkten zugeordnet. Hier sind die in der Prüfungsordnung vorgegebenen Musterstundenpläne hinterlegt.
+	\item \textbf{advisor\_\_modulegroups:} Diese Tabelle enthält die einzelnen Studienbereiche, zu denen die Module zusammengefasst werden.
+	\item \textbf{advisor\_\_schedule:} Hier ist schließlich der eigentliche Prüfungsplan hinterlegt, d. h. eine Zuordnung, welches Modul von welchem Studenten in welchem Semester abgelegt wird. Um die SQL-Statements übersichtlicher zu halten, ist diese Tabelle nicht vollständig normalisiert.
+\end{itemize}
+
+Eine detaillierte Feldbeschreibung dieses Datenmodells findet sich in Anhang \ref{sec:AnhangDatenmodell}.
+
+\subsubsection{Benutzerstammdaten}
+
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=0.9\textwidth]{chapter05/stammdaten.png}
+	\caption{Erweiterung der Benutzerstammdaten}
+	\label{fig:stammdaten}
+	\cite<~eigene Darstellung>{}
+\end{figure}
+
+Da sowohl für die Studienverlaufsplanung aus auch für den in \ref{sec:PerformanceOptimizer} erläuterten "`Performance Optimizer"' eine Erweiterung der  Benutzerstammdaten des WiSo@visor nötig wurde, mussten auch die zugehörigen Use-Cases aktualisiert werden. Sowohl bei der Registrierung ("`ucRegistration"') als auch beim Ändern der Stammdaten ("`ucChangeUserData"') mussten die neuen Felder für die Matrikelnummer, den Studiengang und den Studienbeginn eingearbeitet (Abbildung \ref{fig:stammdaten}) werden.
+
+Erst wenn der Benutzer Matrikelnummer, Studienbeginn und Studiengang (d. h. Studienschwerpunkt) in diesen Stammdaten hinterlegt hat, lässt das System das Erstellen eines Prüfungsplanes und somit auch die Nutzung des "`Performace Optimizer"' zu.
+
+\subsubsection{Prüfungsplan}
+
+Der neu angelegte Use-Case "`ucPlaner"' beinhaltet die Studienverlaufsplanung und ist über den Menüpunkt "`Prüfungsplan"' erreichbar. Hat der Benutzer Matrikelnummer, Studienbeginn und Studiengang (d. h. Studienschwerpunkt) in seinen Stammdaten hinterlegt, erhält er nach der Auswahl dieses Menüpunktes einen Link zum Erstellen seines Prüfungsplanes. Wird diesem Link gefolgt, generiert das System ausgehend von den Modulen des Schwerpunkts den Musterprüfungsplan; dabei werden die Einträge in der Tabelle "`advisor\_\_schedule"' erstellt. Existiert damit ein Prüfungsplan, bekommt der Benutzer seinen individuellen Plan angezeigt (Abbildung \ref{fig:svp-komplett-default}).
+
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=0.90\textwidth]{chapter05/svp-komplett-default.png}
+	\caption{Prüfungsplan (Auszug)}
+	\label{fig:svp-komplett-default}
+	\cite<~eigene Darstellung>{}
+\end{figure}
+
+Im oberen Bereich des Prüfungsplanes werden in Textform die \textbf{Prognose- und Statusinformationen} angezeigt. Die Studiendauer wird differenziert nach tatsächlichen Semestern und Fachsemestern, d. h. Semestern, für die Prüfungen eingeplant wurden.
+
+Die Studiendauer selbst wird direkt unter diesem Text grafisch als \textbf{Zeitstrahl} dargestellt; das aktuelle Semester wird dabei gelb hervorgehoben. Über Links kann der Benutzer von diesem Zeitstrahl direkt auf die Planung des jeweiligen Semesters verzweigen. 
+
+In der zweiten Zeile dieses Zeitstrahls wird zusätzlich eine farbliche Statusinformation zur zeitlichen Planung angezeigt. Bleibt die Studiendauer innerhalb der Regelstudienzeit, sieht diese Information aus wie in Abbildung \ref{fig:svp-komplett-default} dargestellt. Plant der Benutzer sein Studium über die Regelstudienzeit hinaus, verändert sich diese Anzeige jedoch: Die über die Regelstudienzeit hinausgehenden, aber gemäß Prüfungsordnung zulässigen zusätzlichen Semester werden gelb eingefärbt. Über diese zulässigen Spielräume hinweg geplante Semester werden rot dargestellt (Abbildung \ref{fig:svp-prognose-rot}). Zusätzlich werden in beiden Fällen Warnmeldungen angezeigt. Der Benutzer soll mit diesem "`Ampel-System"' dazu angehalten werden, seine Studiendauer innerhalb der Regelstudienzeit zu halten.
+
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=0.66\textwidth]{chapter05/svp-prognose-rot.png}
+	\caption{Statusinformationen im Zeitstrahl}
+	\label{fig:svp-prognose-rot}
+	\cite<~eigene Darstellung>{}
+\end{figure}
+
+Anschließend an die Prognose- und Statusinformationen zeigt der Prüfungsplan die eingeplanten Prüfungen, aufsteigend nach Semestern sortiert. Um die Übersichtlichkeit zu erhöhen, können die einzelnen Semester auf- und zugeklappt werden.
+
+Für jede Prüfung des Prüfungsplanes bekommt der Benutzer die Möglichkeit, seinen \textbf{Erwartungswert} (Plannote) und seine \textbf{tatsächlich erreichte Note} einzugeben. Letzteres zu ermöglichen erwies sich im Verlauf dieser Arbeit als unerlässlich, da sich die ursprüngliche Absicht, sämtliche Prüfungsleistungen einzeln in das System zu importieren, aus Datenschutzgründen nicht realisieren ließ. 
+
+Die für die einzelnen Prüfungen angezeigten \textbf{Durchschnittswerte} haben unterschiedliche zeitliche Bezugspunkte, je nachdem, ob der Benutzer eigene Werte eingetragen hat: Hat der Benutzer nichts eingetragen, werden ihm die Werte des letzten Vorlesungszyklus angezeigt. Hat der Benutzer seine tatsächliche Note eingetragen, beziehen sich die Werte auf das Semester, in dem die Prüfung abgelegt (d. h. eingeplant) wurde. 
+
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=0.66\textwidth]{chapter05/svp-letztes-semester.png}
+	\caption{Farblich veränderte Aktionen}
+	\label{fig:svp-letztes-semester}
+	\cite<~eigene Darstellung>{}
+\end{figure}
+
+Mit den Pfeilen, die bei jeder Prüfung als Aktionen angezeigt werden, kann eine Prüfung je um ein Semester \textbf{vorgezogen oder aufgeschoben} werden. Um dem Grundsatz der Barrierefreiheit Rechnung zu tragen, sind diese Pfeile mit Alternativ- und Hinweistexten hinterlegt, sodass keine Verwirrung hinsichtlich ihrer Bedeutung auftreten kann. Sinnfreie Aktionen wie etwa das Verschieben bereits abgelegter Prüfungen oder das Vorziehen einer Prüfung vor den Studienbeginn werden grundsätzlich nicht gestattet, weder per sichtbarer Aktion im Prüfungsplan, noch per Modifikationen an der URL des Prüfungsplanes. 
+
+Für die Prüfungen der Assessment-Phase ist das Aufschieben nur bis zum dritten Semester erlaubt, da die Assessment-Prüfung nach diesem abgeschlossen sein muss. In Ausnahmefällen (z. B. Krankheit) kann diese Frist vom rechtlichen Standpunkt aus freilich überschritten werden; für den in der Software abgebildeten Prüfungsplan scheint es aber durchaus sinnvoll, den Studenten am Beginn seines Studiums stärker zu lenken.
+
+Die Prüfungen der Bachelor-Phase können im Prüfungsplan dagegen unbegrenzt aufgeschoben werden: In besonderen Fällen (Krankheit, Urlaubssemester) kann das Studium tatsächlich über die eigentlich zulässige Studiendauer hinausgehen. Als Warnung wird der Pfeil zum Aufschieben von Prüfungen rot eingefärbt, sobald die Regelstudienzeit mit dem Verschieben überschritten würde (Abbildung \ref{fig:svp-letztes-semester}). Weitere Warnhinweise zur Überschreitung werden wie bereits erwähnt nach erfolgter Einplanung im Zeitstrahl angezeigt. 
+
+Ein besonderes Augenmerk wurde beim Prüfungsplan auch auf die Navigation innerhalb des Planes gerichtet: Da beim Verschieben einer Prüfung oder beim Speichern von Noten aufgrund der Architektur des WiSo@visor eine komplett neue HTML-Seite angefordert und generiert wird, würde der Benutzer nach jeder derartigen Aktion wieder am Seitenanfang landen; er müsste dann erst wieder zum bearbeiteten Semester scrollen. Durch die Verwendung seiteninterner Verweise kann der Benutzer jedoch nach dem Speichern von Noten wieder zum Ausgangspunkt bzw. nach dem Verschieben von Prüfungen zum Zielsemester gelotst werden.
 
 \subsection{Ausblick und Erweiterungsmöglichkeiten}
 
-[... => BLAH über PA-DATEN]
+Im System sind im Rahmen dieser Arbeit lediglich die \textbf{Stammdaten für die Studiengänge} der zweiten Bachelor-Generation (Studienbeginn WS 2007/08) hinterlegt worden. Hier wäre es denkbar, auch die erste Generation mit aufzunehmen. Auf jeden Fall wird es jedoch eines Tages nötig werden, auf weitere -- sicher zu erwartende -- Änderungen der Prüfungsordnung datenseitig zu reagieren. Die Integration der zukünftigen Master-Studiengänge sollte zwar vom Datenmodell aus gesehen möglich sein, genauere Aussagen dazu können aber erst getroffen werden, wenn die Musterprüfungspläne für diese Studiengänge vorliegen.
 
-Zudem wäre denkbar, dem Studenten die Möglichkeit zu bieten, für eine Prüfung mehrere Versuche einplanen zu lassen. Unter dem Gesichtspunkt, dem Studenten eine langfristige und realistische strategische Planung zu ermöglichen, erscheint dies durchaus sinnvoll. Aus pädagogischer Sicht scheint nach Auffassung des Autors dieser Arbeit eine solche Option jedoch fragwürdig, da eine derartige Funktion den Studenten tendenziell demotivieren und somit das Gegenteil des ursprünglichen Ziels der SVP erreichen könnte.
+Die im Prüfungsplan angezeigten \textbf{Durchschnittswerte} werden allesamt von der Model-Klasse "`ScheduleEntryStatistics"' ermittelt. Derzeit werden die durchschnittlichen tatsächlichen Noten anhand der von den Benutzern eingegebenen Noten berechnet. Sollte eines Tages ein Import der tatsächlichen Daten des Prüfungsamtes möglich werden, lässt sich über den globalen Parameter "`ucImporter"' => "`useimportedmarks"' die \textbf{Datenbasis} dieser Klasse einstellen: Ist der Wert des Parameters auf "`false"' gesetzt, werden wie gehabt die Benutzereingaben verwendet. Setzt man den Wert auf "`true"', können die importierten Daten genutzt werden; die SQL-Routinen der besagten Model-Klasse müssten dann ggf. auf das Datenformat abgestimmt werden.
 
-Aus statistischer Sicht wäre sinnvoll, die aggregierten Module (z. B. Sprachen und Vertiefungsbereiche) in die tatsächlichen Lehrveranstaltungen aufzutrennen. Langfristig würde dies allerdings bedeuten, das vollständige Modulhandbuch der Bachelor-Studiengänge im System abzubilden, was einen deutlichen Mehraufwand hinsichtlich der Datenpflege  zur Folge hätte.
+Insb. vor dem Hintergrund der in \ref{sec:WeiteresAusblick} andiskutierten Erweiterung "`Individuelle Schwerpunktberatung"' wäre sinnvoll, in den Benutzerstammdaten \textbf{nach Studiengang und -schwerpunkt zu differenzieren} -- die Festlegung auf den Schwerpunkt erfolgt ja formell erst zu Beginn des dritten Fachsemesters. Der Prüfungsplan müsste daher in der Lage sein, Änderungen des Schwerpunktes zu erkennen und den Plan dahingehend zu modifizieren; ein detaillierter Abgleich des existierenden Prüfungsplanes mit dem Musterprüfungsplan des neuen Studiengangs bzw. -schwerpunkts wäre nötig. Bereits eingetragene Noten sollten dabei möglichst nicht gelöscht werden.
+
+Denkbar wäre ferner, dem Studenten die Möglichkeit zu bieten, für eine Prüfung \textbf{mehrere Versuche sowie Krankheitsfälle} einplanen zu lassen. Unter dem Gesichtspunkt, dem Studenten eine langfristige und realistische strategische Planung zu ermöglichen, erscheint dies durchaus sinnvoll. Aus pädagogischer Sicht scheinen nach Auffassung des Autors dieser Arbeit solche Optionen jedoch fragwürdig: Eine strategische Möglichkeit, Wiederholungen von Beginn an einzuplanen würde exakt das Gegenteil der ursprünglichen Ziele der SVP erreichen, nämlich den Studenten dazu anzuhalten, sein Studium innerhalb der Regelstudienzeit und ohne Komplikationen, d. h. Wiederholungen, abzuschließen.
+

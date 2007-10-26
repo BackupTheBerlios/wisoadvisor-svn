@@ -12,7 +12,7 @@ Wie in \ref{sec:ControllingKonzept} erläutert, besteht die erste Säule des Contr
 
 \subsubsection{Entwicklungsumgebung}
 
-Die folgenden Ausführungen beziehen sich auf \cite[S. 52-56]{Strecker:2006}.
+Die Ausführungen der beiden folgenden Kapitel stützen sich auf die technische Dokumentation zum WiSo@visor \cite[S. 52-77]{Strecker:2006}.
 
 Ein genereller Anspruch an die Software war, webbasierte Eignungsberatung auf Basis von einfacher HTML-Technologie zu betreiben. STRECKER stellt in einem Vergleich existierender ähnlich gelagerter Beratungstests fest, dass diese fast ausschließlich das weit komplexere Flash einsetzen, was sich häufig negativ auf die Bedienbarkeit auswirkt \cite[S. 43-45]{Strecker:2006}. 
 
@@ -22,14 +22,12 @@ Der WiSo@visor wurde mit der Skriptsprache \textbf{PHP}\abbrev{PHP}{PHP: Hyperte
 
 Sowohl in der Entwicklungs- als auch in derzeitigen Produktivumgebung wird der \textbf{Apache-Webserver} eingesetzt, der mit über 50\% Marktanteil nach wie vor der am häufigsten eingesetzte Webserver ist \cite{netcraft:2007}.
 
-Als Datenbanksystem fungiert derzeit \textbf{mySQL}; die Datenbankschicht jedoch so gestaltet, dass sie ohne großen Aufwand auf die Open-Source-Datenbank Firebird konvertiert werden kann. Fortschrittlichere Konzepte, wie etwa ACID-konforme Transaktionen, werden vom WiSo@visor -- einschließlich seines Frameworks (siehe hierzu \ref{sec:AdvisorArchitektur}) -- nicht genutzt.
+Als Datenbanksystem fungiert derzeit \textbf{mySQL}; die Datenbankschicht ist jedoch so gestaltet, dass sie ohne großen Aufwand auf die Open-Source-Datenbank Firebird konvertiert werden kann. Fortschrittlichere Konzepte, wie etwa ACID-konforme Transaktionen, werden vom WiSo@visor -- einschließlich seines Frameworks (siehe hierzu \ref{sec:AdvisorArchitektur}) -- nicht genutzt.
 
-Zum Erstellen von PDF-Dokumenten\abbrev{PDF}{Portable Document Format} und zum Versenden von E-Mails werden in die Software zusätzlich Bibliotheken von Drittanbietern einbezogen.
+Zum Erstellen von PDF-Dokumenten\abbrev{PDF}{Portable Document Format} und zum Versenden von E-Mails werden in die Software zusätzlich \textbf{Bibliotheken von Drittanbietern} einbezogen.
 
 \subsubsection{Systemarchitektur}
 \label{sec:AdvisorArchitektur}
-
-Die folgenden Ausführungen beziehen sich auf \cite[S. 56-77]{Strecker:2006}.
 
 Der WiSo@visor verfolgt ein weitgehend objektorientiertes Design. Dabei wird getrennt zwischen Framework-, Model- und Use-Case-Klassen (siehe Abbildung \ref{fig:adv-arch}).
 
@@ -41,9 +39,9 @@ Der WiSo@visor verfolgt ein weitgehend objektorientiertes Design. Dabei wird get
 	\cite<eigene Darstellung, in Anlehnung an>{Strecker:2006}
 \end{figure}
 
-Das \textbf{Framework} des WiSo@visor übernimmt dabei die grundlegenden Aufgaben der Applikation. Darunter fallen die zentrale Konfiguration, die Datenbankanbindung, die Benutzer- und Sitzungsverwaltung sowie Generatoren zum Erzeugen von HTML-Code über Templates. Daneben stellt das Framework einen zentralen Einstiegspunkt in Form der Datei "`index.php"' bereit, die je nach übergebenem Parameter den eigentlich Use-Case instanziiert. 
+Das \textbf{Framework} des WiSo@visor übernimmt dabei die grundlegenden Aufgaben der Applikation. Darunter fallen die zentrale Konfiguration, die Datenbankanbindung, die Benutzer- und Sitzungsverwaltung sowie Generatoren zum Erzeugen von HTML-Code über Templates. Daneben stellt das Framework einen zentralen Einstiegspunkt in Form der Datei "`index.php"' bereit, die je nach übergebenem Parameter den eigentlichen Use-Case instanziiert. 
 
-Die \textbf{Model-Klassen} abstrahieren die Datenbankzugriffe. Für jede Tabelle in der Datenbank existiert eine Model-Klasse, die die üblichen Zugriffsmöglichkeiten bereitstellt (Select/Insert/Update/Delete). Über Getter- und Setter-Methoden kann auf die einzelnen Attribute zugegriffen werden.
+Die \textbf{Model-Klassen} abstrahieren die Datenbankzugriffe. Für jede Tabelle in der Datenbank existiert eine Model-Klasse, die die üblichen SQL-Methoden\abbrev{SQL}{Structured Query Language} (Select, Update, Insert, Delete) bereitstellt. Über Getter- und Setter-Methoden kann auf einzelne Attribute zugegriffen werden.
 
 Die \textbf{Use-Case-Klassen} bilden die eigentliche Anwendungslogik. Use-Cases lassen sich für verschiedene Ausgabearten definieren, so etwa für die Ausgabe von Grafikdateien oder PDF-Dokumente. Die am häufigsten vorkommende Form von Use-Cases sind allerdings HTML-Ausgaben. 
 
@@ -52,10 +50,11 @@ Die \textbf{Use-Case-Klassen} bilden die eigentliche Anwendungslogik. Use-Cases 
 Der gesamte Ablauf der dem WiSo@visor zu Grunde liegenden Logik gestaltet sich wie folgt:
 
 \begin{enumerate}
-	\item Der Anwender fordert eine Seite an, z. B. über den Menüpunkt "`Deine Nutzerdaten"' (exemplarische URL\abbrev{URL}{Unified Resource Locator}: http://server.de/wisoadvisor/index.php?action=changeuserdata).
-	\item Das Framework wertet den Parameter "`action"' aus und instanziiert den zum Wert dieses Parameters gehörigen Use-Case "`ucChangeUserData"'. Diese Zuordnung erfolgt im Mapping-Abschnitt des zentralen Konfigurationsobjektes.
+	\item Der Benutzer fordert eine Seite an, z. B. über den Menüpunkt "`Deine Nutzerdaten"' (exemplarische URL\abbrev{URL}{Unified Resource Locator}: http://server.de/wisoadvisor/index.php?action=changeuserdata).
+	\item Das Framework wertet den Parameter "`action"' aus und instanziiert den zum Wert dieses Parameters gehörigen Use-Case (hier: "`ucChangeUserData"'). Die Zuordnung erfolgt dabei im Mapping-Abschnitt des zentralen Konfigurationsobjektes (Datei "`/configuration.php"').
 	\item Das Framework ruft die Methode "`execute"' des Use-Case-Objektes auf.
-	\item Das Use-Case-Objekt prüft den evtl.\abbrev{evtl.}{eventuell} übergebenen Parameter "`step"' und ruft dann die zum Handlungsschritt gehörige Methode auf.
+	\item Das Use-Case-Objekt prüft den evtl.\abbrev{evtl.}{eventuell} übergebenen Parameter "`step"', um den erforderlichen Handlungsschritt zu ermitteln, und ruft dann die zu diesem Handlungsschritt gehörige Methode auf.
 	\item Diese Methode definiert die Art der Ausgabe; im Normalfall handelt es sich um HTML-Ausgaben.
-	\item Bei einer HTML-Ausgabe befüllt die Methode nun mit Hilfe der Generator-Klassen des Frameworks eine Template-Datei; die Werte stammen im Normalfall aus der Datenbank und werden über die Model-Klassen geladen.
+	\item Bei einer HTML-Ausgabe befüllt die Methode nun mit Hilfe der Generator-Klassen des Frameworks eine Template-Datei; die Werte dafür stammen im Normalfall aus der Datenbank und werden über die Model-Klassen geladen. Zudem können hier auch schreibende Aktivitäten erfolgen, z. B. das Speichern eines veränderten Datensatzes.
+	\item Die Beantwortung der Anfrage ist damit abgeschlossen. Der Benutzer führt nun Aktivitäten durch (hier bspw: Änderung seiner E-Mail-Adresse) und stellt dann eine neue Anfrage (hier: Speichern der geänderten Daten). 
 \end{enumerate}

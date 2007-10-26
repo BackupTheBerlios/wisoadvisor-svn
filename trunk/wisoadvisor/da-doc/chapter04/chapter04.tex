@@ -1,45 +1,87 @@
-\section{Studieneingangsberatung für Erstsemester}
+\section{Studieneingangsberatung}
 \label{sec:Studieneingangsberatung}
 
-\subsection{Konzept und Prototyp}
+\subsection{Konzeption und Prototyp}
 \subsubsection{Konzeption}
 Das vorliegende Konzept zur Studieneingangsberatung (SEB) \abbrev{SEB}{Studieneingangsberatung} entstammt einer Studienarbeit über innovative Ansätze der Informationsvermittlung \cite{Nursinski:2007}.
 
 Der Autor beruft sich bei seiner Konzeption primär auf ...
 
-\subsubsection{Prototypische Implem}
-Der Prototyp für die SEB besteht aus statischen HTML-Seiten, \abbrev{HTML}{Hypertext Markup Language} die mit verweissensitiven Grafiken und teilweise mit JavaScript-Elementen interaktiv gestaltet werden. Besonderes Augenmerk wird auf die Navigation gerichtet, sodass der Benutzer immer genau weiß, wo er sich in der Navigation befindet. 
+\subsubsection{Prototypische Implementierung}
+Der Prototyp für die SEB besteht aus statischen HTML-Seiten. \abbrev{HTML}{Hypertext Markup Language} An multimedialen Elementen finden sich primär verweissensitive Grafiken ("`Image-Maps"'). Daneben existieren einige Diashows, die mittels JavaScript-Elementen implementiert wurden. Besonderes Augenmerk im gesamten Prototypen wird auf die Navigation gerichtet, sodass der Benutzer immer genau weiß, an welcher Stelle der SEB er sich gerade befindet. 
 
-Layout und Design des Prototypen sind an den Internetauftritt des Lehrstuhls Wirtschaftsinformatik III angelehnt. 
+Layout und Design des Prototypen sind an den Internetauftritt des Lehrstuhls Wirtschaftsinformatik III angelehnt (siehe Abbildung \ref{fig:seb-prototyp}). 
 
-\subsection{Weitere Anforderungen an das Produktivsystem}
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=1.0\textwidth]{chapter04/seb-prototyp.png}
+	\caption{Prototyp der Studieneingangsberatung}
+	\label{fig:seb-prototyp}
+	\cite{Nursinski:2007}
+\end{figure}
 
-Da es sich bei der SEB im Gegensatz zu den später erläuterten Konzepten ausschließlich um ein Informationsportal handelt, steht bei der Implementierung nicht die Frage nach der Anwendungslogik im Vordergrund, sondern zum einen -- wie in Konzept und Prototyp dargelegt -- die der Darstellung der relevanten Inhalte, und zum anderen die der Wartbarkeit und Pflege dieser Informationen.
+Eine Besonderheit sind die oben erwähnten "`Image-Maps"'. Zu jeder Lehrveranstaltung existiert eine solche Grafik, die in verschiedene Segmente mit einzelnen inhaltlichen Abschnitten der jeweiligen Lehrveranstaltung unterteilt ist. Fährt der Benutzer mit der Maus über eines dieser Segmente, verwandelt sich die Grafik und zeigt statt der vollständigen Übersicht Details für den jeweiligen inhaltlichen Abschnitt (Abbildung \ref{fig:seb-imagemap}). Vom pädagogischen Standpunkt aus bedienen diese Grafiken primär optische, teilweise aber auch haptische Lerntypen.
 
-\subsection{Umsetzung des Konzepts im WiSo@visor}
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=0.66\textwidth]{chapter04/seb-imagemap.png}
+	\caption{Verwandlung einer verweissensitiven Grafik}
+	\label{fig:seb-imagemap}
+	\cite<eigene Darstellung, in Anlehnung an>{Nursinski:2007}
+\end{figure}
 
-\subsubsection{Realisierung als Wiki}
-Bei der Implementierung der SEB stand die Frage nach der technischen Gestaltung im Vordergrund: Die Inhalte sollten schnell und unbürokratisch geändert werden können. Für den bestehenden WiSo@visor existiert derzeit allerdings noch keine Administrationsumgebung, in der die Textbausteine gepflegt werden können; Änderungen müssen hier direkt in der Datenbank erfolgen.
+\subsubsection{Weitere Anforderungen an das Produktivsystem}
 
-% a bisserl über verschiedene Wikis schwallen; auf Vergleichsseite verweisen
-Im Konzept wurde bereits berücksichtigt, dass die Inhalte der SEB...
+Da es sich bei der SEB im Gegensatz zu den später erläuterten Konzepten ausschließlich um ein Informationsportal handelt, steht bei der Implementierung nicht die Frage nach der Anwendungslogik im Vordergrund, sondern zum einen -- wie in Konzept und Prototyp dargelegt -- die der \textbf{Darstellung der relevanten Inhalte}, und zum anderen die der \textbf{Wartbarkeit und Pflege} dieser Informationen.
 
-\subsubsection{Modifikationen an TigerWiki}
+Die Inhalte sollen zunächst auf Aktualität, Korrektheit und Relevanz geprüft werden; wie in \ref{sec:StudienverlaufAnDerWiSo} berichtet wurde, wurde die Prüfungsordnung der Bachelor-Studiengänge zwischenzeitlich geändert. Weniger komplex, aber dafür umso notwendiger, sind Korrekturen von Orthographie und Sprachniveau der prototypischen Inhalte. Der "`Ton"' der Texte soll freundlich und einladend wirken, und nur so technokratisch, dass Missverständnisse vermieden werden. 
+
+Das heterogene Layout des Prototypen soll möglichst vereinheitlicht werden. Dies beinhaltet generell einen einheitlichen Aufbau der Seiten (insb. bei Seiten  gleichen Typs) sowie eine gleichmäßige Anordnung und Ausrichtung der Grafiken.
+
+\subsection{Implementierung des Konzepts}
+
+\subsubsection{Handlungsoptionen}
+Die wichtigste Anforderung an das Produktivsystem ist, eine Möglichkeit zu bieten, die hinterlegten Inhalte schnell und unbürokratisch ändern zu können. Da Layout und Design des Prototypen den Seiten des Lehrstuhls Wirtschaftsinformatik III sehr ähneln, wäre es naheliegend, die Seiten direkt in das Content-Management-System des Lehrstuhls zu integrieren. Dies würde allerdings den Anspruch, die einzelnen Controlling-Instrumente unter der Marke "`WiSo@visor"' zu implementieren, nicht erfüllen.
+
+So ergeben sich drei Optionen für die produktive Umsetzung:
+\begin{enumerate}
+	\item \textbf{Option 1: Statische HTML-Seiten} \\
+	Wie im Prototypen könnten die Seiten statisch angelegt werden. Die Pflege der Inhalte würde dadurch allerdings erheblich erschwert: Ein manuelles Editieren von HTML-Seiten dürfte bei den später dafür zuständigen Studienberatern nur auf geringe Akzeptanz stoßen. Bei Einsatz einer umfangreichen Software-Suite wie Macromedia Dreamweaver würden dagegen Lizenzkosten anfallen (die Kosten für eventuelle Weiterbildungen bleiben dabei noch außen vor). Zusätzlich würde ein Zugang zum Webserver benötigt, um geänderte Dateien hochzuladen.
+	\item \textbf{Option 2: Integration in die Architektur des WiSo@visor} \\
+	In der Datenbank des WiSo@visor existiert eine Tabelle für Textbausteine. Das System bietet allerdings keine Administrationsumgebung, um diese Bausteine zu pflegen; Änderungen müssten also direkt in der Datenbank erfolgen. Würde man sich auf diese bestehende Architektur festlegen, müsste aber nicht nur eine Administrationsumgebung entwickelt werden -- zusätzlich wäre es nötig, unterschiedliche Template-Dateien für die unterschiedlichen Seitentypen sowie mindestens einen Use-Case mit einer entsprechenden Anwendungslogik zu erstellen. 
+		\item \textbf{Option 3: Einführung eines Wiki} \\
+Ein Wiki brächte den entscheidenden Vorteil, dass die Inhalte der SEB direkt im Browser geändert werden könnten. Das einzusetzende Wiki sollte hierbei keine allzu komplexen Formatierungsmöglichkeiten anbieten, um die Eingewöhnungszeit für die Administratoren zu verkürzen. Fraglich wäre, ob ein eigenes Wiki als Use-Case des WiSo@visor implementiert werden sollte, oder ob stattdessen besser ein technisch eigenständiges, aber auf das Design des WiSo@visor abgestimmtes Fremdsystem zum Einsatz kommen sollte.
+\end{enumerate}
+
+Da zur Unterstützung der Lehre bereits von einigen Lehrstühlen der WiSo erfolgreich Wikis eingesetzt werden, lag es für die produktive Umsetzung der SEB nahe, ebenfalls auf ein Wiki zurückzugreifen (Option 3). Bei Betrachtung verschiedener Wiki-Systeme \cite{c2:2007} fiel das auf PHP basierende, im Grunde sehr einfach gehaltene "`TigerWiki"' auf: Es ist unter den Bedingungen der General Public Licence (GPL) \abbrev{GPL}{General Public Licence} verfügbar und besteht im Grunde nur aus einer zwei Dateien (System und Konfiguration). Die einzelnen Inhaltsseiten des Wikis werden als Textdateien auf dem Webserver gespeichert. Über eine Template-Datei lässt sich das Design des Wikis beliebig anpassen, und so auch auf das Design des WiSo@visor abstimmen. Zugriffsschutz gewährt das System über ein Administrator-Passwort; eine datenbankbasierte Benutzerverwaltung ist nicht vorgesehen, erscheint für die Inhalte der SEB aber auch nicht notwendig, da sich die Anzahl der für die Inhalte zuständigen Redakteure vermutlich in Grenzen halten wird.
+
+\subsubsection{Durchgeführte Modifikationen}
 \label{wiki-mod}
 
-Obwohl TigerWiki bereits alle grundlegenden Formatierungsmöglichkeiten mitbrachte, waren dennoch einige Modifikationen an der Software notwendig:
+Das ausgewählte System "`TigerWiki"' enthölt standardmäßig alle grundlegenden Formatierungsmöglichkeiten für Texte (z. B. Überschriften, Schriftstil, Aufzählungen). Um die Anforderungen der SEB sinnvoll umsetzen zu können, waren dennoch einige Modifikationen an der Software notwendig:
 \begin{itemize}
-\item Damit die im gesamten Wiso@visor verwendeten Grafiken nicht an verschiedenen Orten im Verzeichnisbaum liegen, lag es nahe, auch die im Wiki zu verwendenen Grafiken im Grafikverzeichnis des Advisor abzulegen. Dies aber hatte den Nachteil, dass im Code einer Wiki-Seite nun immer der relative Pfad zur Grafik mitangegeben werden musste. In der Konfigurationsdatei des Wikis ist nun ein \textbf{Pfad für Grafiken} definiert, der allen Grafiken und sonstigen Ressourcen vorangestellt wird. Das Warten der Seiteninhalte wird so erheblich erleichtert.
-\item TigerWiki kann Inhalte nur untereinander darstellen. Nun unterstützt das Wiki einfache (einzeilige) \textbf{Tabellen}, um Inhalte auch nebeneinander darstellen zu können. Verwendet wird dies beispielsweise bei den Aussagen der Professoren, wo neben dem jeweiligen Statement auch ein Foto platziert wird.
+\item Damit die im gesamten WiSo@visor verwendeten Grafiken nicht an verschiedenen Orten im Verzeichnisbaum liegen, lag es nahe, auch die im Wiki zu verwendenen Grafiken im Grafikverzeichnis des WiSo@visor abzulegen. Dies aber hatte den Nachteil, dass im Code einer Wiki-Seite nun immer der relative Pfad zur Grafik mitangegeben werden musste. In der Konfigurationsdatei des Wikis ist nun ein \textbf{Pfad für Grafiken} definiert, der allen Grafiken und sonstigen Ressourcen vorangestellt wird. Die Pflege der Seiteninhalte wird so erheblich erleichtert.
+\item TigerWiki kann Inhalte nur untereinander darstellen. Mit den durchgeführten Modifikationen unterstützt das Wiki nun einfache (einzeilige) \textbf{Tabellen}, um Inhalte auch nebeneinander darstellen zu können. Verwendet wird dies beispielsweise bei den Aussagen der Professoren, wo neben dem jeweiligen Statement auch ein Foto platziert wird.
 \item Die verweissensitiven Grafiken des Prototypen erfordern aufwändigen HTML-Code. Fügt man diesen Code über das HTML-Element von TigerWiki ein, wird die Bearbeitung einer Seite sehr schnell unübersichtlich. Der komplette Code dieser Grafiken wurde nun in externe HTML-Dateien ausgelagert; diese kann über eine \textbf{Include-Anweisung} eingefügt werden. Die Konsequenz daraus ist, dass die bearbeitbare Wiki-Seite weitgehend frei von HTML-Code bleibt.
 \end{itemize}
 
-Diese Modifikationen wurden dem ursprünglichen Entwickler der Software zugesandt und werden möglicherweise in eine künftige Version des Systems integriert.
+Um dem Open-Source-Gedanken Rechnung zu tragen \cite<siehe hierzu>[S. 233-258]{Grassmuck:2002}, wurden diese Modifikationen dem ursprünglichen Entwickler der Software zugesandt und werden möglicherweise in eine künftige Version des Systems integriert.
 
-\subsubsection{Kurzreferenz zu TigerWiki}
+\subsubsection{Aufbau des Wiki}
 
-Wie bereits erwähnt, war es vor allem seine Einfachheit, die TigerWiki als Basis für das Wiki zur SEB so attraktiv machte. Tabelle \ref{tab:SyntaxDerWikiEinträge} gibt einen Überblick über die Kommandos, die nun zum Editieren der Seiten bereitstehen \cite<vgl.>{tigerwiki:aide}.
+% a paar screenshots vom produktivsystem eini bauern
 
+\subsubsection{Bearbeitungsmodus}
+
+\begin{figure}[ht]
+	\centering
+		\includegraphics[width=0.8\textwidth]{chapter04/wiki-edit.png}
+	\caption{Wiki im Bearbeitungsmodus}
+	\label{fig:wiki-edit}
+	\cite<~eigene Darstellung>{}
+\end{figure}
+
+Am Ende jeder Wiki-Seite befindet sich ein beinahe unsichtbarer Link "`Admin"', über den die jeweilige Wiki-Seite geändert werden kann (Abbildung \ref{fig:wiki-edit}). Am Ende des Bearbeitungsfensters findet sich dann ein Feld zur Eingabe des Administrator-Passwortes und die Schaltfläche "`Speichern"', mit der die getätigten Änderungen übernommen werden. Über diesen Bearbeitungsmodus kann zusätzlich auf eine Hilfe-Seite verzweigt werden. Dor werden die wichtigsten Kommandos des Wikis dokumentiert, die zum Editieren der Seiten bereitstehen. Eine detailliertere Beschreibung dieser Kommandos findet sich auch in Tabelle \ref{tab:SyntaxDerWikiEinträge}. 
 
 \begin{table}[ht]
 \small
@@ -60,12 +102,12 @@ Wie bereits erwähnt, war es vor allem seine Einfachheit, die TigerWiki als Basis
 			                        & \# (nummeriert)  											  & *zweites Element \\
 			\hline
 			Grafik                  & [Dateiname] (intern)										& [profamberg.jpg] \\
-			                        & [URL] (extern)													& [http://www.foo.bar/profamberg.jpg] \\
+			                        & [URL] (extern)													& [http://server/profamberg.jpg] \\
 			\hline
 			Link                    & [Seite] (intern) 												& [Lehrveranstaltungen] \\
 															& [Beschreibung|?page=Seite] (intern) 		& [Planspiel|?page=Planspiel] \\
-															& [URL] (extern) 													& [http://www.wiso.uni-erlangen.de] \\
-															& [Beschreibung|URL] (extern)							& [WiSo|http://www.wiso.uni-erlangen.de] \\
+															& [URL] (extern) 													& [http://www.server.de] \\
+															& [Beschreibung|URL] (extern)							& [DerServer|http://www.server.de] \\
 			\hline
 			Tabelle                 & [TABLE:Spalte1||Spalte2]								& [TABLE:[profamberg.jpg]||Prof. Amberg] \\
 
@@ -73,12 +115,25 @@ Wie bereits erwähnt, war es vor allem seine Einfachheit, die TigerWiki als Basis
 			Textdatei               & [INCLUDE:Dateiname]	  							    & [INCLUDE:planspiel.map] \\
 
 			\hline
-			HTML-Code               & \{...\}	  							    					  & \{<br><br>\} \\
+			HTML-Code               & \{...\}	  							    					  & \{<br /><br />\} \\
 
 			\hline					
 		\end{tabular}
 	\caption{Syntax der Wiki-Einträge}
 	\label{tab:SyntaxDerWikiEinträge}
+	\cite<vgl.>{tigerwiki:aide}
 \end{table}
 
-Wie in \ref{wiki-mod} erwähnt, ist zu beachten, dass das Wiki interne Ressourcen, also Grafiken und Textdateien, im voreingestellten Grafikverzeichnis sucht. So wird z. B. die Eingabe \texttt{[profamberg.jpg]} ersetzt durch \texttt{<img src="'../grafik/wiki/profamberg.jpg"'/>}.
+Wie in \ref{wiki-mod} erwähnt, ist zu beachten, dass das Wiki interne Ressourcen, also Grafiken und Textdateien, im voreingestellten Grafikverzeichnis sucht. So wird z. B. die Eingabe \texttt{[profamberg.jpg]} ersetzt durch \texttt{<img src="'../grafik/wiki/profamberg.jpg"'/>}. Neu in das System eingefügte Grafiken müssen manuell in dieses Verzeichnis hochgeladen werden.
+
+\subsection{Ausblick und Erweiterungsmöglichkeiten}
+
+Erweiterungen des Wiki wären im Hinblick auf Breite und Tiefe der Informationen denkbar: Eine \textbf{Verbreiterung der Informationen} ließe sich bspw. durch das Einbeziehen anderer Studiengänge erreichen. Der Bachelor-Studiengang "`Sozialökonomik"' bleibt bislang außen vor, ebenso wie die beibehaltenen Diplomstudiengänge "`Wirtschaftsingenieurwesen"' und "`Wirtschaftsmathematik"'. Ebenfalls verbreiternd wäre eine Ausweitung auf Lehrveranstaltungen der weiteren Semester.
+
+Eine \textbf{Vertiefung der Informationen} könnte bspw. durch weitere multimediale Aufbereitung der Inhalte vollzogen werden. Die einzelnen Seiten könnten durch kurze (seriöse) Audio- oder Video-Clips angereichert werden. Speziell Video-Clips wären dabei eine interessante Option: Die WiSo könnte sich -- sofern dies rechtlich zulässig ist -- die Beliebtheit von Video-Portalen wie etwa "`youtube.com"' zu Nutze machen und die besagten Video-Clips dort einstellen. Die WiSo selbst hätte dann keine erhöhten Kosten für Traffic, könnte aber durch die Beliebtheit des Portals auf sich aufmerksam machen und neue Zielgruppen erschließen.
+
+~
+
+Langfristig steckt hinter dem in dieser Arbeit realisierten Wiki freilich noch eine weitere Vision als die bloße Beratung von Studienanfängern: Langfristig wäre wünschenswert, \textbf{sämtliche relevanten Informationen} über das Studium an der WiSo \textbf{zentral an einer Stelle} verfügbar zu machen. Die Informationen sollten dabei nicht nur "`von oben nach unten"' kommuniziert werden, sondern durchaus auch unter Einbeziehung der Studenten erarbeitet werden. Technische Basis hierfür könnte ein offenes Wiki sein, das von einem redaktionellen Stab betreut und qualitätsgesichert wird. Ein solcher Stab müsste aus Spezialisten verschiedener Fachgebiete bestehen, um dieser Aufgabe gerecht zu werden.
+
+Gerade die \textbf{Qualitätssicherung}, also die Sicherung von Korrektheit und Vollständigkeit des Wiki, dürfte die wichtigste Erweiterungsmaßnahme des Instrumentes sein; sie sollte daher kontinuierlich angestrebt werden.
