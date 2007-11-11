@@ -56,6 +56,8 @@ class ucRegistration extends UseCase
 		$datenschutz = $this->getParam()->getParameter('datenschutz');
 		$matnr = $this->getParam()->getParameter('matnr');
 		$majid = $this->getParam()->getParameter('majid');
+		$sem_start = $this->getParam()->getParameter('sem_start');
+		
 		
 		//in $ error werden evtl. Fehlermeldungen gesammelt.
 		$error = '';
@@ -69,6 +71,7 @@ class ucRegistration extends UseCase
 		$user->setBirthday($birthday);
 		$user->setMatNr($matnr);
 		$user->setMajId($majid);
+		$user->setSemStart($sem_start);
 		
 		//zuerst checken: ist die eMailadresse gültig?
   		if (!preg_match($this->getConf()->getConfString('ucRegistration', 'regex', 'email'), $email)) $error .= $this->getConf()->getConfString('ucRegistration', 'error', 'email').'<br/>';
@@ -251,11 +254,13 @@ class ucRegistration extends UseCase
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'matnr'), $user->getMatNr());
 		
 		//Studiengangs-Select muss auch gebaut werden 
-		$studiesSelect = HtmlFormGenerator::getDropDownFromDb($this, "majid", $this->getConf()->getConfString('sql', 'registration', 'dropdown_studies'), "fullname", "majid", "1");
+    $myMajid = (($user == null) ? "1" : $user->getMajId());
+		$studiesSelect = HtmlFormGenerator::getDropDownFromDb($this, "majid", $this->getConf()->getConfString('sql', 'registration', 'dropdown_studies'), "fullname", "majid", $myMajid);
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'studies'), $studiesSelect);
 		
 		//Studienanfangs-Select muss auch gebaut werden 
-		$semStartSelect = HtmlFormGenerator::getDropDownSemester("sem_start", $user->getSemStart());
+    $mySemStart = (($user == null) ? "ws2007" : $user->getSemStart());		
+		$semStartSelect = HtmlFormGenerator::getDropDownSemester("sem_start", $mySemStart);
 		$generator->apply($this->getConf()->getConfString('ucRegistration', 'sem_start'), $semStartSelect);
 		
 		//ggf. wird auch das Link-Target mit durchgereicht

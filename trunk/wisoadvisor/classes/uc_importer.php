@@ -31,17 +31,19 @@ private function performImport() {
 	
   $ret='';
   
-  // TODO: Transfer to Parameter Class
 	if(isset($_FILES['thefile']['tmp_name'])) {
 	  $lines=file($_FILES['thefile']['tmp_name']);
 	  while (list($key,$val)=each($lines)) {
 	    
-	    //$ret .= $lines[$key].'<br>';
 	    $lines[$key] = explode(';',$val);
-	    $i=0;
 	    
-	    $vl = $lines[$key][$i++];
-	    $tp = $lines[$key][$i++];
+	    $i=0;	    
+	    $lect = $lines[$key][$i++]; // erstes Element der CSV-Datei, vielleicht Vorlesung
+	    $mark = $lines[$key][$i++]; // zweites Element der CSV-Datei, vielleicht Note
+	    $mcnt = $lines[$key][$i++]; // drittes Element der CSV-Datei, vielleicht Häufigkeit der Note
+	    
+	    // hier die Routine zum Schreiben in die Datenbank einfügen
+
 	  }  
 	}
   return $ret;
