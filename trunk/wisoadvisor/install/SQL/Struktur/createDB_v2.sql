@@ -1,5 +1,6 @@
-
-ALTER TABLE `advisor__user` CHANGE `majid` `majid` INT( 10 ) UNSIGNED NOT NULL DEFAULT '1'
+ALTER TABLE `advisor__user` ADD `matnr`  VARCHAR(25) NOT NULL DEFAULT '';
+ALTER TABLE `advisor__user` ADD `majid`  INT(10) UNSIGNED NOT NULL DEFAULT '1';
+ALTER TABLE `advisor__user` ADD `sem_start`  VARCHAR(255) NOT NULL DEFAULT '';
 
 
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
