@@ -1,1 +1,0 @@
-<span id="user_count">###:###USERCOUNT###:### Nutzer</span><br/><a href="###:###HREF###:###" class="sponsor_link" target="_blank"><img src="###:###LOGO###:###" class="sponsor" title="###:###SPONSORNAME###:###" alt="###:###SPONSORNAME###:###"/></a>

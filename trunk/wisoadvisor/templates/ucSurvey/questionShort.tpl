@@ -1,5 +1,0 @@
-
-	###:###question###:###
-	###:###answers###:###
-
-###:###answerjavascript###:###

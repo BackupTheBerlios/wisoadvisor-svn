@@ -1,1 +1,0 @@
-&nbsp;&nbsp;<a href="###:###SPONSORHREF###:###" class="start_sponsor_link" target="_blank"><img src="###:###SPONSORLOGO###:###" class="sponsor" alt="###:###SPONSORNAME###:###" title="###:###SPONSORNAME###:###"/></a>&nbsp;&nbsp;
